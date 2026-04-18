@@ -1,1 +1,28 @@
+@import "tailwindcss";
+
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body,
+app-root {
+	width: 100%;
+	min-height: 100%;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+app-root::-webkit-scrollbar {
+	display: none;
+}
+
+body {
+	margin: 0;
+	overflow-x: hidden;
+	background: #070707;
+}
+
+* {
+	box-sizing: border-box;
+}
