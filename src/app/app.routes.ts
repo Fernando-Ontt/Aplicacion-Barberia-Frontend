@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { Inicio } from './public/inicio/inicio';
-import { Nosotros } from './public/nosotros/nosotros';
-import { Productos } from './public/productos/productos';
-import { Servicios } from './public/servicios/servicios';
-import { Reclamos } from './public/reclamos/reclamos';
-import { Login } from './public/login/login';
-import { Register } from './public/register/register';
-import { Error404 } from './public/error404/error404';
-import { Reservas } from './public/reservas/reservas';
+import { Inicio } from './features/public/pages/inicio/inicio';
+import { Nosotros } from './features/public/pages/nosotros/nosotros';
+import { Productos } from './features/public/pages/productos/productos';
+import { Servicios } from './features/public/pages/servicios/servicios';
+import { Reservas } from './features/public/pages/reservas/reservas';
+import { Reclamos } from './features/public/pages/reclamos/reclamos';
+import { Login } from './features/auth/login/login';
+import { Register } from './features/auth/register/register';
+import { Error404 } from './features/public/pages/error404/error404';
 
 
 
