@@ -30,6 +30,7 @@
     "@angular/router": "^20.3.0",
     "@primeuix/themes": "^2.0.3",
     "@tailwindcss/postcss": "^4.2.2",
+    "jwt-decode": "^4.0.0",
     "postcss": "^8.5.9",
     "primeicons": "^7.0.0",
     "primeng": "^20.4.0",

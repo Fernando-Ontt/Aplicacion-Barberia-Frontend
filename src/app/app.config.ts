@@ -5,6 +5,8 @@ import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
 import Aura from '@primeuix/themes/aura';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/interceptors/auth-interceptor';
 
 
 export const appConfig: ApplicationConfig = {
@@ -19,7 +21,10 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.dark-mode'
         }
       }
-    })
+    }),
+   provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
      
   ]
 };

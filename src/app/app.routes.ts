@@ -5,21 +5,48 @@ import { Productos } from './features/public/pages/productos/productos';
 import { Servicios } from './features/public/pages/servicios/servicios';
 import { Reservas } from './features/public/pages/reservas/reservas';
 import { Reclamos } from './features/public/pages/reclamos/reclamos';
-import { Login } from './features/auth/login/login';
-import { Register } from './features/auth/register/register';
+import { Login } from './features/auth/pages/login/login';
+import { Register } from './features/auth/pages/register/register';
 import { Error404 } from './features/public/pages/error404/error404';
+import { EmpleadoLayout } from './layout/empleado-layout/empleado-layout';
+import { PublicLayout } from './layout/public-layout/public-layout';
 
 
 
 export const routes: Routes = [
-    {path:'',component:Inicio,title:'Inicio'},
-    {path:'inicio',component:Inicio,title:'Inicio'},
-    {path:'nosotros',component:Nosotros,title:'Nosotros'},
-    {path:'productos',component:Productos,title:'Productos'},
-    {path:'servicios',component:Servicios,title:'Servicios'},
-    {path:'reclamos',component:Reclamos,title:'Reclamos'},
-    {path:'reservas',component:Reservas,title:'Reservas'},
-    {path:'login',component:Login,title:'Login'},
-    {path:'register',component:Register,title:'Register'},
-    {path:'**',component:Error404,title:'Error'}
+
+ {
+  path: '',
+  component: PublicLayout,
+  children: [
+    { path: '', component: Inicio },
+    { path: 'inicio', component: Inicio },
+    { path: 'nosotros', component: Nosotros },
+    { path: 'productos', component: Productos },
+    { path: 'servicios', component: Servicios },
+    { path: 'reclamos', component: Reclamos },
+    { path: 'reservas', component: Reservas },
+    
+    { path: 'register', component: Register },
+  ]
+},
+
+  // 🔥 EMPLEADO LAYOUT (AQUÍ ESTABA EL ERROR)
+  {
+    path: 'empleado',
+    component: EmpleadoLayout,
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/pages/login/login').then(m => m.Login)
+  },  
+
+  { path: '**', component: Error404 }
 ];

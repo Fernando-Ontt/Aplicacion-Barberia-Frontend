@@ -18,8 +18,7 @@
 
     <!-- Card -->
     <div class="w-full bg-[#0c0c0c] border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col gap-5">
-
-      <!-- Email -->
+      <form (ngSubmit)="login()">
       <div class="flex flex-col gap-2">
         <label class="text-white text-sm font-semibold">Correo electrónico</label>
         <div class="relative">
@@ -30,6 +29,9 @@
             </svg>
           </span>
           <input
+          [(ngModel)]="loginRequest.username"
+        name="username"
+        required
             type="email"
             placeholder="tucorreo@email.com"
             class="w-full bg-black border border-white/10 focus:border-yellow-500 text-white placeholder-gray-600 rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all duration-200"
@@ -54,6 +56,9 @@
           </span>
           <input
             type="password"
+              [(ngModel)]="loginRequest.password"
+        name="password"
+        required
             placeholder="••••••••"
             class="w-full bg-black border border-white/10 focus:border-yellow-500 text-white placeholder-gray-600 rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all duration-200"
           />
@@ -74,7 +79,7 @@
       </label>
 
       <!-- Botón -->
-      <button class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] text-sm tracking-wide uppercase mt-1">
+      <button [disabled]="loading" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3.5 rounded-full transition-all duration-300 hover:scale-[1.02] text-sm tracking-wide uppercase mt-1">
         Iniciar Sesión
       </button>
 
@@ -95,6 +100,8 @@
         </svg>
         Continuar con Google
       </button>
+      </form>
+      <!-- Email -->
 
     </div>
 
@@ -105,6 +112,12 @@
         Regístrate gratis
       </a>
     </p>
+
+    @if (errorMessage) {
+    <p style="color:red">
+      {{errorMessage}}
+    </p>
+  }
 
   </div>
 
