@@ -10,6 +10,8 @@ import { Register } from './features/auth/pages/register/register';
 import { Error404 } from './features/public/pages/error404/error404';
 import { EmpleadoLayout } from './layout/empleado-layout/empleado-layout';
 import { PublicLayout } from './layout/public-layout/public-layout';
+import { authGuardGuard } from './core/guards/auth/auth-guard-guard';
+import { guestGuardGuard } from './core/guards/guess/guest-guard-guard';
 
 
 
@@ -31,22 +33,20 @@ export const routes: Routes = [
   ]
 },
 
-  // 🔥 EMPLEADO LAYOUT (AQUÍ ESTABA EL ERROR)
-  {
-    path: 'empleado',
-    component: EmpleadoLayout,
-    children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
-  },
+ {
+  path: 'dashboard',
+  component: EmpleadoLayout,
+  canActivate: [authGuardGuard],
+  children: [
+    
+  ]
+},
   {
     path: 'login',
+    canActivate: [guestGuardGuard],
     loadComponent: () => import('./features/auth/pages/login/login').then(m => m.Login)
   },  
 
-  { path: '**', component: Error404 }
+  { path: '**', component: Error404 },
+  
 ];

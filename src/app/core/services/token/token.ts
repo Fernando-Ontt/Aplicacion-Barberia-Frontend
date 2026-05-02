@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from "jwt-decode";
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +10,14 @@ export class Token {
   private ACCESS_TOKEN = 'access_token';
   private REFRESH_TOKEN = 'refresh_token';
 
+  private PermisosSubject = new BehaviorSubject<string[]>([]);
+  permisos$ = this.PermisosSubject.asObservable();
+
   saveAccessToken(token: string) {
     localStorage.setItem(this.ACCESS_TOKEN, token);
+
+    const permisos = this.getPermisos();
+    this.PermisosSubject.next(permisos);
   }
 
   getAccessToken(): string | null {
@@ -28,6 +35,7 @@ export class Token {
   clearTokens() {
     localStorage.removeItem(this.ACCESS_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
+    this.PermisosSubject.next([]); 
   }
 
   isLogged(): boolean {
@@ -56,6 +64,20 @@ export class Token {
   getPermisos(): string[] {
     return this.getDecodedToken()?.permisos || [];
   }
+
+   initPermisos() {
+    const permisos = this.getPermisos();
+    this.PermisosSubject.next(permisos);
+  }
+
+  getHomeByRole(): string {
+  const roles = this.getRoles();
+
+  if (roles.includes('ROLE_admin')) return '/dashboard';
+  if (roles.includes('ROLE_cliente')) return '/app';
+
+  return '/';
+}
 
 
 }

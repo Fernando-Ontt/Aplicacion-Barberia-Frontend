@@ -1,0 +1,24 @@
+<aside class="sidebar w-96 border-r-[0.1px] min-h-screen border-r-yellow-100   text-white">
+    <header class="p-6 border-b-[0.1px] border-b-yellow-100">
+        <h1 class="text-yellow-400 text-3xl ">FadeX</h1>
+        <p class="text-white"> Sistema de Gestión </p>
+    </header>
+
+     <button class="bg-rose-500 text-white" (click)="logout()">Cerrar sesión</button>
+
+
+    <ul class="text-white">
+        @for (item of menu$ | async; track item.route) {
+        <li class="p-6 m-4  rounded-2xl  hover:bg-[#292311] hover:text-yellow-400 text-lg ">
+            <a [routerLink]="item.route" class="flex items-center gap-3">
+                <i [class]="item.icon"></i>
+
+                @if(!collapsed){
+                <span>{{item.label}}</span>
+                }
+            </a>
+        </li>
+        }
+    </ul>
+
+</aside>
