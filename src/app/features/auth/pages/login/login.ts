@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LoginRequest } from '../../models/LoginRequest';
 import { AuthService } from '../../../../core/services/auth/auth';
 import { Token } from '../../../../core/services/token/token';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.css',
 })
 export class Login {
+
+  private route = inject(ActivatedRoute);
 
   loginRequest: LoginRequest = {
     username: '',
@@ -25,36 +27,38 @@ export class Login {
     private authService: AuthService,
     private tokenService: Token,
     private router: Router
-  ) {}
+  ) { }
 
- login(){
+  login() {
 
-  this.loading = true;
+    this.loading = true;
 
-  this.authService.login(this.loginRequest)
-    .subscribe({
+    this.authService.login(this.loginRequest)
+      .subscribe({
 
-      next: () => {
+        next: () => {
 
-        if(this.tokenService.getRoles().includes('ROLE_cliente')){
-          this.router.navigate(['/app']);
-          
-        }else{
-          this.router.navigate(['/dashboard']);
-          console.log(this.tokenService.getRoles());
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
+          const home = this.tokenService.getHomeByRole();
+
+          this.router.navigate([returnUrl || home], {
+            replaceUrl: true
+          });
+
+          this.loading = false;
+
+
+
+        },
+
+        error: () => {
+          this.errorMessage = "Credenciales incorrectas";
+
+          this.loading = false;
         }
 
-       
-
-      },
-
-      error: () => {
-        this.errorMessage = "Credenciales incorrectas";
-        
-        this.loading = false;
-      }
-
-    });
+      });
 
   }
 }

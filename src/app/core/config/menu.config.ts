@@ -17,7 +17,8 @@ export const MENU_CONFIG = [
         label: 'Barberos',
         icon: ' pi pi-user-plus',
         route: '/barberos',
-        permissions: 'BARBERO_VIEW'
+        permission: 'BARBERO_VIEW'
+
     },
     {
         label: 'Productos',

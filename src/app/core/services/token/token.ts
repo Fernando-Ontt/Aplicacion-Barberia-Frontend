@@ -74,9 +74,10 @@ export class Token {
   const roles = this.getRoles();
 
   if (roles.includes('ROLE_admin')) return '/dashboard';
+  if (roles.includes('ROLE_barbero')) return '/dashboard';
   if (roles.includes('ROLE_cliente')) return '/app';
 
-  return '/';
+  return '/dashboard';
 }
 
 

@@ -21,7 +21,8 @@ export const routes: Routes = [
   path: '',
   component: PublicLayout,
   children: [
-    { path: '', component: Inicio },
+    { path: '', component: Inicio,  canActivate: [guestGuardGuard], },
+
     { path: 'inicio', component: Inicio },
     { path: 'nosotros', component: Nosotros },
     { path: 'productos', component: Productos },
