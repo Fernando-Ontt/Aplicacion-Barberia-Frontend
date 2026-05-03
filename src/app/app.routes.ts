@@ -25,7 +25,12 @@ export const routes: Routes = [
 
     { path: 'inicio', component: Inicio },
     { path: 'nosotros', component: Nosotros },
-    { path: 'productos', component: Productos },
+    {
+      path: 'productos',
+      loadChildren: () =>
+        import('./features/productos/productos.route')
+          .then(m => m.PRODUCTOS_ROUTE)
+    },
     { path: 'servicios', component: Servicios },
     { path: 'reclamos', component: Reclamos },
     { path: 'reservas', component: Reservas },
