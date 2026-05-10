@@ -1,59 +1,63 @@
 import { Routes } from '@angular/router';
-import { Inicio } from './features/public/pages/inicio/inicio';
-import { Nosotros } from './features/public/pages/nosotros/nosotros';
-import { Servicios } from './features/public/pages/servicios/servicios';
-import { Reservas } from './features/public/pages/reservas/reservas';
-import { Reclamos } from './features/public/pages/reclamos/reclamos';
-import { Login } from './features/auth/pages/login/login';
-import { Register } from './features/auth/pages/register/register';
-import { Error404 } from './features/public/pages/error404/error404';
-import { EmpleadoLayout } from './layout/empleado-layout/empleado-layout';
-import { PublicLayout } from './layout/public-layout/public-layout';
-import { authGuardGuard } from './core/guards/auth/auth-guard-guard';
-import { guestGuardGuard } from './core/guards/guess/guest-guard-guard';
-import { rolGuardsGuard } from './core/guards/rol/rol-guards-guard';
-
-
+import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
+import { NosotrosComponent } from './features/public/pages/nosotros/nosotros..component';
+import { ServiciosComponent } from './features/public/pages/servicios/servicios.component';
+import { ReservasComponent } from './features/public/pages/reservas/reservas.component';
+import { ReclamosComponent } from './features/public/pages/reclamos/reclamos.component';
+import { RegisterComponent } from './features/auth/register/register.component';
+import { PrivateLayoutComponent } from './features/private/layout/private-layout.component';
+import { PublicLayoutComponent } from './features/public/layout/public-layout.component';
+import { Error404Component } from './shared/components/error404/error404.component';
+import { InicioComponent } from './features/public/pages/inicio/inicio.component';
 
 export const routes: Routes = [
-  
 
- {
-  path: '',
-  component: PublicLayout,
-  children: [
-    { path: '', component: Inicio,  canActivate: [guestGuardGuard], },
+  {
+    path: '',
+    component: PublicLayoutComponent,
+    children: [
+      {path: 'inicio',redirectTo: '',pathMatch: 'full'},
+      { path: '', component: InicioComponent, canActivate: [guestGuard], },
 
-    
-    { path: 'nosotros', component: Nosotros },
-    {
-      path: 'productos',
-      loadChildren: () =>
-        import('./features/productos/productos.route')
-          .then(m => m.PRODUCTOS_ROUTE)
-    },
-    { path: 'servicios', component: Servicios },
-    { path: 'reclamos', component: Reclamos },
-    { path: 'reservas', component: Reservas },
-    
-    { path: 'register', component: Register },
-  ]
-},
+      { path: 'nosotros', component: NosotrosComponent },
+      //esta raro esta wea 
+      {path: 'productos',loadChildren: () =>import('./features/productos/productos.route').then(m => m.PRODUCTOS_ROUTE)},
+      { path: 'servicios', component: ServiciosComponent },
+      { path: 'reclamos', component: ReclamosComponent },
+      { path: 'reservas', component: ReservasComponent },
+      { path: 'register', component: RegisterComponent },
+    ]
+  },
 
- {
-  path: 'dashboard',
-  component: EmpleadoLayout,
-  canActivate: [authGuardGuard],
-  data: {roles: ['admin','barbero']},
-  loadChildren:() =>import('../app/features/productos/admin/producto.Admin.route').then(m => m.PRODUCTOS_ROUTE_ADMIN)
-  
-},
+  {
+    path: 'dashboard',
+    component: PrivateLayoutComponent,
+    canActivate: [authGuard],
+    data: { roles: ['admin', 'barbero'] },
+    children: [
+      { path: '', redirectTo: 'resumen', pathMatch: 'full' },
+      {
+        path: 'resumen',
+        loadComponent: () => import('./features/private/components/resumen/resumen').then(m => m.Resumen)
+      },
+      {
+        path: '',
+        loadChildren: () => import('../app/features/productos/admin/producto.Admin.route').then(m => m.PRODUCTOS_ROUTE_ADMIN)
+      },
+      {
+        path: '**',
+        loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component)
+      }
+    ]
+
+  },
   {
     path: 'login',
-    canActivate: [guestGuardGuard],
-    loadComponent: () => import('./features/auth/pages/login/login').then(m => m.Login)
-  },  
+    canActivate: [guestGuard],
+    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
+  },
 
-  { path: '**', component: Error404 },
-  
+  { path: '**', component: Error404Component },
+
 ];

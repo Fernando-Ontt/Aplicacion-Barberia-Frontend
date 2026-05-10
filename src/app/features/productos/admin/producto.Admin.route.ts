@@ -1,5 +1,5 @@
 import { CanActivateFn } from '@angular/router';
-import { permisoGuardGuard } from '../../../core/guards/permisos/permiso-guard-guard';
+import { permisoGuardGuard } from '../../../core/guards/permiso.guard';
 export const PRODUCTOS_ROUTE_ADMIN = [
     {
       path: 'productos',

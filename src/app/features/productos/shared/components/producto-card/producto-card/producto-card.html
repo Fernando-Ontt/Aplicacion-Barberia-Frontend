@@ -9,8 +9,7 @@
       <div class="relative">
         <img
           alt="Card"
-          class="w-full h-56 object-cover"
-          [src]="producto.imagenes?.[0] || '/imagenes/default-hotel.png'"
+          class="w-full h-56 object-cover" [src]="producto.imagenes && producto.imagenes.length ? producto.imagenes[0] : '/imagenes/default-hotel.png'"
         />
 
         @if (producto.publicado) {

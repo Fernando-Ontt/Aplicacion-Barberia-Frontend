@@ -1,30 +1,465 @@
 @import "tailwindcss";
-
 @import "primeicons/primeicons.css";
 
-/* You can add global styles to this file, and also import other style files */
+/* =========================
+   THEME TOKENS
+========================= */
+@theme {
 
-html,
-body,
-app-root {
-	width: 100%;
-	min-height: 100%;
-	scrollbar-width: none;
-	-ms-overflow-style: none;
+	/* =========================
+	   BRAND COLORS
+	========================= */
+
+	--color-brand-black: #0c0c0c;
+	/* Negro principal */
+	--color-brand-white: #FFFFFF;
+	/* Blanco principal */
+
+	--color-brand-red: #dc2626;
+	/* Rojo error / danger */
+
+	--color-brand-gold: #D4AF37;
+	/* Dorado principal */
+	--color-brand-gold-hover: #F5D76E;
+	/* Dorado hover */
+	--color-brand-gold-soft: #efbc1630;
+	/* Dorado suave transparente */
+
+
+	/* =========================
+	   UI COLORS
+	========================= */
+
+	--color-ui-black: #0c0c0c;
+	/* Fondo negro principal */
+	--color-ui-surface: #0f0f0f;
+	/* Fondo secciones */
+	--color-ui-card: #121212;
+	/* Cards / paneles */
+	--color-ui-elevated: #1a1a1a;
+	/* Hover cards / elevated */
+
+	--color-ui-border: rgba(255, 255, 255, 0.20);
+	/* Bordes visibles */
+	--color-ui-borderSoft: rgba(255, 255, 255, 0.06);
+	/* Bordes suaves */
+
+
+	/* =========================
+	   TEXT COLORS
+	========================= */
+
+	--color-text-primary: #ffffff;
+	/* Texto principal */
+	--color-text-secondary: #b3b3b3;
+	/* Texto secundario */
+	--color-text-muted: #7a7a7a;
+	/* Texto apagado */
+	--color-text-subtle: #525252;
+	/* Texto muy tenue */
 }
 
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-app-root::-webkit-scrollbar {
-	display: none;
+::-webkit-scrollbar {
+	width: 10px;
 }
 
-body {
-	margin: 0;
-	overflow-x: hidden;
-	background: #070707ee;
+::-webkit-scrollbar-track {
+	background: var(--color-ui-surface);
 }
 
+::-webkit-scrollbar-thumb {
+	background: var(--color-brand-gold);
+	border-radius: 999px;
+	border: 2px solid var(--color-ui-surface);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-brand-gold-hover);
+}
+
+/* Firefox */
 * {
-	box-sizing: border-box;
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-brand-gold) var(--color-ui-surface);
+}
+
+/* =========================
+   BASE
+========================= */
+@layer base {
+
+	html,
+	body,
+	app-root {
+		width: 100%;
+		min-height: 100%;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	html::-webkit-scrollbar,
+	body::-webkit-scrollbar,
+	app-root::-webkit-scrollbar {
+		display: none;
+	}
+
+	body {
+		margin: 0;
+		overflow-x: hidden;
+		background: #070707ee;
+		color: #ffffff;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+}
+
+/* =========================
+   UTILITIES (IMPORTANTE: PRIMERO)
+========================= */
+
+/* INPUTS */
+
+.input-auth {
+	@apply w-full bg-black border border-white/10 text-white placeholder-gray-600 rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all duration-200;
+}
+
+.input-auth:focus {
+	@apply border-yellow-500;
+}
+
+.inputs-text {
+	@apply w-full px-4 py-3 rounded-xl border border-ui-border bg-ui-black text-white focus:border-brand-gold outline-none transition;
+}
+
+/* BOTONES BASE */
+@utility boton-base {
+	@apply font-semibold py-3 px-6 rounded-xl transition-all duration-300 cursor-pointer hover:scale-105;
+}
+
+/* BOTONES TABLA */
+@utility boton-tabla {
+	@apply mx-1 px-3 py-2 text-sm rounded-lg transition-all duration-200 cursor-pointer hover:scale-105;
+}
+
+/* BADGES BASE */
+@utility badge-base {
+	@apply text-sm font-medium px-3 py-1 rounded-full whitespace-nowrap;
+}
+
+/* =========================
+   PRIME OVERRIDES
+========================= */
+
+.p-inputtext {
+	@apply px-4 py-3 rounded-xl text-sm;
+}
+
+.p-input-icon-left>input {
+	padding-left: 2.5rem !important;
+}
+
+.p-carousel-indicator-active .p-carousel-indicator-button {
+	background: var(--color-brand-gold) !important;
+}
+
+p-button .p-button {
+	@apply w-full h-full;
+}
+
+.p-dialog-header {
+	@apply bg-ui-card rounded-t-2xl;
+}
+
+.p-dialog-header-actions {
+	button {
+		@apply boton-tabla bg-amber-500 hover:bg-amber-600 text-white;
+	}
+}
+
+p-password {
+	svg {
+		cursor: pointer;
+	}
+}
+
+.custom-panelmenu .logout-link,
+.custom-panelmenu .logout-link * {
+	color: #dc2626 !important;
+}
+
+.sidebar-link .p-panelmenu-item-link-active {
+	background-color: #1976d2 !important;
+	font-weight: bold !important;
+}
+
+ul.p-panelmenu-root-list,
+.p-panelmenu-submenu {
+	padding: revert !important;
+
+	li {
+		margin: .8rem 0 !important;
+	}
+}
+
+.custom-panelmenu .p-menuitem-link-active {
+	background: var(--color-brand-gold-soft);
+	color: var(--color-brand-gold) !important;
+	font-weight: bold;
+	border-radius: 6px;
+}
+
+.p-checkbox-box {
+	border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.p-checkbox-input:checked+.p-checkbox-box {
+	background: var(--color-brand-gold) !important;
+	border-color: var(--color-brand-gold) !important;
+}
+
+p-treeSelect button {
+	@apply transition-transform duration-200 hover:scale-110 rounded-lg hover:bg-green-200;
+	color: var(--p-button-text-primary-color);
+}
+
+/* =========================
+   FORMULARIOS
+========================= */
+
+.title-form {
+	@apply text-xl font-bold mb-4;
+}
+
+.subtitle-form {
+	@apply text-lg font-medium text-center;
+}
+
+.part-form {
+	@apply flex flex-col gap-2;
+}
+
+.label-form {
+	@apply text-sm font-semibold text-text-secondary;
+}
+
+/* INPUTS GLOBAL (SIN inputs-text para evitar errores) */
+input,
+textarea,
+p-select,
+p-treeSelect,
+p-fileUpload {
+	@apply w-full px-4 py-3 rounded-xl border border-ui-border bg-ui-black text-white focus:border-brand-gold outline-none transition;
+}
+
+.p-inputtext.ng-invalid.ng-touched,
+.p-inputtext.ng-invalid.ng-dirty,
+p-password.ng-invalid.ng-touched .p-password-input,
+p-password.ng-invalid.ng-dirty .p-password-input,
+p-select.ng-invalid.ng-touched,
+p-select.ng-invalid.ng-dirty,
+p-treeSelect.ng-invalid.ng-touched,
+p-treeSelect.ng-invalid.ng-dirty,
+textarea.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-dirty,
+p-inputnumber.ng-invalid.ng-touched .p-inputnumber-input,
+p-inputnumber.ng-invalid.ng-dirty .p-inputnumber-input {
+	@apply border-red-500 ring-1 ring-red-500;
+}
+
+.p-inputtext.ng-valid.ng-touched,
+p-password.ng-valid.ng-touched .p-password-input,
+p-select.ng-valid.ng-touched,
+p-treeSelect.ng-valid.ng-touched,
+textarea.ng-valid.ng-touched,
+p-inputnumber.ng-valid.ng-touched .p-inputnumber-input {
+	@apply border-blue-500 ring-1 ring-blue-500;
+}
+
+p-colorpicker {
+	.p-colorpicker-preview {
+		@apply p-6 border border-gray-800 rounded-xl focus:outline-none w-10 h-10;
+	}
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.boton-primary {
+	@apply boton-base bg-brand-gold text-black hover:bg-brand-gold-hover;
+}
+
+.boton-secondary {
+	@apply boton-base bg-ui-card text-white border border-ui-border hover:bg-ui-elevated;
+}
+
+.boton-ghost {
+	@apply boton-base bg-transparent text-white border border-ui-border hover:bg-ui-border;
+}
+
+.boton-danger {
+	@apply boton-base bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white;
+}
+
+.boton-warning {
+	@apply boton-base bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500 hover:text-black;
+}
+
+.boton-cerrar {
+	@apply boton-tabla bg-amber-500 hover:bg-amber-600 text-white;
+}
+
+.boton-cierre {
+	@apply bg-amber-500 hover:bg-amber-600 text-white text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer;
+}
+
+.boton-logout {
+	@apply w-full rounded-2xl border border-brand-red/30 px-4 py-3 text-left text-sm text-brand-red transition hover:bg-brand-red/30 hover:text-brand-red hover:border-brand-red flex items-center gap-3 cursor-pointer
+}
+
+/* =========================
+   BOTONES TABLA
+========================= */
+
+.boton-editar-tabla {
+	@apply boton-tabla text-blue-500 hover:bg-blue-500 hover:text-white;
+}
+
+.boton-eliminar-tabla {
+	@apply boton-tabla text-red-500 hover:bg-red-500 hover:text-white;
+}
+
+.boton-ver-tabla {
+	@apply boton-tabla text-green-500 hover:bg-green-500 hover:text-white;
+}
+
+.boton-agregar {
+	@apply boton-tabla text-emerald-500 hover:bg-emerald-500 hover:text-white;
+}
+
+.boton-anular-tabla {
+	@apply boton-tabla text-amber-500 hover:bg-amber-500 hover:text-white;
+}
+
+.boton-aprobar-tabla {
+	@apply boton-tabla text-emerald-600 hover:bg-emerald-600 hover:text-white;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge-activo {
+	@apply badge-base bg-green-500/10 text-green-400 border border-green-500/30;
+}
+
+.badge-inactivo {
+	@apply badge-base bg-red-500/10 text-red-400 border border-red-500/30;
+}
+
+.badge-warning {
+	@apply badge-base bg-yellow-500/10 text-yellow-400 border border-yellow-500/30;
+}
+
+.badge-rol {
+	@apply badge-base bg-blue-500/10 text-blue-400 border border-blue-500/30;
+}
+
+.badge-stock-ok {
+	@apply badge-base bg-green-500/10 text-green-400;
+}
+
+.badge-stock-bajo {
+	@apply badge-base bg-amber-500/10 text-amber-400;
+}
+
+.badge-stock-cero {
+	@apply badge-base bg-red-500/10 text-red-400;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.container-main {
+	@apply max-w-[1200px] mx-auto w-full px-4 md:px-6;
+}
+
+@media (min-width: 1800px) {
+	.container-main {
+		@apply max-w-[1600px];
+	}
+}
+
+/* =========================
+   UTILIDADES EXTRA
+========================= */
+
+.animate-fade-in {
+	animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ICONOS HEADER/FOOTER */
+app-header i,
+app-footer i {
+	font-size: 1.5rem !important;
+}
+
+@media (width <=425px) {
+
+	app-header i,
+	app-footer i {
+		font-size: 1rem !important;
+		margin: 2px;
+	}
+}
+
+/* ========================= si o si tienen q esta aca
+   OVERRIDES SIDEBAR*/
+
+.custom-panelmenu .p-panelmenu-header-content:hover,
+.custom-panelmenu .p-panelmenu-header-content:focus,
+.custom-panelmenu .p-panelmenu-header-content:focus-visible,
+.custom-panelmenu .p-panelmenu-header-content:focus-within,
+
+.custom-panelmenu .p-panelmenu-item-content:hover,
+.custom-panelmenu .p-panelmenu-item-content:focus,
+.custom-panelmenu .p-panelmenu-item-content:focus-visible,
+
+.custom-panelmenu .p-menuitem-link:hover,
+.custom-panelmenu .p-menuitem-link:focus,
+.custom-panelmenu .p-menuitem-link:focus-visible,
+
+.custom-panelmenu .p-panelmenu-header-link:hover,
+.custom-panelmenu .p-panelmenu-header-link:focus,
+.custom-panelmenu .p-panelmenu-header-link:focus-visible {
+	background: rgba(212, 175, 55, 0.15) !important;
+	border-color: var(--color-brand-gold) !important;
+	color: var(--color-brand-gold) !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.custom-panelmenu .p-panelmenu-header-icon,
+.custom-panelmenu .p-menuitem-icon,
+.custom-panelmenu .p-panelmenu-submenu-icon,
+.custom-panelmenu .p-submenu-icon,
+.custom-panelmenu .p-icon {
+	color: var(--color-brand-gold) !important;
+	transition: color .2s ease;
+	font-size: .95rem;
 }
