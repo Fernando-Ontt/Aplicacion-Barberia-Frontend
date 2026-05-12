@@ -21,4 +21,12 @@ export class NotificationService {
     const detail = err?.error?.message || err?.message || 'Ocurrió un error inesperado';
     this.showError(detail, summary);
   }
+
+  // showInfo(detail: string, summary: string = 'Info', life: number = 0) {
+  //   this.messageService.add({ severity: 'info', summary, detail, life });
+  // }
+
+  // clearAll() {
+  //   this.messageService.clear();
+  // }
 }

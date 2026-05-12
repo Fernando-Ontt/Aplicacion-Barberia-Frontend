@@ -27,11 +27,4 @@ export class ProductoFacade {
       crearProducto(producto: any){
         
       }
-
-  
-  
-
-
-
-   
 }

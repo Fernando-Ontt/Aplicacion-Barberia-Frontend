@@ -17,12 +17,12 @@ export const routes: Routes = [
     path: '',
     component: PublicLayoutComponent,
     children: [
-      {path: 'inicio',redirectTo: '',pathMatch: 'full'},
+      { path: 'inicio', redirectTo: '', pathMatch: 'full' },
       { path: '', component: InicioComponent, canActivate: [guestGuard], },
 
       { path: 'nosotros', component: NosotrosComponent },
       //esta raro esta wea 
-      {path: 'productos',loadChildren: () =>import('./features/productos/productos.route').then(m => m.PRODUCTOS_ROUTE)},
+      { path: 'productos', loadChildren: () => import('./features/productos/productos.route').then(m => m.PRODUCTOS_ROUTE) },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'reclamos', component: ReclamosComponent },
       { path: 'reservas', component: ReservasComponent },
@@ -37,18 +37,15 @@ export const routes: Routes = [
     data: { roles: ['admin', 'barbero'] },
     children: [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
+      { path: 'resumen', loadComponent: () => import('./features/private/components/resumen/resumen').then(m => m.Resumen) },
       {
-        path: 'resumen',
-        loadComponent: () => import('./features/private/components/resumen/resumen').then(m => m.Resumen)
+        path: 'catalogo', children: [
+          { path: 'categorias', loadComponent: () => import('./features/private/components/catalogo/categorias/categorias.component').then(m => m.CategoriasComponent) },
+          { path: 'productos', loadComponent: () => import('./features/private/components/catalogo/productos/productos.component').then(m => m.ProductosComponent) },
+          { path: 'servicios', loadComponent: () => import('./features/private/components/catalogo/servicios/servicios.component').then(m => m.ServiciosComponent) },
+        ]
       },
-      {
-        path: '',
-        loadChildren: () => import('../app/features/productos/admin/producto.Admin.route').then(m => m.PRODUCTOS_ROUTE_ADMIN)
-      },
-      {
-        path: '**',
-        loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component)
-      }
+      { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
     ]
 
   },
