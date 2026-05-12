@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   selector: 'app-error404',
   imports: [LogoComponent],
   template: `
-  <div class="flex flex-col items-center justify-center h-screen text-center bg-black h-100">
+  <div class="flex flex-col items-center justify-center h-full text-center bg-black">
     <div class="mb-8">
       <app-logo class="w-32 h-32" />
     </div>

@@ -8,7 +8,7 @@ type LogoVariant = 'logo' | 'icon';
   imports: [RouterLink],
   template: `
     <img [src]="logoFinal()" routerLink="/inicio" alt="Logo FadeX"
-      class="h-14 md:h-18 lg:h-20 w-auto object-contain cursor-pointer hover:scale-105 transition-transform"/> `,
+      class="h-14 md:h-18 lg:h-20 w-auto rounded-2xl object-contain cursor-pointer hover:scale-105 transition-transform"/> `,
 })
 export class LogoComponent {
   @Input() variant: LogoVariant = 'logo'; 

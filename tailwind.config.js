@@ -4,7 +4,12 @@ module.exports = {
     './public/**/*.{html,ts,css}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        'brand-gold': 'var(--color-brand-gold)',
+        'brand-gold-hover': 'var(--color-brand-gold-hover)'
+      }
+    }
   },
 
   plugins: [],
