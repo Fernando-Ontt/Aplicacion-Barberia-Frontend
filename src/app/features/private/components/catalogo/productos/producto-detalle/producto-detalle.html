@@ -1,0 +1,58 @@
+<div class="p-6 space-y-6 center">
+    <div class="p-6 bg-white rounded-xl shadow border-gray-300 border">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button pButton (click)="volver()" class="boton-primary" icon="pi pi-arrow-left">Volver</button>
+                @if (detalleProducto) {
+                <h1 class="text-xl font-bold">{{ detalleProducto.nombre }}</h1>
+                } @else {
+                <h1 class="text-xl font-bold text-gray-400">Cargando...</h1>
+                }
+            </div>
+            @if (detalleProducto) {
+            <span
+                class="text-md px-2 py-1 rounded bg-neutral-200 text-gray-800 font-mono tracking-wide border border-gray-300 shadow-sm">SKU:
+                {{ detalleProducto.nombre }}</span>
+            }
+        </div>
+    </div>
+    @if(detalleProducto){
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm md:text-base">
+        <p><b>Categoría:</b> {{ detalleProducto.nombre }}</p>
+        <p><b>Precio Venta:</b> {{detalleProducto.precio}}</p>
+        <p><b>Stock:</b> {{ detalleProducto.stock }}</p>
+        <p><b class="mr-2">Publicado:</b><app-status-badge type="boolean" [value]="detalleProducto.publicado"
+                trueLabel="Sí" falseLabel="No" /></p>
+        <p><b class="mr-2">Activo:</b><app-status-badge type="boolean" [value]="detalleProducto.estado"
+                trueLabel="Activo" falseLabel="Inactivo" /></p>
+    </div>
+
+    <div class="flex flex-col my-5">
+        <h2 class="font-bold mb-2 text-gray-900 border-l-4 border-green-600 pl-2">Descripción</h2>
+        @if (!detalleProducto.descripcion) {
+        <p class="text-gray-500 italic">No hay descripción para este producto.</p>
+        }
+        <p class="text-gray-600">{{ detalleProducto.descripcion }}</p>
+    </div>
+
+    <div class="flex flex-col my-5">
+        <h2 class="font-bold mb-2 text-gray-900 border-l-4 border-green-600 pl-2">Imágenes</h2>
+        @if (!detalleProducto.urlsMultimedia || detalleProducto.urlsMultimedia.length === 0) {
+        <div
+            class="w-full sm:w-[150px] md:w-[250px] aspect-square border rounded-xl overflow-hidd transition-all duration-300 shadow hover:shadow-lg hover:-translate-y-1 hover:border-primary border-gray-300 flex items-center justify-center bg-gray-100">
+            <i class="pi pi-image text-4xl text-gray-400"></i>
+        </div>
+        } @else {
+        <div class="flex gap-3 flex-wrap justify-center md:justify-start">
+            @for (img of detalleProducto.urlsMultimedia; track $index) {
+            <div
+                class="w-[200px] h-[250px] border rounded-lg shadow border-gray-300 flex items-center justify-center overflow-hidden bg-white">
+                <p-image [src]="environment + img" imageClass="w-full h-full object-cover"
+                    class="w-full h-full object-cover cursor-pointer" [preview]="true" />
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+</div>
