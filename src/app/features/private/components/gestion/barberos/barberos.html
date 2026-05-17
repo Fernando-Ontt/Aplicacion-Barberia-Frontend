@@ -1,7 +1,38 @@
-<div class="mt-5">
-	<app-header-barbero [title]="'Barberos'" [icon]="icono" [description]="'Gestión y administración de barberos'" [buttonLabel]="'Nuevo'" (create)="abrirCrear()" (search)="onSearch($event)"></app-header-barbero>
-</div>
-
-<div class="mt-5">
-	<app-resumen-general-barbero></app-resumen-general-barbero>
+<div class="space-y-8">
+  <section class="px-4 md:px-6 lg:px-8 space-y-3">
+    <app-header-barbero></app-header-barbero>
+  </section>
+  <section class="space-y-3">
+    <app-resumen-general-barbero></app-resumen-general-barbero>
+  </section>
+  <section class="space-y-3">
+    <app-ranking-rendimiento></app-ranking-rendimiento>
+  </section>
+  <section class="space-y-3">
+    <div class="px-4 md:px-6 lg:px-8">
+      <h2
+        class="text-base font-semibold uppercase tracking-[0.18em] text-brand-gold">
+        👥 Gestión de barberos
+      </h2>
+      <p class="mt-1 text-sm text-gray-400">
+        Administración general del personal y actividad.
+      </p>
+    </div>
+    <app-table-barbero></app-table-barbero>
+  </section>
+  <section class="space-y-3">
+    <div class="px-4 md:px-6 lg:px-8">
+      <h2
+        class="text-base font-semibold uppercase tracking-[0.18em] text-brand-gold">
+        💰 Rendimiento financiero
+      </h2>
+      <p class="mt-1 text-sm text-gray-400">
+        Comisiones y cortes realizados este mes.
+      </p>
+    </div>
+    <div class="grid gap-4 xl:grid-cols-2">
+      <app-table-ventas-comisiones></app-table-ventas-comisiones>
+      <app-table-cortes-barbero-mes></app-table-cortes-barbero-mes>
+    </div>
+  </section>
 </div>

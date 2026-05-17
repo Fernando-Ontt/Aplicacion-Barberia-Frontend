@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { HeaderBarbero } from "./components/header-barbero/header-barbero";
 import { ResumenGeneralBarbero } from './components/resumen-general-barbero/resumen-general-barbero';
+import { TableBarbero } from './components/table-barbero/table-barbero';
+import { TableVentasComisiones } from './components/table-ventas-comisiones/table-ventas-comisiones';
+import { TableCortesBarberoMes } from './components/table-cortes-barbero-mes/table-cortes-barbero-mes';
+import { RankingRendimiento } from './components/ranking-rendimiento/ranking-rendimiento';
 
 @Component({
   selector: 'app-barberos',
-  imports: [HeaderBarbero, ResumenGeneralBarbero],
+  imports: [HeaderBarbero, ResumenGeneralBarbero, TableBarbero, TableVentasComisiones, TableCortesBarberoMes, RankingRendimiento],
   templateUrl: './barberos.html',
   styleUrl: './barberos.css',
 })
