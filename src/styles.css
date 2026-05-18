@@ -491,6 +491,7 @@ p-colorpicker {
 }
 
 
+
 /* =========================
    BOTONES TABLA
 ========================= */
@@ -540,6 +541,21 @@ p-colorpicker {
 .boton-ver-tabla .p-button,
 .boton-agregar .p-button {
 	box-shadow: none !important;
+}
+.boton-accion-cita .p-button {
+    @apply rounded-lg mx-1 px-3 py-2 text-sm transition-all duration-200 cursor-pointer hover:scale-105 text-blue-500 border border-blue-500/30 bg-blue-500/10;
+}
+
+.boton-accion-cita .p-button:not(:disabled):hover {
+    @apply bg-blue-500 text-white border border-blue-500/30;
+}
+
+.boton-accion-rojo .p-button {
+    @apply rounded-lg mx-1 px-3 py-2 text-sm transition-all duration-200 cursor-pointer hover:scale-105 text-red-500 border border-red-500/30 bg-red-500/10;
+}
+
+.boton-accion-rojo .p-button:not(:disabled):hover {
+    @apply bg-red-500 text-white border border-red-500/30;
 }
 
 /* =========================

@@ -72,6 +72,7 @@ export const routes: Routes = [
       { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
     ]
   },
+  
 
   {
     path: 'dashboard/barbero',
@@ -87,9 +88,10 @@ export const routes: Routes = [
           { path: 'productos', loadComponent: () => import('./features/private/components/catalogo/productos/productos.component').then(m => m.ProductosComponent) },
           { path: 'productos/detalle/:id', loadComponent: () => import('./features/private/components/catalogo/productos/producto-detalle/producto-detalle.component').then(m => m.ProductoDetalleComponent) },
           { path: 'servicios', loadComponent: () => import('./features/private/components/catalogo/servicios/servicios.component').then(m => m.ServiciosComponent) },
+          
         ]
       },
-
+      { path: 'reservas', loadComponent: () => import('./features/private/components/reserva/reserva') .then(m => m.ReservaComponent)},
       {
         path: 'operaciones',
         children: [
