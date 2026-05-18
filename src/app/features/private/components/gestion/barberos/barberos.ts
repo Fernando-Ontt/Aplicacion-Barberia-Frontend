@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { HeaderBarbero } from "./components/header-barbero/header-barbero";
 import { ResumenGeneralBarbero } from './components/resumen-general-barbero/resumen-general-barbero';
 import { TableBarbero } from './components/table-barbero/table-barbero';
+import { FiltrarBarbero } from "./components/filtrar-barbero/filtrar-barbero";
 
 
 @Component({
   selector: 'app-barberos',
-  imports: [HeaderBarbero, ResumenGeneralBarbero, TableBarbero],
+  imports: [HeaderBarbero, ResumenGeneralBarbero, TableBarbero, FiltrarBarbero],
   templateUrl: './barberos.html',
   styleUrl: './barberos.css',
 })
@@ -18,7 +19,7 @@ icono: string = 'pi-users';
   barberos: any[] = [
     {
       barberoId: 1,
-      persona: { nombre: 'Marco Vega', email: 'marco@beria.pe' },
+      persona: { nombre: 'Marco', apellido: 'Vega', email: 'marco@beria.pe' },
       experiencia: '6 años',
       estado: 'Disponible',
       reservas: 7,
@@ -28,7 +29,7 @@ icono: string = 'pi-users';
     },
     {
       barberoId: 2,
-      persona: { nombre: 'Luis Ríos', email: 'luis@beria.pe' },
+      persona: { nombre: 'Luis', apellido: 'Ríos', email: 'luis@beria.pe' },
       experiencia: '3 años',
       estado: 'En descanso',
       reservas: 6,

@@ -6,8 +6,8 @@
 
 			<thead>
 				<tr class="table-header border-b border-gray-800 text-xs uppercase tracking-[0.2em] text-brand-gold/80">
-					<th class="py-3 px-3 text-left w-[28%]">Nombre</th>
-					<th class="py-3 px-3 text-left w-[10%]">Exp.</th>
+					<th class="py-3 px-3 text-left w-[22%]">Nombre</th>
+					<th class="py-3 px-3 text-left w-[16%]">Apellido</th>
 					<th class="py-3 px-3 text-left w-[14%]">Estado</th>
 					<th class="py-3 px-3 text-center w-[10%]">Reservas</th>
 					<th class="py-3 px-3 text-center w-[10%]">Comisión</th>
@@ -24,7 +24,7 @@
 					<td class="py-4 px-3">
 
 						<div class="flex items-center gap-3">
-							<div class="cliente-avatar">{{ initials(b.persona?.nombre || b.nombre) }}</div>
+							<div class="cliente-avatar">{{ initials((b.persona?.nombre || b.nombre) + ' ' + (b.persona?.apellido || '')) }}</div>
 							<div>
 								<div class="font-semibold text-gray-100 leading-tight">{{ b.persona?.nombre || b.nombre }}</div>
 								<div class="text-xs text-gray-400">{{ b.persona?.email || b.email }}</div>
@@ -33,8 +33,8 @@
 
 					</td>
 
-					<td class="py-4 px-3 text-gray-400 whitespace-nowrap">
-						{{ b.experiencia || b.experienciaAnios || '—' }}
+					<td class="py-4 px-3 font-semibold text-gray-100 leading-tight">
+						{{ b.persona?.apellido || b.apellido || '—' }}
 					</td>
 
 					<td class="py-4 px-3">

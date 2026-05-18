@@ -1,0 +1,44 @@
+<!-- FILTROS -->
+<div class="form-base mb-6">
+
+	<div class="flex flex-col gap-4 lg:flex-row lg:items-start">
+
+		<!-- IZQUIERDA: TÍTULO + DESCRIPCIÓN -->
+		<div class="lg:flex-1">
+			<h3 class="text-sm font-semibold tracking-[0.15em] text-brand-gold uppercase">FILTROS</h3>
+			<p class="mt-1 text-sm text-text-secondary">Organiza y administra el listado de barberos.</p>
+		</div>
+
+		<!-- DERECHA: CONTROLES -->
+		<div class="flex items-center gap-6 lg:ml-auto lg:items-end">
+
+			<div class="filter-group">
+				<label class="label-form">Estado</label>
+				<select #statusSelect class="inputs-text w-[180px]">
+					<option value="">Todos</option>
+					<option value="Disponible">Disponible</option>
+					<option value="Ocupado">Ocupado</option>
+				</select>
+			</div>
+
+			<div class="filter-group">
+				<label class="label-form">Ordenar</label>
+				<select #orderSelect class="inputs-text w-[200px]">
+					<option value="">Seleccionar</option>
+					<option value="reservas_desc">Más reservas</option>
+					<option value="reservas_asc">Menos reservas</option>
+					<option value="ventas_desc">Más ventas</option>
+					<option value="ventas_asc">Menos ventas</option>
+				</select>
+			</div>
+
+			<div class="flex gap-3 actions">
+				<button pButton type="button" class="p-button boton-secondary" (click)="onApply(statusSelect.value, orderSelect.value)">Aplicar</button>
+				<button pButton type="button" class="p-button boton-ghost" (click)="onClear()"><i class="pi pi-filter-slash"></i> Limpiar</button>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
