@@ -20,7 +20,7 @@ export const MENU_CONFIG = [
         label: "Ventas",
         icon: "pi pi-shopping-cart",
         routerLink: ["operaciones/ventas"],
-        permission: "VENTA_READ"
+        permission: "VENTA_READ_ALL"
       }
     ]
   },
