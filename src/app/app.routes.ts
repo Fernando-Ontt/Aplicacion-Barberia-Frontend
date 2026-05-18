@@ -47,6 +47,18 @@ export const routes: Routes = [
           { path: 'servicios', loadComponent: () => import('./features/private/components/catalogo/servicios/servicios.component').then(m => m.ServiciosComponent) },
         ]
       },
+
+      {
+        path: 'operaciones',
+        children: [
+          {
+            path: 'ventas',
+            loadComponent: () =>
+              import('./features/private/components/operaciones/ventas/ventas.component').then(m => m.VentasComponent)
+          }
+        ]
+      },
+
       {
         path: 'gestion', children: [
           { path: 'clientes', loadComponent: () => import('./features/private/components/gestion/clientes/clientes').then(m => m.Clientes) },
