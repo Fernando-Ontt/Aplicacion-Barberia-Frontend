@@ -1,1 +1,142 @@
-<p>dashboard-cliente works!</p>
+<div class="flex min-h-screen bg-white overflow-x-auto overflow-y-auto">
+  @if(sidebarVisible){
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" (click)="toggleSidebar()"></div>
+  }
+  
+  <!-- Sidebar personalizado para cliente -->
+  <aside class="fixed inset-y-0 left-0 z-40 w-64 shrink-0 border-r border-ui-border bg-brand-black transition-transform duration-300 md:hidden"
+    [class.-translate-x-full]="!sidebarVisible"
+    [class.translate-x-0]="sidebarVisible">
+    <div class="h-full flex flex-col">
+      <!-- Logo -->
+      <div class="px-4 py-6 border-b border-ui-border">
+        <div class="flex flex-col items-start gap-2">
+          <div><i class="pi pi-crown text-brand-gold"></i></div>
+          <div>
+            <h1 class="text-[1.7rem] font-semibold text-brand-gold">Mi Cuenta</h1>
+            <p class="text-xs text-text-muted uppercase">Cliente</p>
+          </div>
+        </div>
+      </div>
+      <!-- Menú -->
+      <div class="flex-1 overflow-y-auto p-4">
+        <p-panelMenu [model]="clienteMenuItems" class="custom-panelmenu w-full"></p-panelMenu>
+      </div>
+      <!-- Footer -->
+      <div class="border-t border-ui-border p-4">
+        <button type="button" class="w-full boton-logout">
+          <span class="flex items-center gap-3">
+            <i class="pi pi-sign-out text-brand-red"></i>
+            <span>Cerrar sesión</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Desktop sidebar -->
+  <aside class="hidden h-screen w-64 shrink-0 border-r border-ui-border bg-brand-black md:block">
+    <div class="h-full flex flex-col">
+      <!-- Logo -->
+      <div class="px-4 py-6 border-b border-ui-border">
+        <div class="flex flex-col items-start gap-2">
+          <div><i class="pi pi-crown text-brand-gold text-2xl"></i></div>
+          <div>
+            <h1 class="text-[1.7rem] font-semibold text-brand-gold">Mi Cuenta</h1>
+            <p class="text-xs text-text-muted uppercase">Cliente</p>
+          </div>
+        </div>
+      </div>
+      <!-- Menú -->
+      <div class="flex-1 overflow-y-auto p-4">
+        <p-panelMenu [model]="clienteMenuItems" class="custom-panelmenu w-full"></p-panelMenu>
+      </div>
+      <!-- Footer -->
+      <div class="border-t border-ui-border p-4">
+        <button type="button" class="w-full boton-logout">
+          <span class="flex items-center gap-3">
+            <i class="pi pi-sign-out text-brand-red"></i>
+            <span>Cerrar sesión</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </aside>
+  
+  <div class="flex-1 flex min-h-0 flex-col">
+    <!-- Header -->
+    <header class="sticky top-0 flex h-16 items-center justify-between border-b border-ui-border bg-ui-black px-4 md:px-6 z-10">
+      <div class="flex items-center gap-3">
+        <button type="button" class="inline-flex items-center justify-center rounded-md border border-ui-border bg-transparent p-2 text-brand-gold md:hidden"
+          (click)="toggleSidebar()"
+          aria-label="Abrir o cerrar menú">
+          <i class="pi pi-bars"></i>
+        </button>
+        <span class="font-semibold text-white">Mi Cuenta - Cliente</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="hidden text-text-muted sm:inline">{{ userFullName }}</span>
+      </div>
+    </header>
+
+    <!-- Contenido Dinámico -->
+    <main class="min-h-0 flex-1 overflow-y-auto bg-brand-black p-4 md:p-6">
+      <!-- Dashboard Principal -->
+      @if (isDashboard) {
+        <div class="space-y-6">
+          <h2 class="text-2xl font-bold text-white">Bienvenido, {{ userFullName }}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-ui-card rounded-lg p-6 border border-ui-border">
+              <h3 class="font-semibold text-lg text-white">Próximas Reservas</h3>
+              <p class="text-text-muted text-sm mt-2">No tienes reservas próximas</p>
+            </div>
+            <div class="bg-ui-card rounded-lg p-6 border border-ui-border">
+              <h3 class="font-semibold text-lg text-white">Puntos de Fidelización</h3>
+              <p class="text-2xl font-bold text-brand-gold mt-2">0 pts</p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Agendar Cita -->
+      @if (isReservar) {
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-white">Agendar Nueva Cita</h2>
+          <p class="text-text-muted">Formulario para agendar cita - Por completar</p>
+        </div>
+      }
+
+      <!-- Mis Reservas -->
+      @if (isMisReservas) {
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-white">Mis Reservas</h2>
+          <p class="text-text-muted">Lista de tus reservas - Por completar</p>
+        </div>
+      }
+
+      <!-- Historial -->
+      @if (isHistorial) {
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-white">Historial de Servicios</h2>
+          <p class="text-text-muted">Historial de servicios realizados - Por completar</p>
+        </div>
+      }
+
+      <!-- Rewards -->
+      @if (isRewards) {
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-white">Programa de Fidelización</h2>
+          <p class="text-text-muted">Detalles del programa de rewards - Por completar</p>
+        </div>
+      }
+
+      <!-- Perfil -->
+      @if (isPerfil) {
+        <div class="space-y-4">
+          <h2 class="text-2xl font-bold text-white">Mi Perfil</h2>
+          <p class="text-text-muted">Editar información personal - Por completar</p>
+        </div>
+      }
+    </main>
+  </div>
+</div>
