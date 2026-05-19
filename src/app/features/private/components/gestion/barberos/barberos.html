@@ -21,13 +21,18 @@
   <div class="section-content">
     <app-filtrar-barbero
       (apply)="onApplyFilters($event)"
-      (clear)="onClearFilters()">
+      (clear)="onClearFilters()"
+      (inhabilitados)="onShowInhabilitados()">
     </app-filtrar-barbero>
     <app-table-barbero
       [barberos]="barberos"
       [totalElements]="totalElements"
       [currentPage]="currentPage"
       [totalPages]="totalPages"
+      [inhabilitadosMode]="inhabilitadosMode"
+      [isSearchMode]="searchTerm.trim().length > 0"
+      (delete)="onDisableBarbero($event)"
+      (reactivate)="onReactivateBarbero($event)"
       (prev)="onPrev()"
       (next)="onNext()">
     </app-table-barbero>

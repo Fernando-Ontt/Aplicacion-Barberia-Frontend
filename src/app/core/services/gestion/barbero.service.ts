@@ -40,6 +40,35 @@ export class BarberoService {
         );
     }
 
+    listarInhabilitados(
+        page: number = 0,
+        size: number = 5
+    ): Observable<ApiResponse<Page<Barbero>>> {
+
+        const params = new HttpParams()
+            .set('page', page)
+            .set('size', size);
+
+        return this.http.get<ApiResponse<Page<Barbero>>>(
+            `${this.apiUrl}/inhabilitados`,
+            { params }
+        );
+    }
+    deshabilitar(id: number): Observable<ApiResponse<string>> {
+
+        return this.http.patch<ApiResponse<string>>(
+            `${this.apiUrl}/${id}/deshabilitar`,
+            {}
+        );
+    }
+
+    reactivar(id: number): Observable<ApiResponse<string>> {
+
+        return this.http.patch<ApiResponse<string>>(
+            `${this.apiUrl}/${id}/reactivar`,
+            {}
+        );
+    }
     buscar(
         filtros: FiltroBarberoBusqueda = {},
         page: number = 0,

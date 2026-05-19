@@ -10,12 +10,17 @@ import { ButtonModule } from 'primeng/button';
 export class FiltrarBarbero {
   @Output() apply = new EventEmitter<{ estado: string; order: string }>();
   @Output() clear = new EventEmitter<void>();
+  @Output() inhabilitados = new EventEmitter<void>();
 
   onApply(estado: string, order: string) { this.apply.emit({ estado, order }); }
   onClear(statusSelect: HTMLSelectElement, orderSelect: HTMLSelectElement) {
     statusSelect.value = '';
     orderSelect.value = '';
     this.clear.emit();
+  }
+
+  onInhabilitados() {
+    this.inhabilitados.emit();
   }
 
 }

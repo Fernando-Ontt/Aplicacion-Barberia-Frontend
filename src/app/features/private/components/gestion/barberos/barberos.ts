@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { BarberoService, FiltroBarberoBusqueda, DireccionOrden, OrdenarBarberoPor } from '@/app/core/services/gestion/barbero.service';
 import { HeaderBarbero } from "./components/header-barbero/header-barbero";
 import { ResumenGeneralBarberoComponent } from './components/resumen-general-barbero/resumen-general-barbero';
@@ -15,6 +16,7 @@ export class Barberos implements OnInit {
 
   icono: string = 'pi-users';
   searchTerm: string = '';
+  inhabilitadosMode: boolean = false;
   private filtrosActuales: FiltroBarberoBusqueda = {};
 
   barberos: any[] = [];
@@ -62,16 +64,20 @@ export class Barberos implements OnInit {
     this.searchTerm = query.trim();
 
     if (this.searchTerm) {
-      // Hay término → buscar por nombre/apellido, ignora filtros activos
-      this.barberoService.buscarPorNombre(this.searchTerm, 0, 10)
-        .subscribe((res: any) => this.aplicarPagina(res));
+      this.buscarBarberosPorNombre(this.searchTerm);
     } else {
+      if (this.inhabilitadosMode) {
+        this.onShowInhabilitados();
+        return;
+      }
+
       // Campo vacío → volver al listado normal con filtros activos
       this.loadPage(0, 10, this.filtrosActuales);
     }
   }
 
   onApplyFilters(filters: { estado: string; order: string }): void {
+    this.inhabilitadosMode = false;
     const parsed = this.parseOrder(filters.order);
     this.filtrosActuales = {
       estado: (filters.estado as FiltroBarberoBusqueda['estado']) || 'todos',
@@ -82,8 +88,64 @@ export class Barberos implements OnInit {
   }
 
   onClearFilters(): void {
+    this.inhabilitadosMode = false;
     this.filtrosActuales = {};
     this.loadPage(0, 10, {});
+  }
+
+  onShowInhabilitados(): void {
+    this.searchTerm = '';
+    this.inhabilitadosMode = true;
+    this.filtrosActuales = {};
+    this.barberoService.listarInhabilitados(0, 10).subscribe((res: any) => this.aplicarPagina(res));
+  }
+
+  onDisableBarbero(id: number): void {
+    this.barberoService.deshabilitar(id).subscribe({
+      next: () => this.inhabilitadosMode ? this.onShowInhabilitados() : this.loadPage(this.currentPage, 10, this.filtrosActuales),
+      error: (error) => console.error('Error al deshabilitar barbero', error),
+    });
+  }
+
+  onReactivateBarbero(id: number): void {
+    this.barberoService.reactivar(id).subscribe({
+      next: () => this.onShowInhabilitados(),
+      error: (error) => console.error('Error al reactivar barbero', error),
+    });
+  }
+
+  private buscarBarberosPorNombre(termino: string): void {
+    forkJoin({
+      activos: this.barberoService.buscarPorNombre(termino, 0, 10),
+      inhabilitados: this.barberoService.listarInhabilitados(0, 10),
+    }).subscribe({
+      next: ({ activos, inhabilitados }) => {
+        const texto = termino.toLowerCase();
+        const activosContent = activos?.data?.content || [];
+        const inhabilitadosContent = inhabilitados?.data?.content || [];
+
+        const combinados = [...activosContent, ...inhabilitadosContent].filter((b: any) => {
+          const nombreCompleto = `${b.persona?.nombre || b.nombre || ''} ${b.persona?.apellido || b.apellido || ''}`.toLowerCase();
+          const correo = (b.persona?.email || b.email || '').toLowerCase();
+          return nombreCompleto.includes(texto) || correo.includes(texto);
+        });
+
+        const unicos = Array.from(
+          new Map(combinados.map((b: any) => [b.barberoId || b.id, b])).values()
+        );
+
+        this.aplicarPagina({
+          success: true,
+          data: {
+            content: unicos,
+            totalElements: unicos.length,
+            pageNumber: 0,
+            totalPages: 1,
+          },
+        });
+      },
+      error: (error) => console.error('Error al buscar barberos', error),
+    });
   }
 
   private parseOrder(order: string): { ordenarPor?: OrdenarBarberoPor; direccion?: DireccionOrden } {
