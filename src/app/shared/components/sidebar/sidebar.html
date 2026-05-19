@@ -1,23 +1,31 @@
 @let items = menu$ | async;
 
-<aside class="w-full h-full min-h-screen p-4 flex flex-col transition-all duration-300 items-stretch text-brand-gold">
-    <header class="sidebar-brand px-6 py-6 border-b border-ui-border">
-        <div class="flex items-center gap-4">
-            <div>
+<aside class="sidebar-shell w-full h-full min-h-0 overflow-hidden p-4 flex flex-col items-stretch text-brand-gold transition-all duration-300"
+    [class.sidebar-collapsed]="collapsed">
+    <header class="sidebar-brand relative px-4 py-6 border-b border-ui-border">
+        @if (!collapsed) {
+            <div class="flex flex-col items-start text-left gap-2">
                 <div class="brand-mark">
-                <i class="pi pi-crown"></i>
+                    <i class="pi pi-crown"></i>
+                </div>
+                <div>
+                    <h1 class="text-[1.7rem] leading-none font-semibold tracking-[0.18em]">FadeX</h1>
+                    <p class="mt-1 text-[0.72rem] uppercase tracking-[0.25em] text-text-muted">Sistema de Gestión 
+                        <br>
+                        de Barbería</p>
+                </div>
             </div>
-            @if (!collapsed) {
-                <h1 class="text-[1.7rem] leading-none font-semibold tracking-[0.18em]">FadeX</h1>
-                <p class="mt-1 text-[0.72rem] uppercase tracking-[0.25em] text-text-muted">Sistema de Gestión 
-                    <br>
-                    de Barbería</p>
-            }
+        } @else {
+            <div class="sidebar-compact-brand flex flex-col items-center justify-center text-center gap-0 py-2">
+                <div class="brand-mark brand-mark-compact">
+                    <i class="pi pi-crown"></i>
+                </div>
+                <span class="sidebar-initial">F</span>
             </div>
-        </div>
+        }
     </header>
 
-    <div class="flex-1 overflow-y-auto p-4">
+    <div class="sidebar-menu flex-1 min-h-0 overflow-y-auto p-4">
         @if (items) {
         <p-panelMenu [model]="items" class="custom-panelmenu w-full"></p-panelMenu>
         }
@@ -25,7 +33,7 @@
 
     <div class="sidebar-footer border-t border-ui-border p-4">
         <button type="button"
-            class=" boton-logout"
+            class="boton-logout w-full"
             (click)="logout()">
             <span class="flex items-center gap-3">
                 <i class="pi pi-sign-out text-brand-red"></i>
