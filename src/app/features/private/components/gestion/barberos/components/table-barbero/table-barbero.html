@@ -60,7 +60,7 @@
 					<td class="py-4 px-3 text-right w-[8%]">
 
 						<div class="table-actions">
-							<p-button icon="pi pi-eye" class="boton-editar-tabla" [routerLink]="['/dashboard/gestion/barberos', b.barberoId || b.id]"></p-button>
+							<p-button icon="pi pi-eye" class="boton-editar-tabla" [routerLink]="['/dashboard/admin/gestion/barberos', b.barberoId || b.id]"></p-button>
 							<p-button icon="pi pi-trash" class="boton-eliminar-tabla" (click)="onDelete(b.barberoId || b.id)"></p-button>
 						</div>
 

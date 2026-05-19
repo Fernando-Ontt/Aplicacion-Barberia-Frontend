@@ -48,4 +48,8 @@ export class HeaderPerfilBarbero implements OnInit {
     return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
   }
 
+  volver(): void {
+    window.history.back();
+  }
+
 }
