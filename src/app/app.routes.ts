@@ -66,7 +66,7 @@ export const routes: Routes = [
       {
         path: 'gestion', children: [
           { path: 'clientes', loadComponent: () => import('./features/private/components/gestion/clientes/clientes').then(m => m.Clientes) },
-          { path: 'clientes/registrar-client', component: RegistrarClient },
+          { path: 'clientes/register-cliente', component: RegistrarClient },
           { path: 'clientes/:id', component: PerfilClient },
           { path: 'barberos', loadComponent: () => import('./features/private/components/gestion/barberos/barberos').then(m => m.Barberos) },
           { path: 'barberos/registrar-barbero', component:RegistrarBarbero},
@@ -111,6 +111,7 @@ export const routes: Routes = [
         path: 'gestion', children: [
           { path: 'clientes', loadComponent: () => import('./features/private/components/gestion/clientes/clientes').then(m => m.Clientes) },
           { path: 'clientes/registrar-client', component: RegistrarClient },
+          { path: 'clientes/register-cliente', component: RegistrarClient },
           { path: 'clientes/:id', component: PerfilClient },
           { path: 'barberos', loadComponent: () => import('./features/private/components/gestion/barberos/barberos').then(m => m.Barberos) },
         ]

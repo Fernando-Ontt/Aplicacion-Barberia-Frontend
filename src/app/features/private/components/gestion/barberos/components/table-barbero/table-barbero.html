@@ -65,18 +65,21 @@
 					<td class="py-4 px-3 text-right w-[8%]" data-label="Acción">
 
 						<div class="table-actions">
-							<p-button icon="pi pi-eye" class="boton-editar-tabla" [routerLink]="['/dashboard/admin/gestion/barberos', b.barberoId || b.id]"></p-button>
-							<p-button icon="pi pi-trash" class="boton-eliminar-tabla" (click)="onDelete(b.barberoId || b.id)"></p-button>
+							@if (isSearchMode) {
+								<p-button icon="pi pi-eye" class="boton-editar-tabla" [routerLink]="['/dashboard/admin/gestion/barberos', b.barberoId || b.id]"></p-button>
+								<p-button icon="pi pi-user-minus" class="boton-eliminar-tabla" (click)="onDelete(b.barberoId || b.id)"></p-button>
+								<p-button icon="pi pi-user-plus" class="boton-editar-tabla" (click)="onReactivate(b.barberoId || b.id)"></p-button>
+							} @else if (inhabilitadosMode) {
+								<p-button icon="pi pi-user-plus" class="boton-editar-tabla" (click)="onReactivate(b.barberoId || b.id)"></p-button>
+							} @else {
+								<p-button icon="pi pi-eye" class="boton-editar-tabla" [routerLink]="['/dashboard/admin/gestion/barberos', b.barberoId || b.id]"></p-button>
+								<p-button icon="pi pi-user-minus" class="boton-eliminar-tabla" (click)="onDelete(b.barberoId || b.id)"></p-button>
+							}
 						</div>
-
 					</td>
-
 				</tr>
-
 			</tbody>
-
 		</table>
-
 		<div class="flex items-center justify-between gap-3 px-4 py-3 text-sm text-gray-400 border-t border-gray-800">
 
 			<div>

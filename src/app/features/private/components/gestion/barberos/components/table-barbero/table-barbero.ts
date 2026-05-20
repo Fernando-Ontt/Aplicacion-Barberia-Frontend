@@ -21,11 +21,17 @@ export class TableBarbero {
 
   @Input() pageSize: number = 7;
 
+  @Input() inhabilitadosMode: boolean = false;
+
+  @Input() isSearchMode: boolean = false;
+
   @Output() prev = new EventEmitter<void>();
 
   @Output() next = new EventEmitter<void>();
   
   @Output() delete = new EventEmitter<number>();
+
+  @Output() reactivate = new EventEmitter<number>();
 
   get canGoPrev(): boolean {
     return this.currentPage > 0;
@@ -47,6 +53,10 @@ export class TableBarbero {
 
   onDelete(id: number): void {
     this.delete.emit(id);
+  }
+
+  onReactivate(id: number): void {
+    this.reactivate.emit(id);
   }
 
   initials(name: string) {
