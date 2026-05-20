@@ -31,6 +31,7 @@ export class AuthService {
   logout() {
     this.tokenService.clearTokens();
   }
+
   register(data: {
     nombre: string;
     apellido: string;
@@ -40,4 +41,5 @@ export class AuthService {
   }): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(this.API + "/register", data);
   }
+  
 }

@@ -84,7 +84,7 @@ export class TokenService {
     }
 
     if (roles.includes('ROLE_cliente')) {
-      return '/dashboard/cliente';
+      return '/mi-cuenta';
     }
 
     return '/login';

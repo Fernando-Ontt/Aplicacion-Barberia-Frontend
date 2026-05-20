@@ -4,6 +4,7 @@ import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.compon
 
 @Component({
     selector: 'app-empleado-layout',
+  standalone: true,
     imports: [SidebarComponent, RouterOutlet],
     template: `
   <div class="relative flex min-h-screen overflow-hidden bg-brand-black">

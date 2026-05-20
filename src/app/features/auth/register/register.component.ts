@@ -5,12 +5,16 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from "primeng/inputtext";
 import { PasswordModule } from 'primeng/password';
 import { AuthService } from '@/app/core/services/auth/auth.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { campoInvalido, marcarFormulario } from '@/app/shared/utils/form-utils.component';
+import { MessageModule } from 'primeng/message';
+
 
 @Component({
+  standalone: true,
   selector: 'app-register',
-  imports: [LogoComponent, InputTextModule, CheckboxModule, PasswordModule, ReactiveFormsModule, RouterLink],
+  imports: [LogoComponent, InputTextModule, MessageModule, CheckboxModule,
+    PasswordModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -28,7 +32,7 @@ export class RegisterComponent {
     apellido: ['', [Validators.required, Validators.minLength(2)]],
     telefono: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
     passwordConfirm: ['', [Validators.required]],
     terminos: [false, [Validators.requiredTrue]]
   });
@@ -40,11 +44,8 @@ export class RegisterComponent {
   onSubmit() {
     this.submitted = true;
     marcarFormulario(this.registerForm);
-
     if (this.registerForm.invalid) return;
-
     const { email, password, nombre, apellido, telefono } = this.registerForm.value;
-
     const payload = {
       nombre: nombre!,
       apellido: apellido!,
@@ -60,10 +61,11 @@ export class RegisterComponent {
 
     this.authService.register(payload).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: (err: any) => {
+      error: (err) => {
         this.errorMsg = err.error?.message ?? 'Error al registrarse';
         this.loading = false;
       }
     });
   }
 }
+

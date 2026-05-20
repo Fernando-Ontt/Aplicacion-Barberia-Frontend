@@ -6,9 +6,11 @@ import { AsyncPipe } from '@angular/common';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { SidebarItemsService } from '@/app/core/services/layout/sidebar-items.service';
 import { NotificationService } from '@/app/core/services/common/notification.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
   imports: [AsyncPipe, PanelMenuModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
@@ -26,12 +28,30 @@ export class SidebarComponent {
     this.tokenService.initPermisos();
   }
 
-  menu$ = this.tokenService.permisos$.pipe(
-    map((permisos) => {
+  menu$ = this.tokenService.permisos$.pipe( map((permisos) => {
       const role = this.tokenService.getPrimaryRole();
-      return this.sidebarItemsService.getSidebarItems(permisos, role);
+      const items = this.sidebarItemsService.getSidebarItems(permisos, role);
+      return this.addClickHandlers(items);
     })
   );
+
+  private addClickHandlers(items: MenuItem[]): MenuItem[] {
+    return items.map((item) => ({...item,command: (event: any) => {this.handleMenuItemClick(event);
+        if (item.command) {
+          item.command(event);
+        }
+      },
+      items: item.items ? this.addClickHandlers(item.items) : undefined
+    }));
+  }
+
+  private handleMenuItemClick(event: any) {
+    // Cerrar sidebar en móvil después de hacer clic
+    if (window.innerWidth < 768) {
+      // Emitir evento para cerrar el sidebar desde el componente padre
+      // O simplemente hacer que el overlay se cierre
+    }
+  }
 
   logout() {
     this.tokenService.clearTokens();
