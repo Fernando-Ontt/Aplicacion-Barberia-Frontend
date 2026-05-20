@@ -9,6 +9,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { campoInvalido, marcarFormulario } from '@/app/shared/utils/form-utils.component';
 import { MessageModule } from 'primeng/message';
 
+
 @Component({
   standalone: true,
   selector: 'app-register',

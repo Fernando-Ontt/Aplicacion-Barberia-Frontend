@@ -16,6 +16,8 @@ import { InicioComponent } from './features/public/pages/inicio/inicio.component
 import { PerfilClient } from './features/private/components/gestion/clientes/perfil-client/perfil-client';
 import { RegistrarClient } from './features/private/components/gestion/clientes/registrar-client/registrar-client';
 import { CarritoComponent } from './features/public/pages/carrito/carrito.component';
+import { PerfilBarbero } from './features/private/components/gestion/barberos/perfil-barbero/perfil-barbero';
+import { RegistrarBarbero } from './features/private/components/gestion/barberos/registrar-barbero/registrar-barbero';
 
 export const routes: Routes = [
   {path: 'dashboard/admin',component: PrivateLayoutComponent,
@@ -34,9 +36,11 @@ export const routes: Routes = [
       ]},
       {path: 'gestion', children: [
         { path: 'clientes', loadComponent: () => import('./features/private/components/gestion/clientes/clientes').then(m => m.Clientes) },
-        { path: 'clientes/registrar-client', component: RegistrarClient },
+        { path: 'clientes/register-cliente', component: RegistrarClient },
         { path: 'clientes/:id', component: PerfilClient },
         { path: 'barberos', loadComponent: () => import('./features/private/components/gestion/barberos/barberos').then(m => m.Barberos) },
+          { path: 'barberos/registrar-barbero', component:RegistrarBarbero},
+          { path: 'barberos/:id', component: PerfilBarbero },
       ]},
       { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
     ]
@@ -54,6 +58,7 @@ export const routes: Routes = [
       {path: 'gestion', children: [
         { path: 'clientes', loadComponent: () => import('./features/private/components/gestion/clientes/clientes').then(m => m.Clientes) },
         { path: 'clientes/registrar-client', component: RegistrarClient },
+          { path: 'clientes/register-cliente', component: RegistrarClient },
         { path: 'clientes/:id', component: PerfilClient },
         { path: 'barberos', loadComponent: () => import('./features/private/components/gestion/barberos/barberos').then(m => m.Barberos) },
       ]},

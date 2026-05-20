@@ -1,0 +1,35 @@
+
+app-search-bar {
+	width: 260px;
+}
+
+select.inputs-text {
+	min-height: 44px;
+}
+
+@media (max-width: 768px) {
+	app-search-bar { width: 100%; }
+	.part-form { min-width: 140px; }
+}
+
+/* Ajustes visuales para filtros */
+.form-base {
+	background: linear-gradient(180deg, #0b0b0b, rgba(0,0,0,0.6));
+	border: 1px solid rgba(255,255,255,0.04);
+	padding: 18px;
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 6px; }
+.filter-group .label-form { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--color-text-secondary); }
+
+.inputs-text { background: #070707; border: 1px solid rgba(255,255,255,0.06); color: var(--color-text-primary); }
+.inputs-text:focus { box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.06); border-color: rgba(250,204,21,0.4); }
+
+.actions { align-self: end; }
+
+@media (max-width: 1024px) {
+	.actions { margin-top: 6px; }
+	.filter-group { width: 100%; }
+	.form-base { padding: 14px; }
+}
+

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ClienteRegister } from '../../models/auth/usuario/cliente-register.model';
 import { ResetPasswordRequest } from '../../models/auth/usuario/reset-password-request.model';
 import { UpdateUsernameRequest } from '../../models/auth/usuario/update-username-request.model';
+import { BarberoRegister } from '../../models/auth/usuario/barbero-register.model';
 
 @Injectable({
     providedIn: 'root'
@@ -16,11 +17,17 @@ export class UsuarioService {
     private apiUrl = `${environment.apiUrl}/usuarios`;
 
     registrarCliente(data: ClienteRegister): Observable<any> {
-        // Asegurar que el rol del cliente sea siempre 3
         const payload = { ...data, idRol: 3 } as ClienteRegister;
         return this.http.post<any>(
             `${this.apiUrl}/cliente`,
             payload
+        );
+    }
+
+    registrarBarbero(data: BarberoRegister): Observable<any> {
+        return this.http.post<any>(
+            `${this.apiUrl}/barbero`,
+            data
         );
     }
 

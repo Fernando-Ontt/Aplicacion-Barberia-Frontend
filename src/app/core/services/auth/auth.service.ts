@@ -41,4 +41,5 @@ export class AuthService {
   }): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(this.API + "/register", data);
   }
+  
 }

@@ -20,9 +20,9 @@ export class PersonaService {
     actualizarPersona(
         personaId: number,
         body: PersonaUpdateRequest
-    ): Observable<ApiResponse<any>> {
+    ): Observable<ApiResponse<PersonaUpdateRequest>> {
 
-        return this.http.patch<ApiResponse<any>>(
+        return this.http.patch<ApiResponse<PersonaUpdateRequest>>(
             `${this.apiUrl}/actualizar/${personaId}`,
             body
         );
