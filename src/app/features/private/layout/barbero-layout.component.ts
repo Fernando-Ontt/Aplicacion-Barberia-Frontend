@@ -4,6 +4,7 @@ import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.compon
 
 @Component({
     selector: 'app-barbero-layout',
+  standalone: true,
     imports: [SidebarComponent, RouterOutlet],
     template: `
   <div class="relative min-h-screen overflow-hidden bg-brand-black">

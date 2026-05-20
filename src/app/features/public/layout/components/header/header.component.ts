@@ -3,11 +3,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TokenService } from '@/app/core/services/auth/token.service';
 import { PUBLIC_PAGES } from '@/app/core/config/sites.config';
+import { LogoComponent } from '@/app/shared/components/logo/logo.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule, LogoComponent],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

@@ -10,6 +10,7 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
   imports: [AsyncPipe, PanelMenuModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
