@@ -65,14 +65,14 @@ export class ReservaList {
   loadReservas(event?: TableLazyLoadEvent): void {
     this.loading = true;
     
-    // Obtener página y tamaño del evento de PrimeNG
+    
     const page = event ? Math.floor(event.first! / (event.rows || this.pageSize)) : this.currentPage;
     const size = event?.rows || this.pageSize;
     
     this.currentPage = page;
     this.pageSize = size;
 
-    // Llamar al servicio con paginación
+    
     this.reservaService.getReservas(page, size)
       .pipe(
         finalize(() => {
@@ -105,10 +105,10 @@ export class ReservaList {
   
   
 
-  // Método para filtrar por rango de fechas
+  
   
 
-  // Limpiar filtros
+ 
   limpiarFiltros(): void {
     this.clienteBusqueda = '';
     this.filtroEstado = '';
