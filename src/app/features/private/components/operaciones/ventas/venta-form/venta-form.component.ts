@@ -26,10 +26,8 @@ import { Venta } from '@/app/core/models/ventas/venta.model';
 import { ClienteService } from '@/app/core/services/gestion/cliente.service';
 
 import { Cliente } from '@/app/core/models/gestion/cliente/cliente.model';
-
-import { ProductoService } from '@features/productos/services/producto-service';
-
-import { ProductoResponse } from '@features/productos/models/response/ProductoResponse';
+import { ProductoService } from '@/app/core/services/catalogos/producto.service';
+import { Producto } from '@/app/core/models/catalogos/productos.model';
 
 @Component({
   selector: 'app-venta-form',
@@ -60,7 +58,7 @@ export class VentaFormComponent implements OnInit {
 
   clientes: Cliente[] = [];
 
-  productos: ProductoResponse[] = [];
+  productos: Producto[] = [];
 
   ventaForm: FormGroup = this.fb.group({
 
@@ -148,7 +146,7 @@ export class VentaFormComponent implements OnInit {
 
   cargarProductos(): void {
 
-    this.productoService.getProductos()
+    this.productoService.obtenerProductos()
       .subscribe({
 
         next: (resp) => {

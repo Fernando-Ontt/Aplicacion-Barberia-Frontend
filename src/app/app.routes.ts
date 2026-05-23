@@ -7,20 +7,20 @@ import { ReservasComponent } from './features/public/pages/reservas/reservas.com
 import { ReclamosComponent } from './features/public/pages/reclamos/reclamos.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { LoginComponent } from './features/auth/login/login.component';
-import { PrivateLayoutComponent } from './features/private/layout/private-layout.component';
-import { BarberoLayoutComponent } from './features/private/layout/barbero-layout.component';
 import { PublicLayoutComponent } from './features/public/layout/public-layout.component';
 import { DashboardClienteComponent } from './features/private/dashboard/dashboard-cliente/dashboard-cliente.component';
 import { Error404Component } from './shared/components/error404/error404.component';
 import { InicioComponent } from './features/public/pages/inicio/inicio.component';
+import { CarritoComponent } from './features/public/pages/carrito/carrito.component';
+import { BarberoLayoutComponent } from './features/private/layout/barbero-layout.component';
+import { DashboardAdministrativoComponent } from './features/private/dashboard/dashboard-administrativo/dashboard-administrativo.component';
 import { PerfilClient } from './features/private/components/gestion/clientes/perfil-client/perfil-client';
 import { RegistrarClient } from './features/private/components/gestion/clientes/registrar-client/registrar-client';
-import { CarritoComponent } from './features/public/pages/carrito/carrito.component';
-import { PerfilBarbero } from './features/private/components/gestion/barberos/perfil-barbero/perfil-barbero';
 import { RegistrarBarbero } from './features/private/components/gestion/barberos/registrar-barbero/registrar-barbero';
+import { PerfilBarbero } from './features/private/components/gestion/barberos/perfil-barbero/perfil-barbero';
 
 export const routes: Routes = [
-  {path: 'dashboard/admin',component: PrivateLayoutComponent,
+  {path: 'dashboard/admin',component: DashboardAdministrativoComponent,
     canActivate: [authGuard],data: { roles: ['admin'] },
     children: [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
@@ -67,11 +67,12 @@ export const routes: Routes = [
   },
   
   {path: '', component: PublicLayoutComponent, children: [
-    { path: 'inicio', redirectTo: '', pathMatch: 'full' },
-    { path: '', component: InicioComponent, canActivate: [guestGuard], },
+    { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+    { path: 'inicio', component: InicioComponent },
     { path: 'nosotros', component: NosotrosComponent },
     //esta raro esta wea 
-    // { path: 'productos', loadChildren: () => import('./features/public/pages/productos/productos.module').then(m => m.ProductosModule) },
+    { path: 'productos', loadComponent: () => import('./features/public/pages/productos/productos.component').then(m => m.ProductComponent) },
+    { path: 'productos/detalle/:id', loadComponent: () => import('./features/public/pages/productos/producto-detalle/producto-detalle.component').then(m => m.ProductoDetalleComponent) },
     { path: 'servicios', component: ServiciosComponent },
     { path: 'reclamos', component: ReclamosComponent },
     { path: 'reservas', component: ReservasComponent },
@@ -82,11 +83,11 @@ export const routes: Routes = [
       canActivate: [authGuard],data: { roles: ['cliente'] },
       children: [
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-        { path: 'dashboard', loadComponent: () => import('./features/private/dashboard/dashboard-cliente/pages/resumen/resumen.component').then(m => m.ResumenComponent) },
-        { path: 'reservar', loadComponent: () => import('./features/private/dashboard/dashboard-cliente/pages/reservar/reservar.component').then(m => m.ReservarComponent) },
-        { path: 'historial', loadComponent: () => import('./features/private/dashboard/dashboard-cliente/pages/historial/historial.component').then(m => m.ClienteHistorialComponent) },
-        { path: 'rewards', loadComponent: () => import('./features/private/dashboard/dashboard-cliente/pages/rewards/rewards.component').then(m => m.RewardsComponent) },
-        { path: 'perfil', loadComponent: () => import('./features/private/dashboard/dashboard-cliente/pages/perfil/perfil.component').then(m => m.PerfilComponent) },
+        { path: 'dashboard', loadComponent: () => import('./features/private/pages/resumen/resumen.component').then(m => m.ResumenComponent) },
+        { path: 'reservar', loadComponent: () => import('./features/private/pages/reservar/reservar.component').then(m => m.ReservarComponent) },
+        { path: 'historial', loadComponent: () => import('./features/private/pages/historial/historial.component').then(m => m.ClienteHistorialComponent) },
+        { path: 'rewards', loadComponent: () => import('./features/private/pages/rewards/rewards.component').then(m => m.RewardsComponent) },
+        { path: 'perfil', loadComponent: () => import('./features/private/pages/perfil/perfil.component').then(m => m.PerfilComponent) },
         { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
       ]},
       { path: '**', component: Error404Component }

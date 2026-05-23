@@ -1,27 +1,25 @@
-<header
-  class="fixed left-0 top-0 z-50 w-full border-b border-ui-border bg-ui-black/95 px-2 backdrop-blur-xl sm:px-4 lg:px-6 xl:px-8">
-  <div class="container-main flex w-full flex-wrap items-center justify-between gap-4 py-4 sm:h-22 sm:flex-nowrap sm:py-0">
+<header class="fixed left-0 top-0 z-50 w-full border-b border-ui-border bg-ui-black/95 px-2 backdrop-blur-xl sm:px-4 lg:px-6 xl:px-8">
+  <div class="container-main flex w-full flex-wrap items-center justify-between gap-4 py-4 lg:h-22 lg:flex-nowrap lg:py-0">
 
     <!-- Logo -->
-    <a routerLink="/" class="flex items-center gap-3">
-      <app-logo variant="icon" size="sm"></app-logo>
-      <span class="text-xl font-bold leading-none tracking-tight text-brand-white sm:text-2xl lg:text-[32px]">Fadex</span>
+    <a href="/inicio" class="group inline-flex items-center gap-3 rounded-2xl p-3 transition-all duration-300 ease-out hover:bg-brand-gold-soft hover:shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+        <div class="transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-3">
+            <app-logo variant="icon" size="sm"></app-logo>
+        </div>
+        <h1 class="text-[1.7rem] leading-none font-bold tracking-[0.18em] transition-all duration-300 ease-out group-hover:text-brand-gold group-hover:translate-x-1"> FadeX </h1>
     </a>
 
     <!-- Nav desktop -->
-    <nav class="hidden items-center gap-6 lg:flex xl:gap-11">
+    <nav class="hidden w-full items-center gap-6 md:flex md:justify-center lg:w-auto xl:gap-11">
       <ng-container *ngFor="let p of publicNav  ">
-        <a [routerLink]="p.path" routerLinkActive="!text-white"
-          class="group relative pb-1 text-sm font-medium text-brand-white transition-colors hover:text-brand-gold sm:text-base">
-          {{ p.label }}
-          <span
-            class="absolute bottom-0 left-1/2 h-0.5 w-0 rounded bg-brand-gold transition-all duration-300 group-hover:left-0 group-hover:w-full"></span>
+        <a [routerLink]="p.path" routerLinkActive="!text-white" class="group relative pb-1 text-sm font-medium text-brand-white transition-colors hover:text-brand-gold sm:text-base">{{ p.label }}
+          <span class="absolute bottom-0 left-1/2 h-0.5 w-0 rounded bg-brand-gold transition-all duration-300 group-hover:left-0 group-hover:w-full"></span>
         </a>
       </ng-container>
     </nav>
 
     <!-- Derecha desktop -->
-    <div class="hidden items-center gap-5 lg:flex">
+    <div class="hidden w-full items-center justify-end gap-5 md:flex lg:w-auto">
       <!-- Carrito siempre visible -->
       <a routerLink="/carrito"
         class="relative flex h-9 w-9 items-center justify-center rounded-lg transition-all hover:bg-ui-surface hover:text-brand-gold text-brand-white">
@@ -39,22 +37,15 @@
             <span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-gold text-xs font-bold text-black">2</span>
           </button>
 
-          <!-- Favoritos -->
-          <button
-            class="flex h-9 w-9 items-center justify-center rounded-lg transition-all hover:bg-ui-surface hover:text-brand-gold text-brand-white">
-            <i class="pi pi-heart text-lg"></i>
-          </button>
-
           <!-- Soporte/Chat -->
-          <button
-            class="flex h-9 w-9 items-center justify-center rounded-lg transition-all hover:bg-ui-surface hover:text-brand-gold text-brand-white">
-            <i class="pi pi-comments text-lg"></i>
+          <button routerLink="/reclamos"
+            class=" cursor-pointer flex h-9 w-9 items-center justify-center rounded-lg transition-all hover:bg-ui-surface hover:text-brand-gold text-brand-white">
+            <i class="pi pi-book text-lg"></i>
           </button>
         </div>
 
         <!-- Perfil -->
-        <a routerLink="/mi-cuenta"
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold text-black transition-all hover:bg-brand-gold-hover hover:scale-110">
+        <a [routerLink]="profileLink" class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold text-black transition-all hover:bg-brand-gold-hover hover:scale-110">
           <i class="pi pi-user text-lg"></i>
         </a>
       } @else {
@@ -88,7 +79,7 @@
           </a>
 
           @if (isAuthenticated) {
-            <button
+            <button 
               class="relative flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition hover:bg-ui-elevated hover:text-brand-gold text-brand-white text-xs">
               <i class="pi pi-bell"></i>
               <span class="font-xs">Avisos</span>
@@ -97,15 +88,14 @@
 
             <button
               class="flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition hover:bg-ui-elevated hover:text-brand-gold text-brand-white text-xs">
-              <i class="pi pi-heart"></i>
-              <span class="font-xs">Favoritos</span>
+              <i class="pi pi-book"></i>
+              <span class="font-xs">Reclamos</span>
             </button>
-
-            <button
-              class="flex flex-col items-center justify-center gap-1 rounded-lg p-2 transition hover:bg-ui-elevated hover:text-brand-gold text-brand-white text-xs">
-              <i class="pi pi-comments"></i>
-              <span class="font-xs">Soporte</span>
-            </button>
+            
+            <a [routerLink]="profileLink" class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold text-black transition-all hover:bg-brand-gold-hover hover:scale-110">
+              <i class="pi pi-user text-lg"></i>
+              <span class="sr-only">Perfil</span>
+            </a>
           } @else {
             <div class="col-span-3 flex items-center justify-center">
               <a routerLink="/login" class="rounded-xl bg-brand-gold px-3 py-2 text-center text-sm font-bold uppercase tracking-wide text-black transition hover:bg-brand-gold-hover">Login</a>

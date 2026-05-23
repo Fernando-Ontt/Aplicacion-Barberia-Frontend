@@ -91,9 +91,7 @@ export class TokenService {
   }
 
   getPrimaryRole(): string {
-
     const roles = this.getRoles();
-
     if (roles.includes('ROLE_admin')) {
       return 'admin';
     }

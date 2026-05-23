@@ -15,11 +15,13 @@ import { LogoComponent } from '@/app/shared/components/logo/logo.component';
 export class HeaderComponent implements OnInit {
   private tokenService = inject(TokenService);
   isAuthenticated = false;
+  profileLink = ['/login'];
 
   publicNav = PUBLIC_PAGES;
 
   ngOnInit() {
     this.isAuthenticated = this.tokenService.isLogged();
+    this.profileLink = [this.tokenService.getHomeByRole()];
   }
 } 
 

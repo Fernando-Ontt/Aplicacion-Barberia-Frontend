@@ -21,6 +21,7 @@ import { SidebarComponent } from '@/app/shared/components/sidebar/sidebar.compon
   </div>
   `,
 })
+
 export class DashboardClienteComponent {
   sidebarCollapsed = false;
 }
