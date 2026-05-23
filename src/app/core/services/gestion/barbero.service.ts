@@ -6,6 +6,7 @@ import { ApiResponse, Page } from '../../models/common/index.model';
 import { Barbero } from '../../models/gestion/barbero/barbero.model';
 import { ResumenGeneralBarbero } from '../../models/gestion/barbero/barbero-resumen.model';
 import { ResumenIndividualBarbero } from '../../models/gestion/barbero/barbero-resumen-individual.model';
+import { PerfilBarbero, StatsHoy, Cita, ResumenSemanal, EstadoResponse } from '../../models/gestion/barbero/barbero-resumen-individual.model';
 
 export type EstadoBarberoBusqueda = 'todos' | 'disponible' | 'ocupado';
 export type OrdenarBarberoPor = 'fechaIngreso' | 'experiencia' | 'sueldo' | 'comision';
@@ -150,5 +151,44 @@ export class BarberoService {
             `${this.apiUrl}/${id}/resumen`
         );
     }
+    // ── Endpoints del dashboard del barbero ──────────────────────────
+
+getPerfil(): Observable<ApiResponse<PerfilBarbero>> {
+    return this.http.get<ApiResponse<PerfilBarbero>>(
+        `${environment.apiUrl}/barberos/perfil-propio`
+    );
+}
+
+toggleOcupado(id: number): Observable<ApiResponse<EstadoResponse>> {
+    return this.http.patch<ApiResponse<EstadoResponse>>(
+        `${this.apiUrl}/${id}/ocupado`,
+        {}
+    );
+}
+
+getStatsHoy(id: number): Observable<ApiResponse<StatsHoy>> {
+    return this.http.get<ApiResponse<StatsHoy>>(
+        `${environment.apiUrl}/barbero/reservas/barbero/${id}/hoy`
+    );
+}
+
+getCitasHoy(): Observable<ApiResponse<Cita[]>> {
+    return this.http.get<ApiResponse<Cita[]>>(
+        `${environment.apiUrl}/barbero/citas/hoy`
+    );
+}
+
+getResumenSemanal(id: number): Observable<ApiResponse<ResumenSemanal>> {
+    return this.http.get<ApiResponse<ResumenSemanal>>(
+        `${environment.apiUrl}/barbero/reservas/barbero/${id}/semanal`
+    );
+}
+
+logout(): Observable<ApiResponse<string>> {
+    return this.http.post<ApiResponse<string>>(
+        `${environment.apiUrl}/auth/logout`,
+        {}
+    );
+}
 
 }
