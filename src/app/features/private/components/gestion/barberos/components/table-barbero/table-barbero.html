@@ -6,31 +6,24 @@
 
 			<thead>
 				<tr class="table-header border-b border-gray-800 text-xs uppercase tracking-[0.2em] text-brand-gold/80">
-					<th class="py-3 px-3 text-left w-[22%]">Nombre</th>
-					<th class="py-3 px-3 text-left w-[16%]">Apellido</th>
+					<th class="py-3 px-3 text-left w-[19%]">Nombre</th>
+					<th class="py-3 px-3 text-left w-[13%]">Apellido</th>
 					<th class="py-3 px-3 text-left w-[18%]">Correo</th>
-					<th class="py-3 px-3 text-center w-[14%]">Ingreso</th>
-					<th class="py-3 px-3 text-left w-[14%]">Estado</th>
+					<th class="py-3 px-3 text-center w-[12%]">Ingreso</th>
+					<th class="py-3 px-3 text-left w-[12%]">Estado</th>
 
 					<th class="py-3 px-3 text-center w-[10%]">Comisión</th>
 					<th class="py-3 px-3 text-center w-[10%]">Sueldo</th>
 
-					<th class="py-3 px-3 text-right w-[8%]">Acción</th>
+					<th class="py-3 px-3 text-right w-[6%]">Acción</th>
 				</tr>
 			</thead>
 
 			<tbody class="divide-y divide-gray-800">
 
 				<tr *ngFor="let b of barberos" class="table-row align-middle transition-colors duration-200 hover:bg-white/5">
-
 					<td class="py-4 px-3" data-label="Nombre">
-
-						<div class="flex items-center gap-3">
-							<div class="w-10 h-10 rounded-full flex items-center justify-center bg-yellow-800/20 text-yellow-400 font-bold border border-yellow-600/20 shadow-inner">{{ initials((b.persona?.nombre || b.nombre) + ' ' + (b.persona?.apellido || '')) }}</div>
-							<div>
-								<div class="font-semibold text-gray-100 leading-tight">{{ b.persona?.nombre || b.nombre }}</div>
-							</div>
-						</div>
+						<div class="font-semibold text-gray-100 leading-tight">{{ b.persona?.nombre || b.nombre || '—' }}</div>
 
 					</td>
 
@@ -62,7 +55,7 @@
 
 
 
-					<td class="py-4 px-3 text-right w-[8%]" data-label="Acción">
+					<td class="py-4 px-3 text-right w-[6%]" data-label="Acción">
 
 						<div class="table-actions">
 							@if (isSearchMode) {

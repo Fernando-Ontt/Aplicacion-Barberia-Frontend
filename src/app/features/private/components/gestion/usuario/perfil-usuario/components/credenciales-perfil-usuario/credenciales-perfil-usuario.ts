@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsuarioService } from '@/app/core/services/auth/usuario.service';
@@ -13,15 +13,15 @@ import { UpdateUsernameRequest } from '@/app/core/models/auth/usuario/update-use
   templateUrl: './credenciales-perfil-usuario.html',
   styleUrl: './credenciales-perfil-usuario.css',
 })
-export class CredencialesPerfilUsuario {
+export class CredencialesPerfilUsuario implements OnInit, OnChanges, OnDestroy {
 
   private fb           = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
   private notification = inject(NotificationService);
 
-  @Input() usuario:    string = 'No disponible';
-  @Input() contrasena: string = 'No disponible';
-  @Input() idUsuario:  number = 0;
+  @Input() usuario:   string = 'No disponible';
+  contrasena: string = 'No disponible';
+  @Input() idUsuario: number = 0;
 
   /** URL de la imagen QR (base64 o URL). Si es null, el usuario no tiene QR. */
   @Input() qrImageUrl: string | null = null;
@@ -42,6 +42,9 @@ export class CredencialesPerfilUsuario {
   showNewPassword     = false;
   showConfirmPassword = false;
 
+  loadingCredentials = false;
+  private qrObjectUrl: string | null = null;
+
   // ── Formularios ───────────────────────────────────────────────────────────
   form = this.fb.group({
     newPassword:     ['', [Validators.required, Validators.minLength(8)]],
@@ -54,6 +57,84 @@ export class CredencialesPerfilUsuario {
 
   get f()  { return this.form.controls; }
   get uf() { return this.usernameForm.controls; }
+
+  ngOnInit(): void {
+    this.cargarCredenciales();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idUsuario'] && !changes['idUsuario'].firstChange) {
+      this.cargarCredenciales();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.revokeQrObjectUrl();
+  }
+
+  private cargarCredenciales(): void {
+    if (!this.idUsuario || this.idUsuario <= 0) {
+      return;
+    }
+
+    this.loadingCredentials = true;
+
+    this.usuarioService.obtenerPorId(this.idUsuario).subscribe({
+      next: (response) => {
+        const data: any = response?.data ?? {};
+        const persona = data?.persona ?? {};
+        const usuario = persona?.usuario ?? data?.usuario ?? data?.account ?? data?.credenciales ?? {};
+
+        console.debug('[CredencialesPerfilUsuario] respuesta obtenerPorId', {
+          idUsuario: this.idUsuario,
+          response,
+          data,
+          persona,
+          usuario,
+        });
+
+        const username = usuario?.user
+          ?? usuario?.username
+          ?? usuario?.nombreUsuario
+          ?? usuario?.nombre_usuario
+          ?? usuario?.login
+          ?? data?.user
+          ?? data?.username
+          ?? data?.nombreUsuario
+          ?? data?.nombre_usuario
+          ?? data?.login
+          ?? persona?.usuario?.user
+          ?? persona?.usuario?.username
+          ?? persona?.usuario?.nombreUsuario
+          ?? persona?.usuario?.login
+          ?? this.usuario;
+
+        this.usuario = String(username || 'No disponible');
+
+        const rawPassword = usuario?.password
+          ?? usuario?.contrasena
+          ?? usuario?.clave
+          ?? data?.password
+          ?? data?.contrasena
+          ?? data?.clave
+          ?? persona?.usuario?.password
+          ?? persona?.usuario?.contrasena
+          ?? persona?.usuario?.clave
+          ?? null;
+
+        if (rawPassword) {
+          this.contrasena = this.maskPassword(String(rawPassword));
+        }
+
+        const qrUrl = data?.qrImageUrl ?? data?.qrUrl ?? usuario?.qrToken ?? data?.qrToken ?? persona?.usuario?.qrToken ?? null;
+        this.qrImageUrl = qrUrl ? String(qrUrl) : null;
+        this.loadingCredentials = false;
+      },
+      error: () => {
+        this.loadingCredentials = false;
+      },
+    });
+  }
 
   // ─── Reset contraseña ─────────────────────────────────────────────────────
 
@@ -94,6 +175,7 @@ export class CredencialesPerfilUsuario {
         this.notification.showSuccess(res?.message || 'Contraseña restablecida correctamente');
         this.closeResetModal();
         this.passwordReset.emit();
+        this.cargarCredenciales();
       },
       error: (err) => {
         this.isSubmitting = false;
@@ -135,6 +217,7 @@ export class CredencialesPerfilUsuario {
         this.notification.showSuccess(res?.message || 'Nombre de usuario actualizado correctamente');
         this.closeEditUsernameModal();
         this.usernameUpdate.emit();
+        this.cargarCredenciales();
       },
       error: (err) => {
         this.isSubmitting = false;
@@ -164,19 +247,39 @@ export class CredencialesPerfilUsuario {
     this.isGeneratingQr = true;
 
     this.usuarioService.generateQr(this.idUsuario).subscribe({
-      next: (res) => {
-        // Se espera que el servicio devuelva { qrUrl: string } o similar
-        const url = res?.qrUrl ?? res?.qrImageUrl ?? res?.data ?? null;
-        this.qrImageUrl = url;
+      next: (blob) => {
+        if (!(blob instanceof Blob)) {
+          this.notification.showWarn('No se pudo generar el QR.');
+          this.isGeneratingQr = false;
+          return;
+        }
+
+        this.revokeQrObjectUrl();
+        this.qrObjectUrl = URL.createObjectURL(blob);
+        this.qrImageUrl = this.qrObjectUrl;
         this.isGeneratingQr = false;
         this.notification.showSuccess('Código QR generado correctamente');
         this.closeQrModal();
-        if (url) this.qrGenerated.emit(url);
+        this.qrGenerated.emit(this.qrImageUrl);
       },
       error: (err) => {
         this.isGeneratingQr = false;
         this.notification.showHttpError(err, 'Generar QR');
       },
     });
+  }
+
+  private maskPassword(password: string): string {
+    if (!password) return 'No disponible';
+    if (password.length <= 4) return password;
+    const maskedLength = Math.min(Math.max(password.length - 4, 8), 16);
+    return `${'•'.repeat(maskedLength)}${password.slice(-4)}`;
+  }
+
+  private revokeQrObjectUrl(): void {
+    if (this.qrObjectUrl) {
+      URL.revokeObjectURL(this.qrObjectUrl);
+      this.qrObjectUrl = null;
+    }
   }
 }

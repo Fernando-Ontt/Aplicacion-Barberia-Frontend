@@ -1,5 +1,5 @@
 import { environment } from '@/environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -7,6 +7,8 @@ import { ClienteRegister } from '../../models/auth/usuario/cliente-register.mode
 import { ResetPasswordRequest } from '../../models/auth/usuario/reset-password-request.model';
 import { UpdateUsernameRequest } from '../../models/auth/usuario/update-username-request.model';
 import { BarberoRegister } from '../../models/auth/usuario/barbero-register.model';
+import { ApiResponse, Page } from '../../models/common/index.model';
+import { AssignRolesRequest, Permiso, Rol, UsuarioTablaResponse } from '../../models/gestion/usuario.model';
 
 @Injectable({
     providedIn: 'root'
@@ -45,9 +47,137 @@ export class UsuarioService {
         );
     }
 
-    // Método stub para generar QR - placeholder sin implementación de backend
-    generateQr(idUsuario: number): Observable<any> {
-        // Por ahora no hace nada: devuelve un observable vacío con estructura esperada
-        return of({ qrUrl: null });
+    obtenerPorId(idUsuario: number): Observable<ApiResponse<any>> {
+        return this.http.get<ApiResponse<any>>(
+            `${this.apiUrl}/${idUsuario}`
+        );
     }
+    // Método stub para generar QR - placeholder sin implementación de backend
+    
+    generateQr(idUsuario: number): Observable<Blob> {
+
+    return this.http.get(
+        `${this.apiUrl}/${idUsuario}/qr`,
+        {
+            responseType: 'blob'
+        }
+    );
+}
+
+    listar(
+        page: number = 0,
+        size: number = 10
+    ): Observable<ApiResponse<Page<UsuarioTablaResponse>>> {
+
+        const params = new HttpParams()
+            .set('page', page)
+            .set('size', size);
+
+        return this.http.get<ApiResponse<Page<UsuarioTablaResponse>>>(
+            `${this.apiUrl}/tabla`,
+            { params }
+        );
+    }
+
+    filtrar(
+    filtros: {
+        rol?: string;
+        tieneQr?: boolean;
+        multiplesRoles?: boolean;
+    },
+    page: number = 0,
+    size: number = 10
+): Observable<ApiResponse<Page<UsuarioTablaResponse>>> {
+
+    let params = new HttpParams()
+        .set('page', page)
+        .set('size', size);
+
+    if (filtros.rol) {
+        params = params.set('rol', filtros.rol);
+    }
+
+    if (filtros.tieneQr !== undefined) {
+        params = params.set(
+            'tieneQr',
+            filtros.tieneQr
+        );
+    }
+
+    if (filtros.multiplesRoles !== undefined) {
+        params = params.set(
+            'multiplesRoles',
+            filtros.multiplesRoles
+        );
+    }
+
+    return this.http.get<ApiResponse<Page<UsuarioTablaResponse>>>(
+        `${this.apiUrl}/filtrar`,
+        { params }
+    );
+}
+
+buscar(
+    texto: string,
+    page: number = 0,
+    size: number = 10
+): Observable<ApiResponse<Page<UsuarioTablaResponse>>> {
+
+    const params = new HttpParams()
+        .set('texto', texto)
+        .set('page', page)
+        .set('size', size);
+
+    return this.http.get<ApiResponse<Page<UsuarioTablaResponse>>>(
+        `${this.apiUrl}/buscar`,
+        { params }
+    );
+}
+
+
+asignarRoles(
+    idUsuario: number,
+    data: AssignRolesRequest
+): Observable<any> {
+
+    return this.http.patch<any>(
+        `${this.apiUrl}/${idUsuario}/roles`,
+        data
+    );
+}
+
+
+listarRoles(): Observable<ApiResponse<Rol[]>> {
+    return this.http.get<ApiResponse<Rol[]>>(
+        `${this.apiUrl}/roles` 
+    );
+}
+
+obtenerRolesUsuario(
+    idUsuario: number
+): Observable<ApiResponse<Rol[]>> {
+
+    return this.http.get<ApiResponse<Rol[]>>(
+        `${this.apiUrl}/${idUsuario}/roles`
+    );
+}
+
+obtenerPermisosUsuario(
+    idUsuario: number,
+    page: number = 0,
+    size: number = 10
+): Observable<ApiResponse<Page<Permiso>>> {
+
+    const params = new HttpParams()
+        .set('page', page)
+        .set('size', size);
+
+    return this.http.get<ApiResponse<Page<Permiso>>>(
+        `${this.apiUrl}/${idUsuario}/permisos`,
+        { params }
+    );
+}
+
+
+    
 }

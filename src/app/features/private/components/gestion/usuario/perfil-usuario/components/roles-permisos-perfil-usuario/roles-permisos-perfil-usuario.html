@@ -15,14 +15,13 @@
       <p class="mb-3 text-[0.7rem] uppercase tracking-[0.15em] text-brand-gold/60">Roles asignados</p>
       <div class="flex flex-wrap gap-2">
 
-        <!-- Chip de cada rol -->
-        @for (rol of rolesAsignados; track rol.id_rol) {
+        @for (rol of rolesAsignados; track rol.idRol) {
           <div class="flex items-center gap-2 rounded-xl border border-brand-gold/25 bg-brand-gold/8 px-3 py-1.5">
             <i class="pi pi-shield text-brand-gold" style="font-size: 13px;"></i>
             <span class="text-sm font-medium text-brand-gold">{{ rol.nombre }}</span>
             <button
               type="button"
-              (click)="quitarRol(rol.id_rol)"
+              (click)="quitarRol(rol.idRol)"
               class="ml-1 text-brand-gold/40 transition-colors hover:text-red-400"
               aria-label="Quitar rol">
               <i class="pi pi-times" style="font-size: 11px;"></i>
@@ -30,7 +29,6 @@
           </div>
         }
 
-        <!-- Botón añadir rol -->
         <button
           type="button"
           (click)="abrirModalRol()"
@@ -50,22 +48,30 @@
       <div class="mb-3 flex items-center gap-3">
         <p class="text-[0.7rem] uppercase tracking-[0.15em] text-brand-gold/60">Permisos activos</p>
         <span class="rounded-md bg-brand-gold/10 px-2 py-0.5 text-[11px] text-brand-gold/60 border border-brand-gold/15">
-          {{ permisosActivos.length }} permisos
+          {{ totalPermisos }} permisos
         </span>
       </div>
 
       <!-- Sin permisos -->
-      @if (permisosActivos.length === 0) {
+      @if (permisosActivos.length === 0 && !cargando) {
         <div class="flex flex-col items-center gap-2 py-8 text-center">
           <i class="pi pi-lock-open text-white/20" style="font-size: 22px;"></i>
           <p class="text-sm text-white/25">Sin permisos asignados</p>
         </div>
       }
 
+      <!-- Cargando -->
+      @if (cargando) {
+        <div class="flex flex-col items-center gap-2 py-8 text-center">
+          <i class="pi pi-spin pi-spinner text-brand-gold/40" style="font-size: 22px;"></i>
+          <p class="text-sm text-white/25">Cargando permisos...</p>
+        </div>
+      }
+
       <!-- Lista permisos -->
       @if (permisosActivos.length > 0) {
         <div class="space-y-2">
-          @for (item of permisosActivos; track item.permiso.id_permiso) {
+          @for (item of permisosActivos; track item.permiso.idPermiso) {
             <div class="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3 transition-colors hover:bg-brand-gold/[0.04]">
               <div>
                 <p class="text-sm font-medium text-gray-200">{{ item.permiso.nombre }}</p>
@@ -77,12 +83,40 @@
             </div>
           }
         </div>
+
+        <!-- ✅ Paginación — aquí dentro de la sección permisos, FUERA del modal -->
+        @if (totalPaginasPermisos > 1) {
+          <div class="mt-4 flex items-center justify-between border-t border-brand-gold/10 pt-4">
+            <span class="text-xs text-white/30">
+              {{ totalPermisos }} permisos en total
+            </span>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                (click)="cambiarPaginaPermisos(paginaPermisos - 1)"
+                [disabled]="paginaPermisos === 0"
+                class="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/50 transition hover:border-brand-gold/30 hover:text-brand-gold disabled:cursor-not-allowed disabled:opacity-30">
+                <i class="pi pi-chevron-left"></i>
+              </button>
+              <span class="text-xs text-white/40">
+                {{ paginaPermisos + 1 }} / {{ totalPaginasPermisos }}
+              </span>
+              <button
+                type="button"
+                (click)="cambiarPaginaPermisos(paginaPermisos + 1)"
+                [disabled]="paginaPermisos >= totalPaginasPermisos - 1"
+                class="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/50 transition hover:border-brand-gold/30 hover:text-brand-gold disabled:cursor-not-allowed disabled:opacity-30">
+                <i class="pi pi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        }
       }
 
     </div>
   </div>
 
-  <!-- Modal Añadir Rol -->
+  <!-- ✅ Modal — solo contiene la lista de roles disponibles -->
   @if (showModalAgregarRol) {
     <div class="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" (click)="showModalAgregarRol = false"></div>
@@ -98,21 +132,20 @@
 
         <!-- Lista de roles disponibles -->
         <div class="space-y-2 px-5 py-5">
-          @for (rol of rolesDisponibles; track rol.id_rol) {
+          @for (rol of rolesDisponibles; track rol.idRol) {
             <div
-              (click)="toggleRol(rol.id_rol)"
+              (click)="toggleRol(rol.idRol)"
               class="flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-all duration-200"
-              [class]="rolesSeleccionados.has(rol.id_rol)
+              [class]="rolesSeleccionados.has(rol.idRol)
                 ? 'border-brand-gold/50 bg-brand-gold/10'
                 : 'border-white/6 bg-white/[0.02] hover:border-brand-gold/30 hover:bg-brand-gold/5'">
 
-              <!-- Checkbox visual -->
               <div
                 class="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all"
-                [class]="rolesSeleccionados.has(rol.id_rol)
+                [class]="rolesSeleccionados.has(rol.idRol)
                   ? 'border-brand-gold bg-brand-gold text-[#0c0c0a]'
                   : 'border-brand-gold/30 bg-transparent'">
-                @if (rolesSeleccionados.has(rol.id_rol)) {
+                @if (rolesSeleccionados.has(rol.idRol)) {
                   <i class="pi pi-check" style="font-size: 10px;"></i>
                 }
               </div>

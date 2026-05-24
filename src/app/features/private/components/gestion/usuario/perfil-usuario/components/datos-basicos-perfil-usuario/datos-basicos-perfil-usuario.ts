@@ -56,39 +56,34 @@ export class DatosBasicosPerfilUsuario implements OnInit {
     this.editando = false;
     this.resetForm();
   }
+onGuardar(): void {
+    if (!this.usuarioId) {
+        this.notificationService.showWarn('No se pudo identificar el usuario.');
+        return;
+    }
 
-  onGuardar(): void {
     this.guardando = true;
 
-    this.personaService.actualizarPersona(this.personaId, {
-      nombre:   this.form.nombre,
-      apellido: this.form.apellido,
-      telefono: this.form.telefono,
-      email:    this.form.email,
+    this.personaService.actualizarPersonaPorUsuarioId(this.usuarioId, {
+        nombre:   this.form.nombre,
+        apellido: this.form.apellido,
+        telefono: this.form.telefono,
+        email:    this.form.email,
     }).subscribe({
-      next: (personaRes) => {
-        this.guardando = false;
-
-        // Assuming API returns success flag
-        if (!personaRes?.success) {
-          this.notificationService.showError('No se pudieron guardar los cambios.');
-          return;
+        next: (res) => {
+            this.guardando = false;
+            this.nombre   = this.form.nombre   || '—';
+            this.apellido = this.form.apellido || '—';
+            this.telefono = this.form.telefono || '—';
+            this.email    = this.form.email    || '—';
+            this.editando = false;
+            this.notificationService.showSuccess(res?.message || 'Datos actualizados correctamente.');
+        },
+        error: (err) => {
+            this.guardando = false;
+            this.notificationService.showHttpError(err, 'Actualizar datos');
         }
-
-        this.nombre   = this.form.nombre      || '—';
-        this.apellido = this.form.apellido    || '—';
-        this.telefono = this.form.telefono    || '—';
-        this.email    = this.form.email       || '—';
-        
-
-        this.editando = false;
-        this.notificationService.showSuccess('Datos actualizados correctamente.');
-      },
-      error: (err) => {
-        this.guardando = false;
-        this.notificationService.showHttpError(err, 'Error');
-      }
     });
-  }
+}
 
 }

@@ -30,16 +30,42 @@ export class Barberos implements OnInit {
     this.loadPage(0);
   }
 
+  private extraerPersona(b: any): { persona: any; nombre: string; apellido: string; email: string } {
+    const personaRaw = b?.persona ?? b?.personaResponse ?? b?.personaDto ?? b?.personaDTO ?? {};
+
+    const nombre = (personaRaw?.nombre ?? b?.nombre ?? b?.nombres ?? b?.personaNombre ?? '').toString().trim();
+    const apellido = (personaRaw?.apellido ?? b?.apellido ?? b?.apellidos ?? b?.personaApellido ?? '').toString().trim();
+    const email = (personaRaw?.email ?? personaRaw?.correo ?? b?.email ?? b?.correo ?? '').toString().trim();
+
+    return {
+      persona: {
+        ...personaRaw,
+        nombre,
+        apellido,
+        email,
+      },
+      nombre,
+      apellido,
+      email,
+    };
+  }
+
   private mapBarberos(content: any[]): any[] {
-    return content.map((b: any) => ({
-      barberoId: b.barberoId,
-      persona: b.persona,
-      fechaIngreso: b.fechaIngreso ? new Date(b.fechaIngreso).toLocaleDateString() : '—',
-      experiencia: b.experiencia != null ? `${b.experiencia} años` : '—',
-      estado: b.ocupado ? 'Ocupado' : 'Disponible',
-      comision: b.comision != null ? `${b.comision}%` : '—',
-      sueldo: b.sueldo != null ? `S/${b.sueldo}` : '—'
-    }));
+    return content.map((b: any) => {
+      const p = this.extraerPersona(b);
+      return {
+        barberoId: b.barberoId || b.id,
+        persona: p.persona,
+        nombre: p.nombre,
+        apellido: p.apellido,
+        email: p.email,
+        fechaIngreso: b.fechaIngreso ? new Date(b.fechaIngreso).toLocaleDateString() : '—',
+        experiencia: b.experiencia != null ? `${b.experiencia} años` : '—',
+        estado: b.ocupado ? 'Ocupado' : 'Disponible',
+        comision: b.comision != null ? `${b.comision}%` : '—',
+        sueldo: b.sueldo != null ? `S/${b.sueldo}` : '—'
+      };
+    });
   }
 
   private aplicarPagina(res: any): void {
@@ -125,8 +151,9 @@ export class Barberos implements OnInit {
         const inhabilitadosContent = inhabilitados?.data?.content || [];
 
         const combinados = [...activosContent, ...inhabilitadosContent].filter((b: any) => {
-          const nombreCompleto = `${b.persona?.nombre || b.nombre || ''} ${b.persona?.apellido || b.apellido || ''}`.toLowerCase();
-          const correo = (b.persona?.email || b.email || '').toLowerCase();
+          const p = this.extraerPersona(b);
+          const nombreCompleto = `${p.nombre} ${p.apellido}`.toLowerCase();
+          const correo = p.email.toLowerCase();
           return nombreCompleto.includes(texto) || correo.includes(texto);
         });
 

@@ -10,8 +10,6 @@
           <th class="py-3 px-3 text-left w-[18%]">Nombre</th>
           <th class="py-3 px-3 text-left w-[16%]">Roles</th>
           <th class="py-3 px-3 text-center w-[8%]">QR</th>
-          <th class="py-3 px-3 text-left w-[12%]">Estado</th>
-          <th class="py-3 px-3 text-center w-[18%]">Último acceso</th>
           <th class="py-3 px-3 text-right w-[10%]">Acción</th>
         </tr>
       </thead>
@@ -78,27 +76,6 @@
             </ng-template>
           </td>
 
-          <!-- Estado -->
-          <td class="py-4 px-3" data-label="Estado">
-            <span *ngIf="u.estado === 'Activo' || u.activo === true"
-              class="inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-300">
-              <span class="h-2 w-2 rounded-full bg-lime-400"></span>Activo
-            </span>
-            <span *ngIf="u.estado === 'Inactivo' || u.activo === false"
-              class="inline-flex items-center gap-2 rounded-full border border-red-400/20 bg-red-400/10 px-3 py-1 text-xs font-medium text-red-300">
-              <span class="h-2 w-2 rounded-full bg-red-400"></span>Inactivo
-            </span>
-            <span *ngIf="u.estado == null && u.activo == null"
-              class="inline-flex items-center gap-2 rounded-full border border-gray-500/20 bg-white/5 px-3 py-1 text-xs font-medium text-gray-300">
-              <span class="h-2 w-2 rounded-full bg-gray-400"></span>—
-            </span>
-          </td>
-
-          <!-- Último acceso -->
-          <td class="py-4 px-3 text-center text-gray-400 text-xs" data-label="Último acceso">
-            {{ u.ultimoAcceso || u.lastLogin || '—' }}
-          </td>
-
           <!-- Acción -->
           <td class="py-4 px-3 text-right w-[10%]" data-label="Acción">
             <div class="table-actions">
@@ -110,12 +87,6 @@
                 <p-button icon="pi pi-user-plus" class="boton-editar-tabla"
                   (click)="onReactivate(u.usuarioId || u.id)">
                 </p-button>
-              } @else {
-                @if (canDisable(u)) {
-                  <p-button icon="pi pi-user-minus" class="boton-eliminar-tabla"
-                    (click)="onDelete(u.usuarioId || u.id)">
-                  </p-button>
-                }
               }
             </div>
           </td>
