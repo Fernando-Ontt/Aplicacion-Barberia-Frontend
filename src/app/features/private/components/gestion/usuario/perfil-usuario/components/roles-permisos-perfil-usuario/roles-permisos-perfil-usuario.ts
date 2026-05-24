@@ -117,19 +117,21 @@ export class RolesPermisosPerfilUsuario implements OnInit, OnChanges {
   quitarRol(idRol: number): void {
     if (!this.usuarioId) return;
 
-    const rolesRestantesIds = this.rolesAsignados
-      .filter(r => r.idRol !== idRol)
-      .map(r => r.idRol);
+    const rolesPrevios = [...this.rolesAsignados];
+    this.rolesAsignados = this.rolesAsignados.filter(r => r.idRol !== idRol);
+    this.recalcularDisponibles();
 
-    this.usuarioService.asignarRoles(this.usuarioId, { roles: rolesRestantesIds }).subscribe({
+    this.usuarioService.quitarRol(this.usuarioId, idRol).subscribe({
       next: (res) => {
-        this.rolesAsignados = this.rolesAsignados.filter(r => r.idRol !== idRol);
-        this.recalcularDisponibles();
         this.paginaPermisos = 0;
         this.recargarPermisos();
         this.notification.showSuccess(res?.message || 'Rol quitado correctamente');
       },
-      error: (err) => this.notification.showHttpError(err, 'Quitar rol'),
+      error: (err) => {
+        this.rolesAsignados = rolesPrevios;
+        this.recalcularDisponibles();
+        this.notification.showHttpError(err, 'Quitar rol');
+      },
     });
   }
 

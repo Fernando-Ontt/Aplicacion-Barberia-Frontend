@@ -155,6 +155,16 @@ asignarRoles(
     );
 }
 
+quitarRol(
+    idUsuario: number,
+    idRol: number
+): Observable<any> {
+
+    return this.http.delete<any>(
+        `${this.apiUrl}/${idUsuario}/roles/${idRol}`
+    );
+}
+
 
 listarRoles(): Observable<ApiResponse<Rol[]>> {
     return this.http.get<ApiResponse<Rol[]>>(
