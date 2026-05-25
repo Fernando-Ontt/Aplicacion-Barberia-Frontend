@@ -49,7 +49,12 @@ export const routes: Routes = [
         { path: 'usuarios', component: Usuario },
         { path: 'usuarios/:id', component: PerfilUsuario },
       ]},
+      {path: 'sistema', children: [
+  { path: 'configuracion', loadComponent: () => import('./features/private/components/sistema/configuracion').then(m => m.Configuracion) },
+]},
+      
       { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
+      
     ]
   },
 
