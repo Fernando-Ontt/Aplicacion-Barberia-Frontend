@@ -151,7 +151,7 @@ export class BarberoService {
             `${this.apiUrl}/${id}/resumen`
         );
     }
-    // ── Endpoints del dashboard del barbero ──────────────────────────
+
 
 getPerfil(): Observable<ApiResponse<PerfilBarbero>> {
     return this.http.get<ApiResponse<PerfilBarbero>>(

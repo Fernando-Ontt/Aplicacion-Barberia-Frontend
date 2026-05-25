@@ -62,22 +62,16 @@ export interface Cita {
 
 export interface DiaResumen {
   fecha: string;
-
   atendidos: number;
-
   cancelados: number;
-
   totalIngresos: number;
 }
 
 export interface ResumenSemanal {
 
   dias: DiaResumen[];
-
   sueldoBase: number;
-
   comisionSemanal: number;
-
   totalSemana: number;
 }
 
