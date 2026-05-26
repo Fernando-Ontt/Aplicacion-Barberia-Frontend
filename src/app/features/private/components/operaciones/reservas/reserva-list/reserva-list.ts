@@ -28,7 +28,6 @@ import { finalize } from 'rxjs';
     ButtonModule, 
     CommonModule, 
     TableModule, 
-    ConfirmPopoverComponent, 
     ToggleSwitchModule,
     StatusBadgeComponent
   ],

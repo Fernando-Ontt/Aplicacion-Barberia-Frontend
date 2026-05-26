@@ -25,6 +25,7 @@ import { ServicioService } from '@/app/core/services/catalogos/servicio.service'
 import { Router } from '@angular/router';
 import { ReservaService } from '@/app/core/services/operaciones/reserva-service';
 import { ReservaRequest } from '@/app/core/models/reserva/reservaRequest';
+import { ServicioFiltro } from '@/app/core/models/catalogos/servicios.model';
 
 @Component({
   selector: 'app-create-reserva',
@@ -57,7 +58,7 @@ export class CreateReserva implements OnInit, OnDestroy {
   clientes$!: Observable<Cliente[]>;
   barberos$!: Observable<Barbero[]>;
   servicios$!: Observable<Servicio[]>;
-  
+
   isLoading = false;
   checkingDisponibility = false;
   showConfirmDialog = false;
@@ -67,6 +68,7 @@ export class CreateReserva implements OnInit, OnDestroy {
   clientesCache: any[] = [];
   barberosCache: any[] = [];
   serviciosCache: Servicio[] = [];
+  servicioFiltro: ServicioFiltro = { page: 0, size: 1000 };
 
   horarios = [
     { label: '09:00 AM', value: '09:00', disabled: false },
@@ -97,7 +99,6 @@ export class CreateReserva implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarDatos();
-   
   }
 
   ngOnDestroy(): void {
@@ -107,67 +108,63 @@ export class CreateReserva implements OnInit, OnDestroy {
 
   private cargarDatos(): void {
     // Cargar clientes
-   this.clientes$ = this.clienteService.listar().pipe(
-  map(response => {
-    if (response?.data?.content) {
-      this.clientesCache = response.data.content.map((cliente: Cliente) => ({
-        ...cliente,
-        nombreCompleto: `${cliente.persona.nombre} ${cliente.persona.apellido}`,
-        email: cliente.persona.email,
-        telefono: cliente.persona.telefono
-      }));
+    this.clientes$ = this.clienteService.listar(0, 1000).pipe(
+      map(response => {
+        if (response?.data?.content) {
+          this.clientesCache = response.data.content.map((cliente: Cliente) => ({
+            ...cliente,
+            nombreCompleto: `${cliente.persona.nombre} ${cliente.persona.apellido}`,
+            email: cliente.persona.email,
+            telefono: cliente.persona.telefono
+          }));
 
-      return this.clientesCache;
-    }
+          return this.clientesCache;
+        }
 
-    return [];
-  })
-);
+        return [];
+      })
+    );
 
     // Cargar barberos
-   this.barberos$ = this.barberoService.listar().pipe(
-  map(response => {
-    if (response?.data?.content) {
+    this.barberos$ = this.barberoService.listar(0, 1000).pipe(
+      map(response => {
+        if (response?.data?.content) {
 
-      this.barberosCache = response.data.content.map((barbero: any) => ({
-        ...barbero,
-        persona: {
-          nombre: barbero.nombre,
-          apellido: barbero.apellido,
-          email: barbero.email,
-          telefono: barbero.telefono
-        },
-        nombreCompleto: `${barbero.nombre} ${barbero.apellido}`
-      }));
+          this.barberosCache = response.data.content.map((barbero: Barbero) => ({
+            ...barbero,
+            nombreCompleto: `${barbero.persona?.nombre ?? ''} ${barbero.persona?.apellido ?? ''}`.trim()
+          } as Barbero & { nombreCompleto: string }));
 
-      return this.barberosCache;
-    }
+          return this.barberosCache;
+        }
 
-    return [];
-  })
-);
+        return [];
+      })
+    );
 
     // Cargar servicios
-    this.servicios$ = this.servicioService.obtenerServicios().pipe(
+    this.servicios$ = this.servicioService.obtenerServiciosConFiltro(this.servicioFiltro).pipe(
       map(servicios => {
-        this.serviciosCache = servicios || [];
+        if (servicios?.data?.content) {
+          this.serviciosCache = servicios.data.content;
+        }
         return this.serviciosCache;
       })
     );
   }
 
- 
+
   fechaValida(control: AbstractControl): ValidationErrors | null {
     const fecha = control.value;
     if (!fecha) return null;
-    
+
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-    
+
     if (fecha < hoy) {
       return { fechaInvalida: true };
     }
-    
+
     return null;
   }
 
@@ -183,7 +180,7 @@ export class CreateReserva implements OnInit, OnDestroy {
     }
 
     const reserva = this.reservaForm.getRawValue();
-    
+
     this.reservaPreview = {
       ...reserva,
       fechaFormateada: reserva.fecha ? new Date(reserva.fecha).toLocaleDateString('es-ES', {
@@ -193,75 +190,75 @@ export class CreateReserva implements OnInit, OnDestroy {
         day: 'numeric'
       }) : ''
     };
-    
+
     this.showConfirmDialog = true;
   }
 
- confirmarGuardar(): void {
-  this.showConfirmDialog = false;
-  this.isLoading = true;
+  confirmarGuardar(): void {
+    this.showConfirmDialog = false;
+    this.isLoading = true;
 
-  const form = this.reservaForm.getRawValue();
+    const form = this.reservaForm.getRawValue();
 
-  if (!form.fecha) {
-    this.isLoading = false;
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Fecha inválida',
-      detail: 'La fecha es requerida'
-    });
-    return;
+    if (!form.fecha) {
+      this.isLoading = false;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Fecha inválida',
+        detail: 'La fecha es requerida'
+      });
+      return;
+    }
+
+    const fecha = new Date(form.fecha as string | Date);
+
+    const reservaRequest: ReservaRequest = {
+      clienteId: form.clienteId!,
+      barberoId: form.barberoId!,
+      servicioId: form.servicioId!,
+      fecha: fecha.toISOString().split('T')[0],
+      horaInicio: form.hora!,
+      observacion: form.observacion ?? ''
+    };
+
+    console.log('Payload enviado:', reservaRequest);
+
+    this.reservaService.guardarReserva(reservaRequest)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('Respuesta crear reserva:', response);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: '¡Reserva creada!',
+            detail: 'La reserva se creó correctamente.',
+            life: 3000
+          });
+
+          setTimeout(() => {
+            this.router.navigate(['/dashboard/admin/operaciones/reservas']);
+          }, 2000);
+        },
+
+        error: (error) => {
+          console.error('Error al guardar reserva:', error);
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error del servidor',
+            detail:
+              error?.error?.message ??
+              'Ocurrió un error al crear la reserva.',
+            life: 4000
+          });
+        }
+      });
   }
-
-  const fecha = new Date(form.fecha as string | Date);
-
-  const reservaRequest: ReservaRequest = {
-    clienteId: form.clienteId!,
-    barberoId: form.barberoId!,
-    servicioId: form.servicioId!,
-    fecha: fecha.toISOString().split('T')[0],
-    horaInicio: form.hora!,
-    observacion: form.observacion ?? ''
-  };
-
-  console.log('Payload enviado:', reservaRequest);
-
-  this.reservaService.guardarReserva(reservaRequest)
-    .pipe(
-      finalize(() => {
-        this.isLoading = false;
-      })
-    )
-    .subscribe({
-      next: (response: any) => {
-  console.log('Respuesta crear reserva:', response);
-
-  this.messageService.add({
-    severity: 'success',
-    summary: '¡Reserva creada!',
-    detail: 'La reserva se creó correctamente.',
-    life: 3000
-  });
-
-  setTimeout(() => {
-    this.router.navigate(['/dashboard/admin/operaciones/reservas']);
-  }, 2000);
-},
-
-      error: (error) => {
-        console.error('Error al guardar reserva:', error);
-
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error del servidor',
-          detail:
-            error?.error?.message ??
-            'Ocurrió un error al crear la reserva.',
-          life: 4000
-        });
-      }
-    });
-}
 
   getClienteNombre(): string {
     const clienteId = this.reservaForm.get('clienteId')?.value;
@@ -283,7 +280,7 @@ export class CreateReserva implements OnInit, OnDestroy {
   }
 
   cancelar(): void {
-    this.router.navigate(['/operaciones/reservas']);
+    this.router.navigate(['/dashboard/admin/operaciones/reservas']);
   }
 
   // Getters para validaciones
