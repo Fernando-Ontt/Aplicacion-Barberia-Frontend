@@ -1,1 +1,137 @@
-<p>rewards works!</p>
+<!-- rewards.html -->
+<div class="min-h-screen bg-[#0d0d0d] text-white p-6">
+
+  <!-- Encabezado -->
+  <p class="text-xs tracking-widest uppercase text-[#b8952a] mb-1">Programa de puntos</p>
+  <h2 class="text-2xl font-medium mb-6">Tu tarjeta de fidelización</h2>
+
+  <!-- TARJETA VIRTUAL -->
+  <div class="bg-[#111] border border-[#b8952a]/20 rounded-2xl p-6 mb-4 relative overflow-hidden">
+    <!-- Círculos decorativos -->
+    <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full border border-[#b8952a]/10"></div>
+    <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full border border-[#b8952a]/5"></div>
+
+    <!-- Header tarjeta -->
+    <div class="flex justify-between items-start mb-5 relative">
+      <div>
+        <p class="text-[#b8952a] font-medium tracking-wide">✦ FadeX</p>
+        <p class="text-[#b8952a]/50 text-xs tracking-widest uppercase mt-0.5">Tarjeta Fidelización</p>
+      </div>
+      <span class="text-xs tracking-wide uppercase border border-[#b8952a]/30 text-[#b8952a] px-3 py-1 rounded-full bg-[#b8952a]/10">
+        {{ getLevelLabel() }}
+      </span>
+    </div>
+
+    <!-- Grid tijeritas -->
+    <div class="grid grid-cols-5 gap-2 mb-5">
+      <div *ngFor="let n of slots" class="flex flex-col items-center gap-1">
+        <div
+          class="w-11 h-11 rounded-xl flex items-center justify-center text-lg border transition-all"
+          [ngClass]="n <= state.cortesAcumulados
+            ? 'bg-[#b8952a]/10 border-[#b8952a]/50 text-[#b8952a]'
+            : 'bg-white/5 border-white/10 text-white/10'"
+        ><i class="pi pi-crown text-lg"></i></div>
+        <span
+          class="text-[10px]"
+          [ngClass]="n <= state.cortesAcumulados ? 'text-[#b8952a]/60' : 'text-white/20'"
+        >{{ n }}</span>
+      </div>
+    </div>
+
+    <!-- Footer tarjeta -->
+    <div class="flex justify-between items-center pt-4 border-t border-white/10">
+      <p class="text-sm text-white/40">
+        <span class="text-[#b8952a] font-medium">{{ state.cortesAcumulados }} / {{ state.meta }}</span> cortes
+      </p>
+      <div class="text-right">
+        <p class="text-[10px] text-white/30 mb-1">
+          {{ canRedeem() ? '¡Recompensa disponible!' : 'Faltan ' + state.faltantes + ' para recompensa' }}
+        </p>
+        <div class="w-36 h-1 bg-white/10 rounded-full overflow-hidden">
+          <div
+            class="h-full bg-gradient-to-r from-[#8a6a15] to-[#ddb84a] rounded-full transition-all duration-500"
+            [style.width.%]="progressPct()"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANNER RECOMPENSA -->
+  <div
+    class="flex items-center gap-3 rounded-xl p-4 border mb-4 transition-all"
+    [ngClass]="canRedeem()
+      ? 'bg-[#b8952a]/10 border-[#b8952a]/50'
+      : 'bg-[#b8952a]/5 border-[#b8952a]/20'"
+  >
+    <div class="w-11 h-11 rounded-xl bg-[#b8952a]/20 border border-[#b8952a]/30 flex items-center justify-center text-xl flex-shrink-0">
+      <i class="pi pi-crown"></i>
+    </div>
+    <div class="flex-1">
+      <h4 class="text-sm font-medium text-[#b8952a]">
+        {{ canRedeem() ? '¡Corte gratis disponible!' : 'Corte gratis pendiente' }}
+      </h4>
+      <p class="text-xs text-white/40 mt-0.5">
+        {{ canRedeem()
+          ? 'Completaste los 10 cortes. Muéstrale tu tarjeta al barbero.'
+          : 'Acumula ' + state.faltantes + ' corte(s) más para tu próximo corte gratis.' }}
+      </p>
+    </div>
+    <button
+      (click)="onCanjear()"
+      [disabled]="!canRedeem()"
+      class="px-4 py-2 rounded-lg text-xs font-medium tracking-wide transition-all flex-shrink-0"
+      [ngClass]="canRedeem()
+        ? 'bg-[#b8952a] text-[#111] hover:opacity-85 cursor-pointer'
+        : 'bg-white/10 text-white/20 cursor-not-allowed'"
+    >
+      Canjear
+    </button>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid grid-cols-3 gap-3 mb-6">
+    <div class="bg-[#111] border border-white/10 rounded-xl p-4 text-center">
+      <p class="text-2xl font-medium text-[#b8952a]">{{ state.cortesAcumulados }}</p>
+      <p class="text-[10px] uppercase tracking-widest text-white/40 mt-1">Acumulados</p>
+    </div>
+    <div class="bg-[#111] border border-white/10 rounded-xl p-4 text-center">
+      <p class="text-2xl font-medium text-[#b8952a]">{{ state.cortesGratis }}</p>
+      <p class="text-[10px] uppercase tracking-widest text-white/40 mt-1">Gratis ganados</p>
+    </div>
+    <div class="bg-[#111] border border-white/10 rounded-xl p-4 text-center">
+      <p class="text-2xl font-medium text-[#b8952a]">{{ state.faltantes }}</p>
+      <p class="text-[10px] uppercase tracking-widest text-white/40 mt-1">Faltan</p>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <p class="text-xs tracking-widest uppercase text-[#b8952a] mb-3">Historial reciente</p>
+  <div class="flex flex-col gap-2">
+    <div *ngIf="historial.length === 0" class="text-sm text-white/30 py-2">
+      Aún no hay cortes registrados.
+    </div>
+    <div
+      *ngFor="let h of historial"
+      class="bg-[#111] border border-white/10 rounded-xl px-4 py-3 flex items-center gap-3"
+    >
+      <div
+        class="w-2 h-2 rounded-full flex-shrink-0"
+        [ngClass]="h.gratis ? 'bg-[#b8952a]' : 'bg-white/20'"
+      ></div>
+      <div class="flex-1">
+        <p class="text-sm font-medium">{{ h.tipo }}</p>
+        <p class="text-xs text-white/40 mt-0.5">{{ h.fecha }}</p>
+      </div>
+      <span
+        class="text-[11px] px-2.5 py-1 rounded-full border"
+        [ngClass]="h.gratis
+          ? 'bg-[#b8952a]/10 border-[#b8952a]/40 text-[#b8952a]'
+          : 'bg-white/5 border-white/15 text-white/30'"
+      >
+        {{ h.gratis ? 'Gratis' : 'Corte #' + h.numero }}
+      </span>
+    </div>
+  </div>
+
+</div>
