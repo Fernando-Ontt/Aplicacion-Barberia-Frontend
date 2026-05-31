@@ -101,7 +101,7 @@ export const routes: Routes = [
       children: [
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
         { path: 'dashboard', loadComponent: () => import('./features/private/pages/resumen/resumen.component').then(m => m.ResumenComponent) },
-        { path: 'reservar', loadComponent: () => import('./features/private/pages/reservar/reservar.component').then(m => m.ReservarComponent) },
+        { path: 'reservar/agendar', loadComponent: () => import('./features/private/pages/reservar/reservar.component').then(m => m.ReservarComponent) },
         { path: 'historial', loadComponent: () => import('./features/private/pages/historial/historial.component').then(m => m.ClienteHistorialComponent) },
         { path: 'rewards', loadComponent: () => import('./features/private/pages/rewards/rewards.component').then(m => m.RewardsComponent) },
         { path: 'perfil', loadComponent: () => import('./features/private/pages/perfil/perfil.component').then(m => m.PerfilComponent) },
