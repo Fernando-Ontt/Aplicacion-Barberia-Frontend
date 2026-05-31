@@ -92,7 +92,7 @@ export const routes: Routes = [
     { path: 'productos/detalle/:id', loadComponent: () => import('./features/public/pages/productos/producto-detalle/producto-detalle.component').then(m => m.ProductoDetalleComponent) },
     { path: 'servicios', component: ServiciosComponent },
     { path: 'reclamos', component: ReclamosComponent },
-    { path: 'reservas', component: ReservasComponent },
+    { path: 'reservas', component: ReservasComponent, canActivate: [authGuard] },
     { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
     { path: 'register', component: RegisterComponent },
     { path: 'carrito', component: CarritoComponent },
@@ -101,7 +101,7 @@ export const routes: Routes = [
       children: [
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
         { path: 'dashboard', loadComponent: () => import('./features/private/pages/resumen/resumen.component').then(m => m.ResumenComponent) },
-        { path: 'reservar', loadComponent: () => import('./features/private/pages/reservar/reservar.component').then(m => m.ReservarComponent) },
+        { path: 'reservar/agendar', loadComponent: () => import('./features/private/pages/reservar/reservar.component').then(m => m.ReservarComponent), canActivate: [authGuard] },
         { path: 'historial', loadComponent: () => import('./features/private/pages/historial/historial.component').then(m => m.ClienteHistorialComponent) },
         { path: 'rewards', loadComponent: () => import('./features/private/pages/rewards/rewards.component').then(m => m.RewardsComponent) },
         { path: 'perfil', loadComponent: () => import('./features/private/pages/perfil/perfil.component').then(m => m.PerfilComponent) },

@@ -48,14 +48,15 @@ export class RegisterComponent {
     marcarFormulario(this.registerForm);
     if (this.registerForm.invalid) return;
     const { email, password, nombre, apellido, telefono, username } = this.registerForm.value;
-    const payload = {
-      nombre: nombre!,
-      apellido: apellido!,
-      telefono: telefono!,
-      correo: email!,
-      username: username!,
-      password: password!
-    };
+const payload = {
+  username: username!,
+  password: password!,
+  idRol: 3,            // ← cliente siempre es rol 3
+  nombre: nombre!,
+  apellido: apellido!,
+  telefono: telefono!,
+  email: email!        // ← corregido
+};
 
     this.loading = true;
     this.errorMsg = '';

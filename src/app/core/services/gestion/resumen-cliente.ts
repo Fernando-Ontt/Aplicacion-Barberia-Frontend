@@ -52,7 +52,7 @@ getProximaCita(): Observable<ReservaDTO | null> {
 
   getRecomendados(): Observable<ServicioResponseDTO[]> {
     return this.http
-      .get<ApiResponse<any>>(`${BASE}/servicio`)
+      .get<ApiResponse<any>>(`${BASE}/servicios`)
       .pipe(
         map(res => {
           const data = res.data?.content ?? res.data ?? [];

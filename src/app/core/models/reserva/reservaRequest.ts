@@ -5,4 +5,5 @@ export interface ReservaRequest {
   fecha: string;
   horaInicio: string;
   observacion?: string;
+  esGratis?: boolean;
 }
