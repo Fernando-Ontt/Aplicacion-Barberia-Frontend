@@ -21,6 +21,7 @@ import { PerfilClient } from './features/private/components/gestion/clientes/per
 import { PerfilBarbero } from './features/private/components/gestion/barberos/perfil-barbero/perfil-barbero';
 import { Usuario } from './features/private/components/gestion/usuario/usuario';
 import { PerfilUsuario } from './features/private/components/gestion/usuario/perfil-usuario/perfil-usuario';
+import { CheckoutComponent } from './features/auth/checkout/checkout.component';
 
 export const routes: Routes = [
   {
@@ -127,6 +128,7 @@ export const routes: Routes = [
       { path: 'reservas', component: ReservasComponent },
       { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
       { path: 'register', component: RegisterComponent },
+      { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard], data: { roles: ['cliente'] } },
       { path: 'carrito', component: CarritoComponent },
       {
         path: 'mi-cuenta', component: DashboardClienteComponent,
