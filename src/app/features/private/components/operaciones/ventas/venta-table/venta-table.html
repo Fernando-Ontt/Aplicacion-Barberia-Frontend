@@ -1,0 +1,185 @@
+<div class="table-base p-4 md:p-6 lg:p-8">
+    <div class="relative w-full overflow-x-auto">
+
+        <p-table
+            [value]="ventas"
+            [loading]="!cargado"
+            dataKey="ventaId"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Viendo {first} a {last} de {totalRecords} entradas"
+            [tableStyle]="{ 'min-width': '1000px' }"
+            class="rounded-xl"
+        >
+
+            <!-- HEADER -->
+            <ng-template #header>
+                <tr class="table-header">
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Cliente</th>
+                    <th class="text-center">Comprobante</th>
+                    <th class="text-center">Productos</th>
+                    <th class="text-center">Fecha</th>
+                    <th class="text-center">Total</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </ng-template>
+
+            <!-- BODY -->
+            <ng-template #body let-venta pTemplate="body">
+
+                <tr class="table-row transition-all duration-200">
+
+                    <td class="px-4 py-3 whitespace-nowrap text-center">
+
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200"
+                        >
+                            #{{ venta.ventaId }}
+                        </span>
+
+                    </td>
+
+                    <td class="px-4 py-3 whitespace-nowrap text-center">
+
+                        <div class="flex flex-col">
+                            <span class="font-medium text-gray-800">
+                                {{ venta.clienteNombre }}
+                            </span>
+                        </div>
+
+                    </td>
+
+                    <!-- COMPROBANTE -->
+                    <td class="px-4 py-3 whitespace-nowrap text-center">
+
+                        <!-- BOLETA -->
+                        @if(venta.tipoComprobante === 'BOLETA'){
+
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide
+                                bg-purple-100 text-purple-700 border border-purple-200"
+                            >
+                                {{ venta.tipoComprobante }}
+                            </span>
+
+                        }
+
+                        <!-- FACTURA -->
+                        @if(venta.tipoComprobante === 'FACTURA'){
+
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide
+                                bg-blue-100 text-blue-700 border border-blue-200"
+                            >
+                                {{ venta.tipoComprobante }}
+                            </span>
+
+                        }
+
+                    </td>
+
+                    <!-- PRODUCTOS -->
+                    <td class="px-4 py-3 text-center">
+
+                        <div class="flex flex-col items-center gap-1">
+
+                            @for (detalle of venta.detalles; track detalle.detalleVentaId) {
+
+                                <div class="text-sm text-gray-700">
+
+                                    <span class="font-medium">
+                                        {{ detalle.productoNombre || ('#' + detalle.productoId) }}
+                                    </span>
+
+                                    <span class="font-semibold text-primary ml-1">
+                                        x{{ detalle.cantidad }}
+                                    </span>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </td>
+
+                    <!-- FECHA -->
+                    <td class="px-4 py-3 whitespace-nowrap text-center">
+
+                        <div class="flex flex-col items-center">
+
+                            <span class="font-medium text-gray-700">
+                                {{ venta.fecha | date:'dd/MM/yyyy' }}
+                            </span>
+
+                            <span class="text-xs text-gray-400">
+                                {{ venta.fecha | date:'HH:mm' }}
+                            </span>
+
+                        </div>
+
+                    </td>
+
+                    <!-- TOTAL -->
+                    <td class="px-4 py-3 whitespace-nowrap text-center">
+
+                        <span class="text-base font-semibold text-green-600">
+
+                            S/ {{ calcularTotal(venta) | number:'1.2-2' }}
+
+                        </span>
+
+                    </td>
+
+                    <!-- ACCIONES -->
+                    <td class="px-4 py-3 whitespace-nowrap text-center">
+
+                        <div class="table-actions flex justify-center gap-2">
+
+                            <p-button
+                                icon="pi pi-pencil"
+                                class="boton-editar-tabla"
+                                (click)="editar.emit(venta)"
+                            ></p-button>
+
+                            <p-button
+                                icon="pi pi-trash"
+                                class="boton-eliminar-tabla"
+                                (click)="eliminar.emit(venta)"
+                            ></p-button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </ng-template>
+
+            <!-- EMPTY -->
+            <ng-template #empty>
+
+                <tr>
+
+                    <td colspan="7" class="py-20 text-center">
+
+                        <div class="flex flex-col items-center text-gray-400">
+
+                            <i class="pi pi-inbox text-4xl mb-3 opacity-30"></i>
+
+                            <p class="text-sm">
+                                Sin ventas registradas
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </ng-template>
+
+        </p-table>
+
+    </div>
+</div>
