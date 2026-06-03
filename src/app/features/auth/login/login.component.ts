@@ -62,7 +62,8 @@ export class LoginComponent implements OnInit {
         this.notify.showSuccess('Bienvenido al sistema');
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
         const home = this.tokenService.getHomeByRole();
-        this.router.navigate([returnUrl || home], { replaceUrl: true });
+        
+        this.router.navigateByUrl(returnUrl || home, { replaceUrl: true });
       },
       error: (err) => {
         this.notify.showHttpError(err, 'Error de autenticación');
