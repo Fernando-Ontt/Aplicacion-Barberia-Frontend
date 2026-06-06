@@ -44,4 +44,11 @@ register(data: {
 }): Observable<ApiResponse<any>> {
   return this.http.post<ApiResponse<any>>(environment.apiUrl + "/usuarios/cliente", data);
 }
+forgotPassword(email: string): Observable<void> {
+  return this.http.post<void>(`${this.API}/forgot-password`, { email: email });
+}
+
+resetPassword(token: string, nuevaPassword: string): Observable<void> {
+  return this.http.post<void>(`${this.API}/reset-password`, { token, nuevaPassword });
+}
 }

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -18,7 +18,7 @@ import { campoInvalido } from '@/app/shared/utils/form-utils.component';
   selector: 'app-login',
   standalone: true,
   imports: [
-    ReactiveFormsModule, InputTextModule, CheckboxModule, ButtonModule, LogoComponent, PasswordModule, MessageModule
+    ReactiveFormsModule, InputTextModule, CheckboxModule, ButtonModule, LogoComponent, PasswordModule, MessageModule, RouterModule
   ],
   templateUrl: './login.html',
 })
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.formularioLogin = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(4)]],
+      username: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[^@]+$/)]],
       password: ['', [Validators.required, Validators.minLength(3)]],
       remember: [false]
     });

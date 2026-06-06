@@ -7,6 +7,8 @@ import { ReservasComponent } from './features/public/pages/reservas/reservas.com
 import { ReclamosComponent } from './features/public/pages/reclamos/reclamos.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { LoginComponent } from './features/auth/login/login.component';
+import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
+import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { PublicLayoutComponent } from './features/public/layout/public-layout.component';
 import { DashboardClienteComponent } from './features/private/dashboard/dashboard-cliente/dashboard-cliente.component';
 import { Error404Component } from './shared/components/error404/error404.component';
@@ -115,6 +117,8 @@ export const routes: Routes = [
       { path: 'inicio', component: InicioComponent },
       { path: 'nosotros', component: NosotrosComponent },
       { path: 'productos', loadComponent: () => import('./features/public/pages/productos/productos.component').then(m => m.ProductComponent) },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPassword },
       { path: 'productos/detalle/:id', loadComponent: () => import('./features/public/pages/productos/producto-detalle/producto-detalle.component').then(m => m.ProductoDetalleComponent) },
       { path: 'servicios', component: ServiciosComponent },
       { path: 'reclamos', component: ReclamosComponent },
@@ -140,8 +144,6 @@ export const routes: Routes = [
       { path: '**', component: Error404Component }
     ]
   },
-
-  { path: 'login', canActivate: [guestGuard], loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) },
 
   { path: '**', component: Error404Component },
 ];
