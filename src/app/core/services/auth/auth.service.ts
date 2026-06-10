@@ -22,6 +22,16 @@ export class AuthService {
     }));
   }
 
+  loginWithGoogle(idToken: string): Observable<LoginResponse> {
+    return this.http.post<ApiResponse<LoginResponse>>(this.API + "/google", { idToken }).pipe(
+      map(res => res.data), 
+      tap(data => {
+        this.tokenService.saveAccessToken(data.accessToken);
+        this.tokenService.saveRefreshToken(data.refreshToken);
+      })
+    );
+  }
+
   refreshToken(): Observable<ApiResponse<LoginResponse>> {
     const token = this.tokenService.getRefreshToken();
     const body: RefreshRequest = { refreshToken: token! };
@@ -32,23 +42,24 @@ export class AuthService {
     this.tokenService.clearTokens();
   }
 
-// auth.service.ts
-register(data: {
-  username: string;
-  password: string;
-  idRol: number;
-  nombre: string;
-  apellido: string;
-  telefono: string;
-  email: string;
-}): Observable<ApiResponse<any>> {
-  return this.http.post<ApiResponse<any>>(environment.apiUrl + "/usuarios/cliente", data);
-}
-forgotPassword(email: string): Observable<void> {
-  return this.http.post<void>(`${this.API}/forgot-password`, { email: email });
-}
+  // auth.service.ts
+  register(data: {
+    username: string;
+    password: string;
+    idRol: number;
+    nombre: string;
+    apellido: string;
+    telefono: string;
+    email: string;
+  }): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrl + "/usuarios/cliente", data);
+  }
 
-resetPassword(token: string, nuevaPassword: string): Observable<void> {
-  return this.http.post<void>(`${this.API}/reset-password`, { token, nuevaPassword });
-}
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${this.API}/forgot-password`, { email: email });
+  }
+
+  resetPassword(token: string, nuevaPassword: string): Observable<void> {
+    return this.http.post<void>(`${this.API}/reset-password`, { token, nuevaPassword });
+  }
 }

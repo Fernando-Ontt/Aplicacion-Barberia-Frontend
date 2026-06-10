@@ -36,11 +36,18 @@
           <span class="text-text-secondary text-sm">Recordarme</span>                  
         </div>
         <button pButton type="submit" label="Iniciar Sesión" [loading]="loading" class="boton-primary w-full"></button>
+        
+        <div class="relative flex items-center py-2">
+          <div class="flex-grow border-t border-white/10"></div>
+          <span class="px-4 text-text-muted text-sm">O continúa con</span>
+          <div class="flex-grow border-t border-white/10"></div>
+        </div>
+
+        <div id="google-button" class="flex justify-center w-full min-h-[40px]"></div>
         <span class="text-text-muted text-sm mt-4 text-center">¿Olvidaste tu contraseña? <a routerLink="/forgot-password" class="text-brand-gold hover:underline">Recuperar</a></span>
         <span class="text-text-muted text-sm mt-2 text-center">¿No tienes cuenta? <a href="/register" class="text-brand-gold hover:underline">Regístrate</a></span>
       </form>        
       
-      <!-- DEMO -->
       <div class="mt-8 pt-6 border-t border-white/10 text-sm">
         <p class="text-center text-text-muted mb-4">
           Credenciales de prueba:
@@ -62,7 +69,6 @@
       </div>
     </div>
 
-    <!-- RIGHT -->
     <div class="hidden lg:flex flex-col items-center justify-center bg-black p-10 border-l border-brand-gold/20">
       <div class="mb-4">
         <i class="pi pi-mobile text-brand-gold text-4xl"></i>
@@ -70,7 +76,6 @@
       <h2 class="text-3xl font-bold text-white mb-2">Acceso Rápido</h2>
       <p class="text-text-muted text-sm text-center mb-8">Escanea el código QR con tu dispositivo móvil</p>
       <div class="bg-white rounded-2xl p-5 border-4 border-brand-gold shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-        <!-- qr fake de simularion -->
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://fadex.com" alt="QR"
           class="w-[220px] h-[220px]" />
       </div>
