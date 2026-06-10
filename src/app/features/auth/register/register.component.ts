@@ -1,16 +1,26 @@
 import { LogoComponent } from '@/app/shared/components/logo/logo.component';
 import { Router, RouterLink } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, AfterViewInit } from '@angular/core';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from "primeng/inputtext";
 import { PasswordModule } from 'primeng/password';
 import { AuthService } from '@/app/core/services/auth/auth.service';
+import { TokenService } from '../../../core/services/auth/token.service';
+import { NotificationService } from '../../../core/services/common/notification.service';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { campoInvalido, marcarFormulario } from '@/app/shared/utils/form-utils.component';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
+import { environment } from '../../../../environments/environment.development';
+import { finalize } from 'rxjs';
 
-// ─── Validadores personalizados ───────────────────────────────────────────────
+export interface GoogleCredentialResponse {
+  credential: string;
+  clientId: string;
+  select_by: string;
+}
+
+declare var google: any;
 
 const soloLetrasValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const valor: string = control.value ?? '';
@@ -27,7 +37,6 @@ const usernameValidator: ValidatorFn = (control: AbstractControl): ValidationErr
   if (/\s/.test(valor)) return { sinEspacios: true };
   return /^[a-zA-Z0-9._]+$/.test(valor) ? null : { usernameInvalido: true };
 };
-
 
 const passwordSeguraValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const valor: string = control.value ?? '';
@@ -47,10 +56,7 @@ const passwordsIgualesValidator: ValidatorFn = (group: AbstractControl): Validat
 
 const gmailValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const valor: string = (control.value ?? '').trim().toLowerCase();
-
-  return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(valor)
-    ? null
-    : { gmailInvalido: true };
+  return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(valor) ? null : { gmailInvalido: true };
 };
 
 
@@ -64,10 +70,12 @@ const gmailValidator: ValidatorFn = (control: AbstractControl): ValidationErrors
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewInit {
   private fb          = inject(FormBuilder);
   private authService = inject(AuthService);
   private router      = inject(Router);
+  private tokenService = inject(TokenService);
+  private notify      = inject(NotificationService);
 
   errorMsg  = '';
   loading   = false;
@@ -78,7 +86,7 @@ export class RegisterComponent {
       nombre:          ['', [Validators.required, Validators.minLength(2), soloLetrasValidator]],
       apellido:        ['', [Validators.required, Validators.minLength(2), soloLetrasValidator]],
       telefono:        ['', [Validators.required, telefonoPeruanoValidator]],
-      email: ['', [ Validators.required, Validators.email, gmailValidator ]],
+      email:           ['', [ Validators.required, Validators.email, gmailValidator ]],
       username:        ['', [Validators.required, Validators.minLength(4), usernameValidator]],
       password:        ['', [Validators.required, passwordSeguraValidator]],
       passwordConfirm: ['', [Validators.required]],
@@ -87,6 +95,9 @@ export class RegisterComponent {
     { validators: passwordsIgualesValidator }   
   );
 
+  ngAfterViewInit() {
+    this.initGoogleSignIn();
+  }
 
   get passwordCtrl()        { return this.registerForm.get('password'); }
   get passwordConfirmCtrl() { return this.registerForm.get('passwordConfirm'); }
@@ -95,7 +106,6 @@ export class RegisterComponent {
     return campoInvalido(this.registerForm, campo, this.submitted);
   }
 
-  /** Mensajes descriptivos para la contraseña */
   get passwordError(): string {
     const e = this.passwordCtrl?.errors;
     if (!e) return '';
@@ -112,6 +122,7 @@ export class RegisterComponent {
     return '';
   }
 
+  // REGISTRO SIN GOOGLE
   onSubmit(): void {
     this.submitted = true;
     marcarFormulario(this.registerForm);
@@ -134,9 +145,11 @@ export class RegisterComponent {
     this.errorMsg = '';
 
     this.authService.register(payload).subscribe({
-      next: () => this.router.navigate(['/login']),
+      next: () => {
+        this.notify.showSuccess('Cuenta creada exitosamente');
+        this.router.navigate(['/login']);
+      },
       error: (err) => {
-        // El backend avisa si el email ya existe
         const msg: string = err.error?.message ?? '';
         if (msg.toLowerCase().includes('email') || msg.toLowerCase().includes('correo')) {
           this.registerForm.get('email')?.setErrors({ emailDuplicado: true });
@@ -146,6 +159,49 @@ export class RegisterComponent {
         }
         this.loading = false;
       },
+    });
+  }
+
+  // REGISTRO CON GOOGLE 
+  initGoogleSignIn() {
+    if (typeof google === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => this.renderGoogleButton();
+      document.head.appendChild(script);
+    } else {
+      this.renderGoogleButton();
+    }
+  }
+
+  renderGoogleButton() {
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: this.handleGoogleCredentialResponse.bind(this)
+    });
+
+    const googleBtnContainer = document.getElementById("google-register-button");
+    if (googleBtnContainer) {
+      google.accounts.id.renderButton(
+        googleBtnContainer,
+        { theme: "filled_black", size: "large", shape: "rectangular", width: "100%" }
+      );
+    }
+  }
+
+  handleGoogleCredentialResponse(response: GoogleCredentialResponse) {
+    this.loading = true;
+    this.authService.loginWithGoogle(response.credential).pipe(finalize(() => this.loading = false)).subscribe({
+      next: () => {
+        this.notify.showSuccess('Cuenta creada y sesión iniciada con Google');
+        const home = this.tokenService.getHomeByRole();
+        this.router.navigateByUrl(home, { replaceUrl: true });
+      },
+      error: (err) => {
+        this.notify.showHttpError(err, 'Error procesando tu cuenta de Google');
+      }
     });
   }
 }
