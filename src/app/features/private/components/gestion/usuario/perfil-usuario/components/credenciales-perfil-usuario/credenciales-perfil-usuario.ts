@@ -133,8 +133,24 @@ export class CredencialesPerfilUsuario implements OnInit, OnChanges, OnDestroy {
           this.contrasena = this.maskPassword(String(rawPassword));
         }
 
-        const qrUrl = data?.qrImageUrl ?? data?.qrUrl ?? usuario?.qrToken ?? data?.qrToken ?? persona?.usuario?.qrToken ?? null;
-        this.qrImageUrl = qrUrl ? String(qrUrl) : null;
+        if (data?.tieneQr) {
+
+          this.usuarioService.generateQr(this.idUsuario)
+            .subscribe(blob => {
+
+              this.revokeQrObjectUrl();
+
+              this.qrObjectUrl =
+                URL.createObjectURL(blob);
+
+              this.qrImageUrl =
+                this.qrObjectUrl;
+            });
+
+        }
+        else {
+          this.qrImageUrl = null;
+        }
         this.loadingCredentials = false;
       },
       error: () => {
@@ -218,7 +234,7 @@ export class CredencialesPerfilUsuario implements OnInit, OnChanges, OnDestroy {
     if (this.usernameForm.invalid) { this.usernameForm.markAllAsTouched(); return; }
 
     const newUsername = this.uf.username.value?.trim() ?? '';
-    
+
     if (!newUsername) {
       this.notification.showWarn(
         'El nombre de usuario es obligatorio.'
@@ -275,7 +291,7 @@ export class CredencialesPerfilUsuario implements OnInit, OnChanges, OnDestroy {
 
     this.isGeneratingQr = true;
 
-    this.usuarioService.generateQr(this.idUsuario).subscribe({
+    this.usuarioService.regenerarQr(this.idUsuario).subscribe({
       next: (blob) => {
         if (!(blob instanceof Blob)) {
           this.notification.showWarn('No se pudo generar el QR.');
@@ -284,6 +300,7 @@ export class CredencialesPerfilUsuario implements OnInit, OnChanges, OnDestroy {
         }
 
         this.revokeQrObjectUrl();
+
         this.qrObjectUrl = URL.createObjectURL(blob);
         this.qrImageUrl = this.qrObjectUrl;
         this.isGeneratingQr = false;
@@ -311,4 +328,50 @@ export class CredencialesPerfilUsuario implements OnInit, OnChanges, OnDestroy {
       this.qrObjectUrl = null;
     }
   }
+
+  // Propiedades nuevas
+showPinModal = false;
+isSubmittingPin = false;
+showPinValue = false;
+
+pinForm = this.fb.group({
+    pin: ['', [
+        Validators.required,
+        Validators.pattern(/^\d{4,6}$/)
+    ]]
+});
+
+get pf() { return this.pinForm.controls; }
+
+openPinModal(): void {
+    this.pinForm.reset();
+    this.showPinModal = true;
+}
+
+closePinModal(): void {
+    this.showPinModal = false;
+    this.isSubmittingPin = false;
+    this.pinForm.reset();
+}
+
+togglePinValue(): void { this.showPinValue = !this.showPinValue; }
+
+confirmAsignarPin(): void {
+    if (!this.idUsuario) { this.notification.showWarn('No se pudo identificar el usuario.'); return; }
+    if (this.pinForm.invalid) { this.pinForm.markAllAsTouched(); return; }
+
+    const pin = this.pf.pin.value?.trim() ?? '';
+    this.isSubmittingPin = true;
+
+    this.usuarioService.asignarPin(this.idUsuario, pin).subscribe({
+        next: () => {
+            this.notification.showSuccess('PIN asignado correctamente');
+            this.closePinModal();
+        },
+        error: (err) => {
+            this.isSubmittingPin = false;
+            this.notification.showHttpError(err, 'Asignar PIN');
+        }
+    });
+}
 }

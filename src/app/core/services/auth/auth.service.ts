@@ -62,4 +62,14 @@ export class AuthService {
   resetPassword(token: string, nuevaPassword: string): Observable<void> {
     return this.http.post<void>(`${this.API}/reset-password`, { token, nuevaPassword });
   }
+
+  loginWithQr(qrToken: string, pin: string): Observable<LoginResponse> {
+  return this.http.post<ApiResponse<LoginResponse>>(this.API + "/qr-login", { qrToken, pin }).pipe(
+    map(res => res.data),
+    tap(data => {
+      this.tokenService.saveAccessToken(data.accessToken);
+      this.tokenService.saveRefreshToken(data.refreshToken);
+    })
+  );
+}
 }

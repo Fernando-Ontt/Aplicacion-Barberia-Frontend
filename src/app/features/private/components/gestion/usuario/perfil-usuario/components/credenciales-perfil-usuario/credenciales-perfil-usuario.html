@@ -66,15 +66,25 @@
 		</div>
 
 		<!-- Botones de credenciales -->
+		<!-- Botones de credenciales -->
 		<div class="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:justify-end md:px-5">
+
 			<button type="button" (click)="openEditUsernameModal()"
 				class="rounded-xl border border-blue-400/40 bg-blue-400/10 px-4 py-2 text-sm font-semibold text-blue-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-400/20">
 				Editar usuario
 			</button>
+
+			<button type="button" (click)="openPinModal()"
+				class="rounded-xl border border-purple-400/40 bg-purple-400/10 px-4 py-2 text-sm font-semibold text-purple-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-300 hover:bg-purple-400/20">
+				<i class="pi pi-key mr-2"></i>
+				Asignar PIN
+			</button>
+
 			<button type="button" (click)="openResetModal()"
 				class="rounded-xl border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-sm font-semibold text-amber-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-200 hover:bg-amber-300/20">
 				Reset contraseña
 			</button>
+
 		</div>
 
 		<!-- ─── Modal Reset Contraseña ─────────────────────────────────────── -->
@@ -187,6 +197,55 @@
 						<button type="submit" [disabled]="isSubmitting"
 							class="rounded-xl border border-blue-400/40 bg-blue-400/10 px-4 py-2 text-sm font-semibold text-blue-300 transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-400/20 disabled:cursor-not-allowed disabled:opacity-60">
 							{{ isSubmitting ? 'Actualizando...' : 'Confirmar cambio' }}
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+		}
+
+
+		@if (showPinModal) {
+		<div class="fixed inset-0 z-50 flex items-center justify-center px-4">
+			<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" (click)="closePinModal()"></div>
+			<div
+				class="relative z-10 w-full max-w-md overflow-hidden rounded-3xl border border-purple-500/15 bg-[#0d0d0b] shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
+
+				<div class="border-b border-purple-500/10 px-5 py-4">
+					<p class="text-[0.78rem] uppercase tracking-[0.18em] text-purple-400">PIN de acceso rápido</p>
+					<h3 class="mt-1 text-xl font-semibold text-gray-100">Asignar PIN</h3>
+					<p class="mt-1 text-sm text-gray-400">El PIN permite al usuario autenticarse al escanear su QR. Debe
+						ser numérico de 4 a 6 dígitos.</p>
+				</div>
+
+				<form [formGroup]="pinForm" (ngSubmit)="confirmAsignarPin()" class="space-y-4 px-5 py-5">
+
+					<label class="grid gap-2">
+						<span class="text-sm font-medium text-gray-200">PIN numérico</span>
+						<div class="relative">
+							<input formControlName="pin" [type]="showPinValue ? 'text' : 'password'" placeholder="1234"
+								maxlength="6"
+								class="w-full rounded-2xl border border-white/10 bg-black/40 px-4 py-3 pr-12 text-center text-2xl tracking-[0.5em] text-white outline-none transition placeholder:text-white/25 focus:border-purple-400/70 focus:ring-4 focus:ring-purple-400/10" />
+							<button type="button" (click)="togglePinValue()"
+								class="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-purple-300 transition hover:bg-white/10">
+								<i [ngClass]="showPinValue ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+							</button>
+						</div>
+						<div *ngIf="pf.pin.touched && pf.pin.errors" class="text-sm text-red-400">
+							<div *ngIf="pf.pin.errors['required']">El PIN es requerido.</div>
+							<div *ngIf="pf.pin.errors['pattern']">El PIN debe ser numérico de 4 a 6 dígitos.</div>
+						</div>
+					</label>
+
+					<div class="flex items-center justify-end gap-3 pt-2">
+						<button type="button" (click)="closePinModal()"
+							class="rounded-xl border border-white/10 bg-transparent px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/5">
+							Cancelar
+						</button>
+						<button type="submit" [disabled]="isSubmittingPin"
+							class="rounded-xl border border-purple-400/40 bg-purple-400/10 px-4 py-2 text-sm font-semibold text-purple-300 transition hover:-translate-y-0.5 hover:border-purple-300 hover:bg-purple-400/20 disabled:cursor-not-allowed disabled:opacity-60">
+							{{ isSubmittingPin ? 'Asignando...' : 'Confirmar PIN' }}
 						</button>
 					</div>
 
