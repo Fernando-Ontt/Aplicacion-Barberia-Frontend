@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 import { ServicioService } from '../../../../core/services/catalogos/servicio.service';
 import { Servicio } from '../../../../core/models/catalogos/servicios.model';
-import { TokenService } from '../../../../core/services/auth/token.service'; 
+import { TokenService } from '../../../../core/services/auth/token.service';
 
 @Component({
   selector: 'app-servicios',
@@ -18,7 +18,7 @@ export class ServiciosComponent implements OnInit {
 
   private servicioService = inject(ServicioService);
   private router = inject(Router);
-  private tokenService = inject(TokenService); 
+  private tokenService = inject(TokenService);
 
   servicios: Servicio[] = [];
   cargando = true;
@@ -29,6 +29,10 @@ export class ServiciosComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerServicios();
+  }
+
+  irAReservas(): void {
+    this.router.navigate(['/reservas']);
   }
 
   obtenerServicios(): void {
@@ -71,22 +75,22 @@ export class ServiciosComponent implements OnInit {
       this.cerrarModal();
 
       if (this.tokenService.isLogged()) {
-        
+
         if (this.tokenService.getPrimaryRole() === 'cliente') {
-          this.router.navigate(['/mi-cuenta/reservar/agendar'], { 
-            queryParams: { servicioId: idServicio } 
+          this.router.navigate(['/mi-cuenta/reservar/agendar'], {
+            queryParams: { servicioId: idServicio }
           });
-        } 
-      
+        }
+
         else {
           this.router.navigate([`/dashboard/${this.tokenService.getPrimaryRole()}/operaciones/reservas/nueva`]);
         }
 
       } else {
         const rutaDestino = `/mi-cuenta/reservar/agendar?servicioId=${idServicio}`;
-        
-        this.router.navigate(['/login'], { 
-          queryParams: { returnUrl: rutaDestino } 
+
+        this.router.navigate(['/login'], {
+          queryParams: { returnUrl: rutaDestino }
         });
       }
     }
