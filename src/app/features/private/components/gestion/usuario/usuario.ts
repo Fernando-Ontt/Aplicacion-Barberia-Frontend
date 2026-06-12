@@ -287,7 +287,8 @@ export class Usuario implements OnInit {
         apellido: usuario.apellido,
       },
       roles: usuario.roles ?? [],
-      qr: usuario.tieneQr,
+      tieneQr: usuario.tieneQr, 
+      tienePin: usuario.tienePin ?? false,
       activo: null,
       ultimoAcceso: '—',
     };

@@ -63,8 +63,27 @@ export class UsuarioService {
     }
 
     generateQr(idUsuario: number): Observable<Blob> {
-        return this.http.get(`${this.apiUrl}/${idUsuario}/qr`,{responseType: 'blob'});
+        return this.http.get(`${this.apiUrl}/${idUsuario}/qr`, { responseType: 'blob' });
     }
+
+    getQrUrl(idUsuario: number): string {
+        return `${this.apiUrl}/${idUsuario}/qr`;
+    }
+
+    regenerarQr(idUsuario: number): Observable<Blob> {
+        return this.http.post(
+            `${this.apiUrl}/${idUsuario}/qr/regenerar`,
+            {},
+            { responseType: 'blob' }
+        );
+    }
+
+    asignarPin(idUsuario: number, pin: string): Observable<any> {
+    return this.http.patch<any>(
+        `${this.apiUrl}/${idUsuario}/pin`,
+        { pin }
+    );
+}
 
     listar(page: number = 0, size: number = 10): Observable<ApiResponse<Page<UsuarioTablaResponse>>> {
         const params = new HttpParams().set('page', page).set('size', size);
