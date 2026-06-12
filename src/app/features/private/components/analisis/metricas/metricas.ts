@@ -1,25 +1,22 @@
-import {
-  Component, OnInit, OnDestroy, AfterViewInit,
-  ViewChild, ElementRef, inject
-} from '@angular/core';
+import { Component, OnInit, OnDestroy,  ViewChild, ElementRef, inject, ChangeDetectorRef  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { ResumenadminService } from '@/app/core/services/gestion/resumen-admin.service';
-import { DashboardData } from '@/app/core/models/gestion/admin/resumen-admin';
+import { forkJoin } from 'rxjs';
 import { Chart, registerables } from 'chart.js';
+import { MetricaService } from '@/app/core/services/analisis/metrica.service';
+import { ResumenMetricas, IngresoDiario, ReservasDia, RendimientoBarbero, ServicioSolicitado } from '@/app/core/models/analisis/metrica.model';
 
 Chart.register(...registerables);
 
-interface KpiMetrica {
-  icon: string;
+interface Kpi {
   label: string;
   value: string;
   sub: string;
+  icon: string;
   porcentaje: number;
   deltaPositivo: boolean;
 }
-
+ 
 @Component({
   selector: 'app-metricas',
   standalone: true,
@@ -27,235 +24,145 @@ interface KpiMetrica {
   templateUrl: './metricas.html',
   // ✅ Sin styleUrl — todo el estilo va en Tailwind dentro del HTML
 })
-export class MetricasComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MetricasComponent implements OnInit, OnDestroy {
+  private metricaService: MetricaService = inject(MetricaService);
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-  @ViewChild('ventasChart')    ventasRef!:    ElementRef<HTMLCanvasElement>;
-  @ViewChild('reservasChart')  reservasRef!:  ElementRef<HTMLCanvasElement>;
-  @ViewChild('barberosChart')  barberosRef!:  ElementRef<HTMLCanvasElement>;
+  @ViewChild('ventasChart')    ventasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('reservasChart')  reservasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('barberosChart')  barberosRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('serviciosChart') serviciosRef!: ElementRef<HTMLCanvasElement>;
 
-  private resumenSvc = inject(ResumenadminService);
-  private destroy$   = new Subject<void>();
   private charts: Chart[] = [];
 
-  fechaInicio = '';
-  fechaFin    = '';
-  cargando    = true;
-  error       = '';
-  kpis: KpiMetrica[] = [];
+  fechaFin    = new Date().toISOString().split('T')[0];
+  fechaInicio = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0];
 
-  private rawData: DashboardData | null = null;
+  cargando = false;
+  error    = '';
+  kpis: Kpi[] = [];
 
-  ngOnInit(): void {
-    const hoy    = new Date();
-    const hace30 = new Date();
-    hace30.setDate(hoy.getDate() - 30);
-    this.fechaFin    = hoy.toISOString().split('T')[0];
-    this.fechaInicio = hace30.toISOString().split('T')[0];
-    this.cargarDatos();
-  }
+  private gold      = '#c9a84c';
+  private goldSoft  = 'rgba(201,168,76,0.18)';
+  private red       = '#e05252';
+  private gridColor = 'rgba(255,255,255,0.06)';
+  private textColor = 'rgba(255,255,255,0.55)';
 
-  ngAfterViewInit(): void {}
+  ngOnInit(): void { this.cargar(); }
 
-  ngOnDestroy(): void {
-    this.charts.forEach(c => c.destroy());
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  ngOnDestroy(): void { this.charts.forEach(c => c.destroy()); }
 
-  cargarDatos(): void {
-    this.cargando = true;
-    this.error    = '';
+  aplicarFiltros(): void { this.cargar(); }
 
-    this.resumenSvc
-      .getDashboardData()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data: DashboardData) => {
-          this.rawData = data;
-          this.construirKpis(data);
-          this.cargando = false;
-          setTimeout(() => this.inicializarGraficas(), 80);
-        },
-        error: (err) => {
-          console.error(err);
-          this.error    = 'No se pudieron cargar las métricas. Verifica la conexión.';
-          this.cargando = false;
-        }
-      });
-  }
+private cargar(): void {
+  this.cargando = true;
+  this.error    = '';
+  this.charts.forEach(c => c.destroy());
+  this.charts   = [];
 
-  aplicarFiltros(): void {
-    if (!this.fechaInicio || !this.fechaFin) {
-      this.error = 'Seleccione un rango de fechas válido.';
-      return;
+  forkJoin({
+    resumen:   this.metricaService.getResumen(this.fechaInicio, this.fechaFin),
+    ingresos:  this.metricaService.getIngresosDiarios(this.fechaInicio, this.fechaFin),
+    reservas:  this.metricaService.getReservasPorDia(this.fechaInicio, this.fechaFin),
+    barberos:  this.metricaService.getRendimientoBarberos(this.fechaInicio, this.fechaFin),
+    servicios: this.metricaService.getServiciosSolicitados(this.fechaInicio, this.fechaFin),
+  }).subscribe({
+    next: ({ resumen, ingresos, reservas, barberos, servicios }) => {
+      this.cargando = false;
+      this.buildKpis(resumen);
+      this.cdr.detectChanges(); 
+      this.buildVentasChart(ingresos);
+      this.buildReservasChart(reservas);
+      this.buildBarberosChart(barberos);
+      this.buildServiciosChart(servicios);
+    },
+    error: (err) => {
+      this.cargando = false;
+      this.error = err?.error?.message ?? 'Error al cargar métricas';
     }
-    this.charts.forEach(c => c.destroy());
-    this.charts = [];
-    this.cargarDatos();
-  }
+  });
+}
 
-  // ─────────────────────────────────────────────
-  //  KPIs
-  // ─────────────────────────────────────────────
-  private construirKpis(data: DashboardData): void {
+  private buildKpis(r: ResumenMetricas): void {
     this.kpis = [
-      {
-        icon: 'dollar',
-        label: 'Ingresos totales',
-        value: `S/ ${(data as any)?.totalIngresos?.toFixed(2) ?? '0.00'}`,
-        sub: 'En el período seleccionado',
-        porcentaje: (data as any)?.crecimientoIngresos ?? 0,
-        deltaPositivo: ((data as any)?.crecimientoIngresos ?? 0) >= 0,
-      },
-      {
-        icon: 'calendar',
-        label: 'Reservas totales',
-        value: String((data as any)?.totalReservas ?? 0),
-        sub: `Completadas: ${(data as any)?.reservasCompletadas ?? 0}`,
-        porcentaje: (data as any)?.crecimientoReservas ?? 0,
-        deltaPositivo: ((data as any)?.crecimientoReservas ?? 0) >= 0,
-      },
-      {
-        icon: 'users',
-        label: 'Clientes activos',
-        value: String((data as any)?.totalClientes ?? 0),
-        sub: `Nuevos: ${(data as any)?.clientesNuevos ?? 0}`,
-        porcentaje: (data as any)?.crecimientoClientes ?? 0,
-        deltaPositivo: ((data as any)?.crecimientoClientes ?? 0) >= 0,
-      },
-      {
-        icon: 'tag',
-        label: 'Ticket promedio',
-        value: `S/ ${(data as any)?.ticketPromedio?.toFixed(2) ?? '0.00'}`,
-        sub: 'Por venta realizada',
-        porcentaje: (data as any)?.crecimientoTicket ?? 0,
-        deltaPositivo: ((data as any)?.crecimientoTicket ?? 0) >= 0,
-      },
+      { label: 'Ingresos totales',  value: `S/ ${r.ingresosTotales.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`, sub: 'En el período',            icon: 'dollar',     porcentaje: 0, deltaPositivo: true },
+      { label: 'Reservas totales',  value: `${r.reservasTotales}`,  sub: 'Total del período',          icon: 'calendar',   porcentaje: 0, deltaPositivo: true },
+      { label: 'Completadas',       value: `${r.completadas}`,      sub: `${r.reservasTotales ? ((r.completadas / r.reservasTotales) * 100).toFixed(0) : 0}% del total`, icon: 'check-circle', porcentaje: 0, deltaPositivo: true },
+      { label: 'Clientes activos',  value: `${r.clientesActivos}`,  sub: 'Con reservas en período',    icon: 'users',      porcentaje: 0, deltaPositivo: true },
+      { label: 'Clientes nuevos',   value: `${r.clientesNuevos}`,   sub: 'Primera reserva',            icon: 'user-plus',  porcentaje: 0, deltaPositivo: true },
+      { label: 'Ticket promedio',   value: `S/ ${r.ticketPromedio.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`, sub: 'Por reserva completada', icon: 'chart-line', porcentaje: 0, deltaPositivo: true },
     ];
   }
 
-  // ─────────────────────────────────────────────
-  //  GRÁFICAS
-  // ─────────────────────────────────────────────
-  private inicializarGraficas(): void {
-    const data      = this.rawData as any;
-    const dorado    = '#C9A84C';
-    const alfa      = 'rgba(201,168,76,0.15)';
-    const tickColor = 'rgba(255,255,255,0.4)';
-    const gridColor = 'rgba(255,255,255,0.05)';
+  private buildVentasChart(data: IngresoDiario[]): void {
+    const ctx = this.ventasRef.nativeElement.getContext('2d')!;
+    this.charts.push(new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.map(d => d.fecha),
+        datasets: [{ label: 'Ingresos (S/)', data: data.map(d => d.total), borderColor: this.gold, backgroundColor: this.goldSoft, borderWidth: 2, pointRadius: 3, pointBackgroundColor: this.gold, fill: true, tension: 0.4 }]
+      },
+      options: this.baseOptions('S/ ')
+    }));
+  }
 
-    const escalaBase = {
-      x: { ticks: { color: tickColor }, grid: { color: gridColor } },
-      y: { ticks: { color: tickColor }, grid: { color: gridColor } },
+  private buildReservasChart(data: ReservasDia[]): void {
+    const ctx = this.reservasRef.nativeElement.getContext('2d')!;
+    this.charts.push(new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.map(d => d.dia),
+        datasets: [
+          { label: 'Completadas', data: data.map(d => d.completadas), backgroundColor: this.gold, borderRadius: 6 },
+          { label: 'Canceladas',  data: data.map(d => d.canceladas),  backgroundColor: this.red,  borderRadius: 6 }
+        ]
+      },
+      options: this.baseOptions()
+    }));
+  }
+
+  private buildBarberosChart(data: RendimientoBarbero[]): void {
+    const ctx = this.barberosRef.nativeElement.getContext('2d')!;
+    this.charts.push(new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.map(d => d.nombre),
+        datasets: [{ label: 'Reservas', data: data.map(d => d.totalReservas), backgroundColor: data.map((_, i) => `rgba(201,168,76,${Math.max(1 - i * 0.12, 0.35)})`), borderRadius: 6 }]
+      },
+      options: { ...this.baseOptions(), indexAxis: 'y' as const }
+    }));
+  }
+
+  private buildServiciosChart(data: ServicioSolicitado[]): void {
+    const ctx = this.serviciosRef.nativeElement.getContext('2d')!;
+    const colors = ['#c9a84c','#d4af37','#b8964b','#a07840','#e2c074','#8a6530','#f0d080','#6b4f25'];
+    this.charts.push(new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: data.map(d => d.nombre),
+        datasets: [{ data: data.map(d => d.cantidad), backgroundColor: colors.slice(0, data.length), borderColor: 'rgba(0,0,0,0)', borderWidth: 2 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'right', labels: { color: this.textColor, font: { size: 11 }, padding: 12 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}` } }
+        }
+      }
+    }));
+  }
+
+  private baseOptions(prefix = ''): any {
+    return {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: this.textColor, font: { size: 11 } } },
+        tooltip: { callbacks: { label: (ctx: any) => ` ${ctx.dataset.label}: ${prefix}${ctx.parsed.y ?? ctx.parsed}` } }
+      },
+      scales: {
+        x: { ticks: { color: this.textColor, font: { size: 11 } }, grid: { color: this.gridColor } },
+        y: { ticks: { color: this.textColor, font: { size: 11 } }, grid: { color: this.gridColor } }
+      }
     };
-    const legend = {
-      labels: { color: 'rgba(255,255,255,0.55)', font: { size: 11 } },
-    };
-
-    // ─ Ingresos diarios (línea)
-    if (this.ventasRef) {
-      const labels  = data?.ventasPorDia?.map((v: any) => v.dia)  ?? ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-      const valores = data?.ventasPorDia?.map((v: any) => v.monto) ?? [520, 580, 610, 730, 850, 400, 310];
-
-      this.charts.push(new Chart(this.ventasRef.nativeElement, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Ingresos (S/)',
-            data: valores,
-            borderColor: dorado,
-            backgroundColor: alfa,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: dorado,
-            pointRadius: 4,
-            borderWidth: 2,
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: escalaBase,
-        },
-      }));
-    }
-
-    // ─ Reservas por día (barras agrupadas)
-    if (this.reservasRef) {
-      const labels      = data?.reservasPorDia?.map((r: any) => r.dia)         ?? ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-      const completadas = data?.reservasPorDia?.map((r: any) => r.completadas) ?? [40, 45, 42, 54, 62, 48, 25];
-      const canceladas  = data?.reservasPorDia?.map((r: any) => r.canceladas)  ?? [5, 7, 6, 7, 8, 7, 5];
-
-      this.charts.push(new Chart(this.reservasRef.nativeElement, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Completadas', data: completadas, backgroundColor: dorado,    borderRadius: 4, borderSkipped: false },
-            { label: 'Canceladas',  data: canceladas,  backgroundColor: '#7f1d1d', borderRadius: 4, borderSkipped: false },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend },
-          scales: escalaBase,
-        },
-      }));
-    }
-
-    // ─ Rendimiento por barbero (barras horizontales)
-    if (this.barberosRef) {
-      const labels  = data?.rendimientoBarberos?.map((b: any) => b.nombre)    ?? ['Carlos','Miguel','Luis','Pedro','Andrés'];
-      const valores = data?.rendimientoBarberos?.map((b: any) => b.servicios) ?? [45, 38, 52, 29, 41];
-
-      this.charts.push(new Chart(this.barberosRef.nativeElement, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [{
-            label: 'Servicios realizados',
-            data: valores,
-            backgroundColor: ['#C9A84C','#a88430','#8a6c25','#6e551d','#523f15'],
-            borderRadius: 4,
-            borderSkipped: false,
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: 'y' as const,
-          plugins: { legend: { display: false } },
-          scales: escalaBase,
-        },
-      }));
-    }
-
-    // ─ Servicios más solicitados (donut)
-    if (this.serviciosRef) {
-      const labels  = data?.serviciosPopulares?.map((s: any) => s.nombre)   ?? ['Corte clásico','Corte + barba','Degradado','Barba','Tratamiento'];
-      const valores = data?.serviciosPopulares?.map((s: any) => s.cantidad) ?? [35, 28, 20, 12, 5];
-
-      this.charts.push(new Chart(this.serviciosRef.nativeElement, {
-        type: 'doughnut',
-        data: {
-          labels,
-          datasets: [{
-            data: valores,
-            backgroundColor: ['#C9A84C','#d4b05e','#dfc070','#e9d088','#f3e0a0'],
-            borderWidth: 0,
-            hoverOffset: 8,
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { ...legend, position: 'bottom' } },
-        },
-      }));
-    }
   }
 }
