@@ -23,7 +23,8 @@
                             </h3>
                             <div class="bg-black rounded-xl p-4 border border-neutral-800">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                                    <div
+                                        class="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center">
                                         <i class="pi pi-user text-yellow-500 text-xl"></i>
                                     </div>
                                     <div>
@@ -52,7 +53,8 @@
                                 class="w-full" [class.border-red-500]="barberoInvalido">
                                 <ng-template let-barbero pTemplate="item">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center">
+                                        <div
+                                            class="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center">
                                             <i class="pi pi-user text-yellow-500"></i>
                                         </div>
                                         <div>
@@ -72,9 +74,9 @@
                             <label class="block text-sm font-medium text-gray-300 mb-2">
                                 Elige tu servicio <span class="text-red-500">*</span>
                             </label>
-                            <p-select formControlName="servicioId" [options]="(servicios$ | async) || []" optionLabel="nombre"
-                                optionValue="servicioId" placeholder="Selecciona un servicio" class="w-full"
-                                [class.border-red-500]="servicioInvalido">
+                            <p-select formControlName="servicioId" [options]="(servicios$ | async) || []"
+                                optionLabel="nombre" optionValue="servicioId" placeholder="Selecciona un servicio"
+                                class="w-full" [class.border-red-500]="servicioInvalido">
                                 <ng-template let-servicio pTemplate="item">
                                     <div class="flex justify-between items-center w-full">
                                         <div>
@@ -82,7 +84,7 @@
                                             <div class="text-xs text-gray-500">{{ servicio.duracion || 30 }} min</div>
                                         </div>
                                         <div class="text-yellow-500 font-semibold">
-                                            {{ servicio.precio | currency:'COP' }}
+                                            {{ servicio.precio | currency:'PEN ' }}
                                         </div>
                                     </div>
                                 </ng-template>
@@ -149,7 +151,7 @@
                         <div class="mb-6">
                             <label class="flex items-center gap-3 cursor-pointer">
                                 <input type="checkbox" formControlName="aceptaTerminos"
-                                    class="w-4 h-4 rounded border-neutral-600 bg-black text-yellow-500 focus:ring-yellow-500 focus:ring-offset-black">
+                                    class="!w-4 !h-4 !min-w-4 !min-h-4 !max-w-4 !max-h-4 !p-0 !rounded !border-0 shrink-0 bg-black text-yellow-500 focus:ring-yellow-500 focus:ring-offset-black">
                                 <span class="text-gray-300 text-sm">
                                     Acepto los <a href="#" class="text-yellow-500 hover:text-yellow-400">términos y
                                         condiciones</a>
@@ -186,7 +188,7 @@
                         <div class="border-b border-neutral-800 pb-3">
                             <div class="flex justify-between text-white font-semibold text-lg mt-2 pt-2">
                                 <span>Total a pagar</span>
-                                <span class="text-yellow-500">{{ getServicioPrecio() | currency:'COP' }}</span>
+                                <span class="text-yellow-500">{{ getServicioPrecio() | currency:'PEN ' }}</span>
                             </div>
                         </div>
 
@@ -265,7 +267,7 @@
                 </div>
                 <div class="flex justify-between py-2">
                     <span class="font-medium text-gray-400">Total:</span>
-                    <span class="text-yellow-500 font-bold text-lg">{{ getServicioPrecio() | currency:'COP' }}</span>
+                    <span class="text-yellow-500 font-bold text-lg">{{ getServicioPrecio() | currency:'PEN ' }}</span>
                 </div>
             </div>
         </div>
