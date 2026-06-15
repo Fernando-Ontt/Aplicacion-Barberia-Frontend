@@ -6,31 +6,11 @@
             <h1 class="text-2xl font-bold text-white tracking-tight">Reservas</h1>
             <p class="text-[#666666] text-sm mt-0.5">Gestiona todas las citas del sistema</p>
         </div>
-
-        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-
-            <p-floatlabel>
-                <p-iconfield class="w-full">
-                    <p-inputicon class="pi pi-search" />
-
-                    <input pInputText id="buscarCliente" [(ngModel)]="clienteBusqueda" autocomplete="off"
-                        class="w-full lg:w-80 rounded-2xl" />
-                </p-iconfield>
-
-                <label for="buscarCliente">
-                    Buscar por cliente
-                </label>
-            </p-floatlabel>
-
-            <button
-    (click)="irNuevaReserva()"
-    class="flex items-center gap-2 px-4 py-2 bg-[#C9A84C] hover:bg-[#E2B95A] text-black font-semibold rounded-xl transition-colors cursor-pointer">
-    <i class="pi pi-plus"></i>
-    Nueva reserva
-</button>
-
-        </div>
-
+        <button (click)="irNuevaReserva()"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#C9A84C] hover:bg-[#E2B95A] text-black text-sm font-semibold transition-colors cursor-pointer self-start lg:self-auto">
+            <i class="pi pi-plus text-xs"></i>
+            Nueva reserva
+        </button>
     </section>
 
    
@@ -146,46 +126,34 @@
         </div>
 
         <div class="overflow-x-auto">
-
-            <p-table #dt [value]="reservas" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [paginator]="true"
-                [rows]="rows" [totalRecords]="totalRecords" [loading]="loading" dataKey="id"
-                [showCurrentPageReport]="true"
-                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} reservas"
-                [tableStyle]="{ 'min-width': '1100px' }">
+            <p-table [value]="reservasFiltradas" [paginator]="true" [rows]="rows" [loading]="loading"
+                dataKey="reservaId" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
+                [tableStyle]="{ 'min-width': '900px' }">
 
                 <ng-template pTemplate="header">
-
-                    <tr class="bg-[#151515]">
-
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Cliente
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Barbero
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Servicio
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Fecha / Hora
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Tipo
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Estado
-                        </th>
-
+                    <tr class="bg-[#0e0e0e]">
                         <th
-                            class="px-6 py-4 text-center text-xs font-semibold text-yellow-500 uppercase tracking-wider">
-                            Acciones
-                        </th>
-
+                            class="px-5 py-3.5 text-left text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Cliente</th>
+                        <th
+                            class="px-5 py-3.5 text-left text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Barbero</th>
+                        <th
+                            class="px-5 py-3.5 text-left text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Servicio</th>
+                        <th
+                            class="px-5 py-3.5 text-left text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Fecha / Hora</th>
+                        <th
+                            class="px-5 py-3.5 text-left text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Tipo</th>
+                        <th
+                            class="px-5 py-3.5 text-left text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Estado</th>
+                        <th
+                            class="px-5 py-3.5 text-center text-[10px] font-semibold text-[#555555] uppercase tracking-wider">
+                            Acciones</th>
                     </tr>
                 </ng-template>
 
@@ -225,27 +193,25 @@
                             </span>
                         </td>
 
-                        <td class="px-6 py-4">
-                            <app-status-badge type="text" [value]="reserva.estado || reserva.estadoReserva">
-                            </app-status-badge>
+                        
+                        <td class="px-5 py-3.5">
+                            <span class="px-2 py-0.5 rounded-md text-xs font-semibold border"
+                                [ngClass]="getEstadoClass(reserva.estadoReserva)">
+                                {{ reserva.estadoReserva || 'Sin estado' }}
+                            </span>
                         </td>
 
-                        <td class="px-6 py-4">
-
-                            <div class="flex items-center justify-center gap-2">
-
-                                <button pButton icon="pi pi-eye"
-                                    class="p-button-text p-button-rounded text-blue-400 hover:text-blue-300"
-                                    (click)="verDetalle(reserva)">
+                        
+                        <td class="px-5 py-3.5">
+                            <div class="flex items-center justify-center gap-1">
+                                <button (click)="verDetalle(reserva)" title="Ver detalle"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-[#555555] hover:text-blue-400 hover:bg-blue-400/10 transition-colors cursor-pointer border-0 bg-transparent">
+                                    <i class="pi pi-eye text-xs"></i>
                                 </button>
-
-                                <button pButton icon="pi pi-pencil"
-                                    class="p-button-text p-button-rounded text-green-400 hover:text-green-300"
-                                    (click)="editarReserva(reserva)">
+                                <button (click)="editarReserva(reserva)" title="Editar"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-[#555555] hover:text-[#C9A84C] hover:bg-[#C9A84C]/10 transition-colors cursor-pointer border-0 bg-transparent">
+                                    <i class="pi pi-pencil text-xs"></i>
                                 </button>
-
-
-
                             </div>
                         </td>
 
@@ -257,21 +223,11 @@
                         <td colspan="7" class="text-center py-16">
                             <div class="flex flex-col items-center gap-3 text-[#444444]">
                                 <i class="pi pi-calendar-times text-4xl"></i>
-                                <p class="text-sm">No hay reservas registradas</p>
-                                <p-button label="Crear primera reserva" icon="pi pi-plus" (onClick)="irNuevaReserva()"
-                                    styleClass="p-button-text text-yellow-500">
-                                </p-button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-
-                <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td colspan="7" class="text-center py-8">
-                            <div class="flex flex-col items-center gap-2">
-                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
-                                <p class="text-gray-400 text-sm">Cargando reservas...</p>
+                                <p class="text-sm font-medium text-[#666666]">No hay reservas que coincidan</p>
+                                <button *ngIf="hayFiltrosActivos" (click)="limpiarTodosFiltros()"
+                                    class="text-[#C9A84C] text-xs underline cursor-pointer bg-transparent border-0">
+                                    Limpiar filtros
+                                </button>
                             </div>
                         </td>
                     </tr>
