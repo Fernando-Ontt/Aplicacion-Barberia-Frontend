@@ -1,6 +1,7 @@
 import { ApiResponse, Page } from '@/app/core/models/common/index.model';
 import { Reserva } from '@/app/core/models/operaciones/Reserva.model';
-import { ReservaService } from '@/app/core/services/operaciones/reserva-service';
+import { ReservaService } from '@/app/core/services/operaciones/reserva.service';
+import { ConfirmPopoverComponent } from '@/app/shared/components/confirm-popover/confirm-popover.component';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge.component';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';

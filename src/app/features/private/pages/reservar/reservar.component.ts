@@ -28,7 +28,7 @@ import { Servicio } from '@/app/core/models/catalogos/servicios.model';
 import { ServicioService } from '@/app/core/services/catalogos/servicio.service';
 import { ServicioFiltro } from '@/app/core/models/catalogos/servicios.model';
 import { Router } from '@angular/router';
-import { ReservaService } from '@/app/core/services/operaciones/reserva-service';
+import { ReservaService } from '@/app/core/services/operaciones/reserva.service';
 import { ReservaRequest } from '@/app/core/models/reserva/reservaRequest';
 import { TokenService } from '@/app/core/services/auth/token.service';
 import { IftaLabelModule } from 'primeng/iftalabel';

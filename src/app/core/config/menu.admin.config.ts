@@ -39,23 +39,26 @@ export const ADMIN_MENU = [
             routerLink: ["operaciones/reservas/nueva"],
             permission: "RESERVA_CREATE"
           }
-
         ]
       },
-
       {
         label: "Ventas",
         icon: "pi pi-shopping-cart",
         routerLink: ["operaciones/ventas"],
         permission: "VENTA_READ_ALL"
       },
-      
+
       {
         label: "Pagos",
         icon: "pi pi-credit-card",
         routerLink: ["operaciones/pagos"],
-      }
+      },
 
+      {
+        label: "Reclamos",
+        icon: "pi pi-exclamation-circle",
+        routerLink: ["operaciones/reclamos"],
+      },
     ]
   },
 
