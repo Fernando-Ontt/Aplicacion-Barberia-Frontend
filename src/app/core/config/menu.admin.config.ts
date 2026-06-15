@@ -31,26 +31,7 @@ export const ADMIN_MENU = [
             permission: "RESERVA_READ_ALL"
           },
 
-          {
-            label: "Reservas de Hoy",
-            icon: "pi pi-calendar-check",
-            routerLink: ["operaciones/reservas/hoy"],
-            permission: "RESERVA_READ_ALL"
-          },
-
-          {
-            label: "Pendientes",
-            icon: "pi pi-clock",
-            routerLink: ["operaciones/reservas/pendientes"],
-            permission: "RESERVA_READ_ALL"
-          },
-
-          {
-            label: "Historial",
-            icon: "pi pi-history",
-            routerLink: ["operaciones/reservas/historial"],
-            permission: "RESERVA_READ_ALL"
-          },
+          
 
           {
             label: "Nueva Reserva",
