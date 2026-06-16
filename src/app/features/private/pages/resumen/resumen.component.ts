@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ResumenCliente } from '@/app/core/services/gestion/resumen-cliente';
 import { ReservaDTO, ClienteDetalleResumenDTO, ServicioResponseDTO } from '@/app/core/models/gestion/cliente/ClienteResumen.model';
 import { ProximaCita } from '../../components/proxima-cita/proxima-cita';
 import { ServiciosRecomendados } from '../../components/servicios-recomendados/servicios-recomendados';
+import { ResumenCliente } from '@/app/core/services/gestion/resumen-cliente.service';
 
 @Component({
   selector: 'app-resumen',
