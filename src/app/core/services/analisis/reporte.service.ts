@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '@/environments/environment.development';
 import { FilaSemanal } from '../../models/analisis/reporte.model';
+import { ReporteFiltro } from '../../models/analisis/reporte.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReporteService {
@@ -32,11 +33,21 @@ getResumenSemanal(desde: string, hasta: string): Observable<FilaSemanal[]> {
     }))));
 }
 
-descargarArchivo(tipo: string, formato: string, desde: string, hasta: string): Observable<Blob> {
-  return this.http.get(`${this.base}/${tipo}/${formato}`, {
-    params: { desde, hasta },
-    responseType: 'blob'
-  });
+descargarArchivo(tipo: string, formato: string, filtro: ReporteFiltro): Observable<Blob> {
+  const params: Record<string, string> = { desde: filtro.desde, hasta: filtro.hasta };
+  if (filtro.barberoId)  params['barberoId']  = String(filtro.barberoId);
+  if (filtro.servicioId) params['servicioId'] = String(filtro.servicioId);
+  if (filtro.estado)     params['estado']     = filtro.estado;
+  if (filtro.metodoPago) params['metodoPago'] = filtro.metodoPago;
+  return this.http.get(`${this.base}/${tipo}/${formato}`, { params, responseType: 'blob' });
+}
+
+getBarberos(): Observable<{id: number, nombre: string}[]> {
+  return this.http.get<any>(`${environment.apiUrl}/barberos/lista`).pipe(map(r => r.data));
+}
+
+getServicios(): Observable<{id: number, nombre: string}[]> {
+  return this.http.get<any>(`${environment.apiUrl}/servicios/lista`).pipe(map(r => r.data));
 }
 }
 
