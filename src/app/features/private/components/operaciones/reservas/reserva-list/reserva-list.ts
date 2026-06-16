@@ -2,7 +2,6 @@ import { ApiResponse, Page } from '@/app/core/models/common/index.model';
 import { Reserva } from '@/app/core/models/operaciones/Reserva.model';
 import { ReservaService } from '@/app/core/services/operaciones/reserva.service';
 import { ConfirmPopoverComponent } from '@/app/shared/components/confirm-popover/confirm-popover.component';
-import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge.component';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-reserva-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule,DialogModule, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, DialogModule],
   templateUrl: './reserva-list.html',
   styleUrls: ['./reserva-list.css'],
 })

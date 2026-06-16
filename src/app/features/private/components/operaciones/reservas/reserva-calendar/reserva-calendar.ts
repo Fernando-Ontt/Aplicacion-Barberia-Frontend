@@ -3,7 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
-import { ReservaService } from '@/app/core/services/operaciones/reserva-service';
+import { ReservaService } from '@/app/core/services/operaciones/reserva.service';
 import { Reserva } from '@/app/core/models/operaciones/Reserva.model';
 import { finalize } from 'rxjs';
 
