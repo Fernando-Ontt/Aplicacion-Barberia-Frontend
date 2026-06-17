@@ -1,0 +1,52 @@
+<div class="fx-wrap">
+    <p class="fx-title">Detalle por barbero</p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Barbero</th>
+                    <th>Sueldo base</th>
+                    <th>Ventas</th>
+                    <th>Comisión</th>
+                    <th>Sueldo final</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let b of barberos">
+                    <td>
+                        <div class="barbero-cell">
+                            <span class="avatar" [style.background]="b.avatarColor">
+                                {{ b.iniciales }}
+                            </span>
+                            {{ b.nombre }}
+                        </div>
+                    </td>
+
+                    <td>S/ {{ b.sueldoBase | number:'1.2-2' }}</td>
+
+                    <td>{{ b.ventas }}</td>
+
+                    <td>
+                        <span class="comision-badge">
+                            {{ b.porcentaje }}% &nbsp; S/ {{ b.comision | number:'1.2-2' }}
+                        </span>
+                    </td>
+
+                    <td class="sueldo-final">
+                        S/ {{ b.sueldoFinal | number:'1.2-2' }}
+                    </td>
+
+                    <td>
+                        <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text btn-detalle"
+                            (click)="verDetalle(b)">
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+

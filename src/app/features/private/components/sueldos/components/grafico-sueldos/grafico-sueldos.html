@@ -1,0 +1,48 @@
+<div class="fx-wrap">
+  <p class="fx-title">Comisión vs sueldo base por barbero</p>
+
+  <div class="chart-container">
+    <div class="y-axis">
+      <span>S/3,000</span>
+      <span>S/2,500</span>
+      <span>S/2,000</span>
+      <span>S/1,500</span>
+      <span>S/1,000</span>
+      <span>S/500</span>
+      <span>S/0</span>
+    </div>
+
+    <div class="bars-area">
+      <div class="grid-lines">
+        <div class="grid-line" *ngFor="let l of [0,1,2,3,4,5]"></div>
+      </div>
+
+      <div class="bars">
+        <div class="bar-group" *ngFor="let b of barberos">
+          <div class="bar-stack">
+            <div
+              class="bar-comision"
+              [style.height.%]="(b.comision / maxValor) * 100"
+              [title]="'Comisión: S/' + b.comision"
+            ></div>
+            <div
+              class="bar-base"
+              [style.height.%]="(b.sueldoBase / maxValor) * 100"
+              [title]="'Base: S/' + b.sueldoBase"
+            ></div>
+          </div>
+          <span class="bar-label">{{ b.nombre }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="leyenda">
+    <span class="leyenda-item">
+      <span class="dot base"></span> Sueldo base
+    </span>
+    <span class="leyenda-item">
+      <span class="dot comision"></span> Comisión
+    </span>
+  </div>
+</div>

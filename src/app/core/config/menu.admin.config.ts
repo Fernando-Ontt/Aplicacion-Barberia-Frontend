@@ -62,6 +62,12 @@ export const ADMIN_MENU = [
     ]
   },
 
+   {
+    label: "Sueldos",
+    icon: "pi pi-chart-bar",
+    routerLink: ["sueldos"],
+  },
+
   {
     label: "Gestión",
     icon: "pi pi-users",

@@ -22,6 +22,7 @@ import { PerfilBarbero } from './features/private/components/gestion/barberos/pe
 import { Usuario } from './features/private/components/gestion/usuario/usuario';
 import { PerfilUsuario } from './features/private/components/gestion/usuario/perfil-usuario/perfil-usuario';
 import { CheckoutComponent } from './features/auth/checkout/checkout.component';
+import { MisueldoModal } from './features/private/components/sueldos/misueldo-modal/misueldo-modal';
 
 export const routes: Routes = [
   {
@@ -43,10 +44,25 @@ export const routes: Routes = [
           { path: 'ventas', loadComponent: () => import('./features/private/components/operaciones/ventas/ventas.component').then(m => m.VentasComponent) },
           { path: 'reservas', loadComponent: () => import('./features/private/components/operaciones/reservas/reserva-list/reserva-list').then(m => m.ReservaList) },
           { path: 'reservas/nueva', loadComponent: () => import('./features/private/components/operaciones/reservas/reserva-create/create-reserva/create-reserva').then(m => m.CreateReserva) },
-          {path: 'reservas/calendario', loadComponent: () => import('./features/private/components/operaciones/reservas/reserva-calendar/reserva-calendar').then(m => m.CalendarReservas) },
+          { path: 'reservas/calendario', loadComponent: () => import('./features/private/components/operaciones/reservas/reserva-calendar/reserva-calendar').then(m => m.CalendarReservas) },
           { path: 'pagos', loadComponent: () => import('./features/private/components/operaciones/pagos/pagos.component').then(m => m.PagosComponent) },
           { path: 'reclamos', loadComponent: () => import('./features/private/components/operaciones/reclamos/reclamos.component').then(m => m.ReclamosComponent) },
           { path: 'reclamos/:id', loadComponent: () => import('./features/private/components/operaciones/reclamos/reclamo-detalle/reclamo-detalle.component').then(m => m.ReclamoDetalleComponent) }
+        ]
+      },
+      {
+        path: 'sueldos',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/private/components/sueldos/sueldos')
+                .then(m => m.Sueldos)
+          },
+          {
+            path: ':id',
+            component: MisueldoModal
+          }
         ]
       },
       {
@@ -137,6 +153,7 @@ export const routes: Routes = [
           { path: 'dashboard', loadComponent: () => import('./features/private/pages/resumen/resumen.component').then(m => m.ResumenComponent) },
           { path: 'reservar/agendar', loadComponent: () => import('./features/private/pages/reservar/reservar.component').then(m => m.ReservarComponent), canActivate: [authGuard] },
           { path: 'reservas/mis-reservas', loadComponent: () => import('./features/private/pages/mis-reservas/mis-reservas').then(m => m.MisReservasComponent) },
+          { path: 'ia/analisis-facial', loadComponent: () => import('./features/private/pages/reconocimiento-facial/reconocimiento-facial').then(m => m.ReconocimientoFacial) },
           { path: 'historial', loadComponent: () => import('./features/private/pages/historial/historial.component').then(m => m.ClienteHistorialComponent) },
           { path: 'rewards', loadComponent: () => import('./features/private/pages/rewards/rewards.component').then(m => m.RewardsComponent) },
           { path: 'perfil', loadComponent: () => import('./features/private/pages/perfil/perfil.component').then(m => m.PerfilComponent) },

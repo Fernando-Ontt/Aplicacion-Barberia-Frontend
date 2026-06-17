@@ -1,0 +1,97 @@
+<div class="detalle-sueldo-container">
+
+    <div class="header-section">
+
+    <div>
+        <h2 class="titulo">
+            Comisiones de {{ barbero?.nombre }}
+        </h2>
+
+        <p class="subtitulo">
+            Resumen de ventas y comisiones del mes de Junio 2026.
+        </p>
+    </div>
+
+</div>
+
+    <div class="resumen-cards">
+
+        <div class="card-resumen">
+            <span>Total Ventas</span>
+            <strong>{{ ventas.length }}</strong>
+        </div>
+
+        <div class="card-resumen">
+            <span>Total Facturado</span>
+            <strong>
+                S/
+                {{ totalFacturado | number:'1.2-2' }}
+            </strong>
+        </div>
+
+        <div class="card-resumen card-dorado">
+            <span>Total Comisión</span>
+            <strong>
+                S/
+                {{ totalGanancia | number:'1.2-2' }}
+            </strong>
+        </div>
+
+    </div>
+
+    <div class="table-container">
+
+        <table class="detalle-table">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Fecha</th>
+                    <th>Total Venta</th>
+                    <th>Comisión</th>
+                    <th>Ganancia</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr *ngFor="let venta of ventas; let i = index">
+
+                    <td>{{ i + 1 }}</td>
+
+                    <td>{{ venta.fecha }}</td>
+
+                    <td>
+                        S/ {{ venta.totalVenta | number:'1.2-2' }}
+                    </td>
+
+                    <td>
+                        <span class="badge-comision">
+                            {{ venta.porcentaje }}%
+                        </span>
+                    </td>
+
+                    <td class="ganancia">
+                        S/ {{ venta.ganancia | number:'1.2-2' }}
+                    </td>
+
+                </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="total-label">
+                        Total Comisión Generada
+                    </td>
+
+                    <td class="total-ganancia">
+                        S/ {{ totalGanancia | number:'1.2-2' }}
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+    </div>
+
+</div>
