@@ -1,231 +1,198 @@
-/* ==================================
-   DASHBOARD RESUMEN PREMIUM
-================================== */
+/* ═══════════════════════════════════════════════════════════
+   RESUMEN PAGE - CLIENT DASHBOARD STYLING
+   ═══════════════════════════════════════════════════════════ */
 
-:host {
-  display: block;
+:root {
+  color-scheme: dark;
 }
 
-/* Fondo decorativo */
-.max-w-4xl {
-  position: relative;
+.stats-card {
+  background: rgba(24, 24, 27, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.3rem 1.4rem;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.max-w-4xl::before {
-  content: '';
-
-  position: fixed;
-
-  top: -300px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: 900px;
-  height: 900px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(212, 175, 55, 0.08),
-      transparent 70%
-    );
-
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* ==================================
-   HEADER
-================================== */
-
-header h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-header h1::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 3px;
-  margin-top: 10px;
-  border-radius: 999px;
-  background: var(--color-brand-gold);
-}
-
-header p {
-  color: var(--color-text-secondary) !important;
-  margin-top: 8px;
-}
-
-/* ==================================
-   BOTÓN NOTIFICACIÓN
-================================== */
-
-header button {
-  background: linear-gradient(
-    145deg,
-    #121212,
-    #1a1a1a
-  ) !important;
-
-  border: 1px solid rgba(255,255,255,.08) !important;
-
-  transition: all .25s ease;
-}
-
-header button:hover {
-  border-color: var(--color-brand-gold) !important;
-
-  color: var(--color-brand-gold) !important;
-
-  box-shadow:
-    0 0 20px rgba(212,175,55,.15);
-
+.stats-card:hover {
   transform: translateY(-2px);
+  border-color: rgba(212, 175, 55, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
 }
 
-/* ==================================
-   KPI CARDS
-================================== */
-
-.grid.grid-cols-2.gap-3.mt-5 > div {
-  position: relative;
-
-  overflow: hidden;
-
-  border-radius: 18px !important;
-
-  border: 1px solid rgba(255,255,255,.08) !important;
-
-  background:
-    linear-gradient(
-      145deg,
-      #121212,
-      #181818
-    ) !important;
-
-  transition: all .3s ease;
+.stats-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
-.grid.grid-cols-2.gap-3.mt-5 > div::before {
-  content: '';
-
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 2px;
-
-  background: var(--color-brand-gold);
+.stats-card__icon,
+.stats-card__trend {
+  color: var(--color-brand-gold);
+  font-size: 1rem;
+  line-height: 1;
 }
 
-.grid.grid-cols-2.gap-3.mt-5 > div:hover {
-  transform: translateY(-5px);
-
-  border-color: rgba(212,175,55,.35) !important;
-
-  box-shadow:
-    0 10px 25px rgba(0,0,0,.45),
-    0 0 20px rgba(212,175,55,.08);
+.stats-card__label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 0.85rem;
 }
 
-/* ==================================
-   KPI ICONOS
-================================== */
+.stats-card__value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+  line-height: 1.05;
+}
 
-.grid.grid-cols-2.gap-3.mt-5 > div span {
+.stats-card__subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.appointment-card {
+  background: rgba(24, 24, 27, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.3rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.appointment-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212, 175, 55, 0.22);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+}
+
+.appointment-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.appointment-card__datetime {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.appointment-card__service {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.appointment-card__barber {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-
-  width: 42px;
-  height: 42px;
-
-  border-radius: 12px;
-
-  background: rgba(212,175,55,.08);
-
-  border: 1px solid rgba(212,175,55,.15);
+  gap: 0.5rem;
 }
 
-/* ==================================
-   KPI LABELS
-================================== */
-
-.grid.grid-cols-2.gap-3.mt-5 > div p:first-of-type {
-  color: var(--color-text-secondary) !important;
-
-  letter-spacing: 2px;
-
-  font-size: 11px !important;
-
-  margin-top: 12px !important;
+.appointment-card__button {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid var(--color-brand-gold);
+  color: var(--color-brand-gold);
+  background: transparent;
+  padding: 0.9rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: center;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
-/* ==================================
-   KPI VALORES
-================================== */
-
-.grid.grid-cols-2.gap-3.mt-5 > div p:last-of-type {
-  color: white;
-
-  font-weight: 800;
-
-  margin-top: 8px !important;
+.appointment-card__button:hover {
+  background: rgba(212, 175, 55, 0.12);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
-/* ==================================
-   SKELETON
-================================== */
-
-.kpi-card--skeleton {
-  background:
-    linear-gradient(
-      90deg,
-      #121212,
-      #1a1a1a,
-      #121212
-    );
-
-  background-size: 200% 100%;
-
-  animation: skeleton-loading 1.5s infinite;
+.empty-card {
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 2rem;
+  background: rgba(24, 24, 27, 0.85);
 }
 
-@keyframes skeleton-loading {
-  from {
-    background-position: 200% 0;
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status-pill-confirmada {
+  color: #a16207;
+  background: rgba(245, 158, 11, 0.18);
+}
+
+.status-pill-completada {
+  color: #22c55e;
+  background: rgba(16, 185, 129, 0.14);
+}
+
+.status-pill-cancelada {
+  color: #ef4444;
+  background: rgba(248, 113, 113, 0.18);
+}
+
+.table-header-cell {
+  padding: 1rem 1.25rem;
+}
+
+.table-cell {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+}
+
+.table-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.table-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.table-cell.text-text-muted {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 1024px) {
+  .table-header-cell,
+  .table-cell {
+    padding: 0.9rem 1rem;
   }
-
-  to {
-    background-position: -200% 0;
-  }
 }
-
-/* ==================================
-   ERROR
-================================== */
-
-.bg-red-500\/8 {
-  background: rgba(220,38,38,.08) !important;
-}
-
-/* ==================================
-   RESPONSIVE
-================================== */
 
 @media (max-width: 768px) {
-
-  header h1 {
-    font-size: 1.6rem;
+  .stats-card__top,
+  .appointment-card__header {
+    flex-direction: column;
+    align-items: flex-start;
   }
+}
 
-  .grid.grid-cols-2.gap-3.mt-5 {
-    grid-template-columns: 1fr !important;
+@media (max-width: 640px) {
+  .table-header-cell,
+  .table-cell {
+    padding: 0.8rem 0.85rem;
   }
 }
