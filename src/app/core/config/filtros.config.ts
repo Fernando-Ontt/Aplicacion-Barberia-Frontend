@@ -4,6 +4,7 @@ import { ServicioFiltro } from "../models/catalogos/servicios.model";
 import { FilterField } from "../models/common/filtro.model";
 import { BOOLEAN_FILTERS, CATEGORIA_OPTIONS, CAUSA_RECLAMO_OPTIONS, ESTADO_RECLAMO_OPTIONS, TIPO_PROBLEMA_OPTIONS, TIPO_RECLAMACION_OPTIONS } from "../models/common/select.option.model";
 import { ReclamoFiltro } from "../models/operaciones/reclamos-model/reclamo.filtro.model";
+import { VentaFiltro } from "../models/ventas/venta.model";
 
 
 export const FILTROS_CATEGORIA: FilterField<CategoriaFiltro>[] = [
@@ -58,3 +59,14 @@ export const FILTROS_RECLAMO: FilterField<ReclamoFiltro>[] = [
     { key: 'fechaInicio', label: 'Fecha de inicio', type: 'date', placeholder: 'Desde' },
     { key: 'fechaFin', label: 'Fecha de fin', type: 'date', placeholder: 'Hasta', endOfDay: true },
 ]
+
+export const FILTROS_VENTA: FilterField<VentaFiltro>[] = [
+    { key: 'numeroCorrelativo', label: 'N° de Venta', type: 'text', placeholder: 'Ej. VEN-062026-0001' },
+    { key: 'cliente', label: 'Nombre del Cliente', type: 'text', placeholder: 'Buscar por nombre' },
+    { key: 'tipoComprobante', label: 'Tipo de Comprobante', type: 'select', options: [
+        { label: 'Boleta', value: 'BOLETA' },
+        { label: 'Factura', value: 'FACTURA' }
+    ], placeholder: 'Todos' },
+    { key: 'fechaInicio', label: 'Fecha de inicio', type: 'date', placeholder: 'Desde' },
+    { key: 'fechaFin', label: 'Fecha de fin', type: 'date', placeholder: 'Hasta', endOfDay: true }
+];
