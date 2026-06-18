@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { Dialog } from "primeng/dialog";
-import { MisueldoModal } from "../../misueldo-modal/misueldo-modal";
 import { Router } from '@angular/router';
 
 interface BarberoFila {
@@ -20,7 +18,7 @@ interface BarberoFila {
 @Component({
   selector: 'app-tabla-sueldos',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, ButtonModule, Dialog, MisueldoModal],
+  imports: [CommonModule, DecimalPipe, ButtonModule],
   templateUrl: './tabla-sueldos.html',
   styleUrl: './tabla-sueldos.css',
 })
@@ -89,11 +87,6 @@ export class TablaSueldos {
   mostrarModalSueldo = false;
   barberoSeleccionado: any = null;
 
-  verDetalle(barbero: any): void {
-  this.router.navigate([
-    '/dashboard/admin/sueldos',
-    barbero.id
-  ]);
-}
+
 
 }

@@ -10,7 +10,6 @@
                     <th>Ventas</th>
                     <th>Comisión</th>
                     <th>Sueldo final</th>
-                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,11 +37,6 @@
                         S/ {{ b.sueldoFinal | number:'1.2-2' }}
                     </td>
 
-                    <td>
-                        <button pButton icon="pi pi-eye" class="p-button-rounded p-button-text btn-detalle"
-                            (click)="verDetalle(b)">
-                        </button>
-                    </td>
                 </tr>
             </tbody>
         </table>
