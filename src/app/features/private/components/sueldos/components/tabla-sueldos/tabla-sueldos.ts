@@ -1,92 +1,79 @@
-import { Component } from '@angular/core';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { Router } from '@angular/router';
-
-interface BarberoFila {
-  id?: number;
-  nombre: string;
-  iniciales: string;
-  avatarColor: string;
-  sueldoBase: number;
-  ventas: number;
-  porcentaje: number;
-  comision: number;
-  sueldoFinal: number;
-}
+import { PlanillaService } from '@core/services/planilla/planilla.service';
+import { PlanillaBarbero } from '@/app/core/models/planilla/planilla.model';
 
 @Component({
   selector: 'app-tabla-sueldos',
   standalone: true,
-  imports: [CommonModule, DecimalPipe, ButtonModule],
+  imports: [CommonModule, FormsModule, ButtonModule],  // ✅ FormsModule agregado
   templateUrl: './tabla-sueldos.html',
   styleUrl: './tabla-sueldos.css',
 })
-export class TablaSueldos {
+export class TablaSueldos implements OnInit {
 
-  constructor(private router: Router) {}
+  private readonly planillaService = inject(PlanillaService);
 
-  barberos: BarberoFila[] = [
-    {
-      id: 1,
-      nombre: 'Carlos Rivas',
-      iniciales: 'CR',
-      avatarColor: '#1a3a5c',
-      sueldoBase: 2200,
-      ventas: 42,
-      porcentaje: 15,
-      comision: 504,
-      sueldoFinal: 2704,
-    },
-    {
-      id: 2,
-      nombre: 'Luis Torres',
-      iniciales: 'LT',
-      avatarColor: '#1a4a3a',
-      sueldoBase: 2000,
-      ventas: 35,
-      porcentaje: 12,
-      comision: 336,
-      sueldoFinal: 2336,
-    },
-    {
-        id: 3,
-      nombre: 'Miguel Soto',
-      iniciales: 'MS',
-      avatarColor: '#3a2a1a',
-      sueldoBase: 1800,
-      ventas: 28,
-      porcentaje: 10,
-      comision: 224,
-      sueldoFinal: 2024,
-    },
-    {
-      id: 4,
-      nombre: 'Jorge Paredes',
-      iniciales: 'JP',
-      avatarColor: '#2a1a3a',
-      sueldoBase: 1740,
-      ventas: 24,
-      porcentaje: 10,
-      comision: 192,
-      sueldoFinal: 1932,
-    },
-    {
-      id: 5,
-      nombre: 'Andrés Campos',
-      iniciales: 'AC',
-      avatarColor: '#3a1a1a',
-      sueldoBase: 1500,
-      ventas: 19,
-      porcentaje: 8,
-      comision: 121.60,
-      sueldoFinal: 1621.60,
-    },
+  barberos: PlanillaBarbero[] = [];
+  page = 0;
+  size = 10;
+  totalElements = 0;
+  totalPages = 0;
+  mes = new Date().getMonth() + 1;
+  anio = new Date().getFullYear();
+  aniosDisponibles: number[] = [];  
+
+  readonly Math = Math;
+
+  readonly meses = [  
+    { id: 1,  nombre: 'Enero' },
+    { id: 2,  nombre: 'Febrero' },
+    { id: 3,  nombre: 'Marzo' },
+    { id: 4,  nombre: 'Abril' },
+    { id: 5,  nombre: 'Mayo' },
+    { id: 6,  nombre: 'Junio' },
+    { id: 7,  nombre: 'Julio' },
+    { id: 8,  nombre: 'Agosto' },
+    { id: 9,  nombre: 'Septiembre' },
+    { id: 10, nombre: 'Octubre' },
+    { id: 11, nombre: 'Noviembre' },
+    { id: 12, nombre: 'Diciembre' },
   ];
 
-  mostrarModalSueldo = false;
-  barberoSeleccionado: any = null;
+  ngOnInit(): void {
+    this.cargarAnios();
+    this.cargarDatos();
+  }
 
+  cargarAnios(): void {
+    this.planillaService.obtenerAnios().subscribe({
+      next: (r) => { this.aniosDisponibles = r.data; },
+      error: (err) => console.error('Error al cargar años', err)
+    });
+  }
 
+  cargarDatos(): void {
+    this.planillaService
+      .getDetalle(this.mes, this.anio, this.page, this.size)
+      .subscribe({
+        next: (response) => {
+          this.barberos = response.data.content;
+          this.totalElements = response.data.totalElements;
+          this.totalPages = response.data.totalPages;
+        },
+        error: (err) => console.error(err)
+      });
+  }
 
+  aplicarFiltro(): void {
+    this.page = 0;  
+    this.cargarDatos();
+  }
+
+  cambiarPagina(nuevaPagina: number): void {
+    this.page = nuevaPagina;
+    this.cargarDatos();
+  }
 }
