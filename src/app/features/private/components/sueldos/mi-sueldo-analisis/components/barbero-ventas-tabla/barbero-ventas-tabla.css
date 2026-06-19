@@ -242,3 +242,62 @@ tbody tr:hover td {
   }
 }
 
+.tabla-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #2a2a2a;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tabla-titulo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tabla-filter {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  color: #ccc;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.tabla-filter:focus {
+  outline: none;
+  border-color: #c9972a55;
+}
+
+.btn-aplicar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #c9972a;
+  border: none;
+  color: #0d0d0d;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-aplicar:hover { opacity: 0.85; }
+
+@media (max-width: 600px) {
+  .tabla-header { flex-direction: column; align-items: flex-start; }
+  .filtros { flex-wrap: wrap; }
+}

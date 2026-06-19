@@ -42,7 +42,7 @@ export class MiSueldoAnalisis implements OnInit {
 
   cargarTodo(): void {
     this.cargarResumen();
-    this.cargarVentas();
+    this.cargarVentas(0);
   }
 
   cargarResumen(): void {
@@ -75,5 +75,16 @@ export class MiSueldoAnalisis implements OnInit {
   cambiarPagina(nuevaPagina: number): void {
   this.cargarVentas(nuevaPagina);
 }
+
+aplicarFiltro(filtro: { mes: number; anio: number }): void {
+  console.log('filtro recibido:', filtro);
+  this.mesActual  = filtro.mes;
+  this.anioActual = filtro.anio;
+  this.cargarTodo();
+}
+
+
+
+
 
 }
