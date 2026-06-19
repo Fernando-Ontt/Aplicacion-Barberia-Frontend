@@ -108,5 +108,5 @@ export const TIPO_DOCUMENTO_OPTIONS: SelectOption<string>[] = [
     { label: 'DNI', value: 'DNI' },
     { label: 'Carné de Extranjería', value: 'CE' },
     { label: 'Pasaporte', value: 'PASAPORTE' },
-    { label: 'RUC', value: 'RUC' },
+    // { label: 'RUC', value: 'RUC' },
 ];

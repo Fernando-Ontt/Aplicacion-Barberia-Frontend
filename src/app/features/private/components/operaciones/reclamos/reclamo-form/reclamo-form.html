@@ -1,11 +1,6 @@
-<form [formGroup]="reclamoForm"
-    class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:p-6 p-0 md-border border-default rounded-xl bg-neutral-primary-soft shadow-xs">
-
-    <!-- ── Columna izquierda ───────────────────────────────────────── -->
+<form [formGroup]="reclamoForm" class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:p-6 p-0 md-border border-default rounded-xl bg-neutral-primary-soft shadow-xs">   
     <div class="flex flex-col gap-6">
-
         <h2 class="subtitle-form">Datos del cliente</h2>
-
         <div class="part-form">
             <label for="nombreCliente">Nombre completo *</label>
             <input pInputText id="nombreCliente" formControlName="nombreCliente" placeholder="Ej. Juan Pérez" />
@@ -25,29 +20,39 @@
         <div class="part-form">
             <label for="telefonoCliente">Teléfono</label>
             <input pInputText id="telefonoCliente" formControlName="telefonoCliente" placeholder="Ej. 987654321" />
-            @if (campoInvalido('telefonoCliente')) {
-            <p-message severity="error" variant="simple" size="small">El teléfono es requerido y debe tener 9 dígitos</p-message>
+            @if (campoInvalido('telefonoCliente')) { 
+                <p-message severity="error" variant="simple" size="small">El teléfono es requerido y debe tener 9 dígitos</p-message>
             }
         </div>
 
         <div class="grid grid-cols-2 gap-6">
             <div class="part-form">
                 <label for="tipoDocumentoCliente">Tipo de documento</label>
-                <p-select [options]="tipoDocumentoOpts" formControlName="tipoDocumentoCliente" optionLabel="label"
-                    optionValue="value" placeholder="Seleccione" inputId="tipoDocumentoCliente" />
+                <p-select [options]="tipoDocumentoOpts" formControlName="tipoDocumentoCliente" optionLabel="label" optionValue="value" placeholder="Seleccione" inputId="tipoDocumentoCliente" />
+                @if (campoInvalido('tipoDocumentoCliente')) {
+                    <p-message severity="error" variant="simple" size="small">Seleccione un tipo de documento</p-message>
+                }
             </div>
             <div class="part-form">
                 <label for="numeroDocumentoCliente">N° de documento</label>
-                <input pInputText id="numeroDocumentoCliente" formControlName="numeroDocumentoCliente"
-                    placeholder="Ej. 12345678" />
-                @if (campoInvalido('numeroDocumentoCliente')) {
-                    <p-message severity="error" variant="simple" size="small">El número de documento es requerido y debe tener 8 dígitos</p-message>
-                }
+                <input pInputText id="numeroDocumentoCliente" formControlName="numeroDocumentoCliente" placeholder="Ej. 12345678" [maxlength]="maxLengthDocumento" />
+                <div class="flex justify-between mt-1">
+                    @if (campoInvalido('numeroDocumentoCliente')) {
+                        <p-message severity="error" variant="simple" size="small">
+                            @switch (reclamoForm.get('tipoDocumentoCliente')?.value) {
+                                @case ('DNI') {DNI: debe tener exactamente 8 dígitos}
+                                @case ('CE') {Carné de Extranjería: debe tener exactamente 9 dígitos}
+                                @case ('PASAPORTE') {Pasaporte: entre 6 y 12 caracteres alfanuméricos}
+                                @default {Documento inválido}
+                            }
+                        </p-message>
+                    }
+                    <span class="text-text-subtle text-xs">{{ reclamoForm.get('numeroDocumentoCliente')?.value?.length || 0 }}/{{ maxLengthDocumento }}</span>
+                </div>
             </div>
         </div>
 
         <h2 class="subtitle-form">Descripción del problema</h2>
-
         <div class="part-form">
             <label for="descripcion">Descripción *</label>
             <textarea pTextarea id="descripcion" formControlName="descripcion" rows="4"
@@ -100,13 +105,12 @@
                 <label for="montoReclamado">Monto reclamado (S/)</label>
                 <p-inputNumber formControlName="montoReclamado" inputId="montoReclamado" mode="decimal"
                     [minFractionDigits]="2" [maxFractionDigits]="2" [showButtons]="true" [min]="0" [step]="0.5"
-                    [max]="999999" placeholder="0.00" mode="currency" currencyDisplay="symbol" currency="PEN"
-                    locale="es-PE" />
+                    [max]="999999" placeholder="0.00" mode="currency" currencyDisplay="symbol" currency="PEN" locale="es-PE" />
             </div>
             <div class="part-form">
                 <label for="fechaOcurrencia">Fecha de ocurrencia</label>
-                <p-datepicker formControlName="fechaOcurrencia" [maxDate]="today" dateFormat="dd/mm/yy" [showTime]="true" hourFormat="24"
-                    inputId="fechaOcurrencia" dateFormat="dd/mm/yy" [showIcon]="true" placeholder="dd/mm/aaaa" />
+                <p-datepicker formControlName="fechaOcurrencia" [maxDate]="today" dateFormat="dd/mm/yy" hourFormat="24"
+                    inputId="fechaOcurrencia" dateFormat="dd/mm/yy" placeholder="dd/mm/aaaa" />
             </div>
         </div>
 

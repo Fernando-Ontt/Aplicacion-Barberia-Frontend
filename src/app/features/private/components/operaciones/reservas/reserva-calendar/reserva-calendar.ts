@@ -7,7 +7,7 @@ import { ReservaService } from '@/app/core/services/operaciones/reserva.service'
 import { Reserva } from '@/app/core/models/operaciones/Reserva.model';
 import { finalize } from 'rxjs';
 
-@Component({
+@Component({ 
   selector: 'app-calendar-reservas',
   standalone: true,
   imports: [CommonModule, ToastModule, DialogModule],

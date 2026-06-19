@@ -22,7 +22,6 @@ import { PerfilBarbero } from './features/private/components/gestion/barberos/pe
 import { Usuario } from './features/private/components/gestion/usuario/usuario';
 import { PerfilUsuario } from './features/private/components/gestion/usuario/perfil-usuario/perfil-usuario';
 import { CheckoutComponent } from './features/auth/checkout/checkout.component';
-import { MisueldoModal } from './features/private/components/sueldos/misueldo-modal/misueldo-modal';
 
 export const routes: Routes = [
   {
@@ -59,10 +58,13 @@ export const routes: Routes = [
               import('./features/private/components/sueldos/sueldos')
                 .then(m => m.Sueldos)
           },
-          {
+           {
             path: ':id',
-            component: MisueldoModal
+            loadComponent: () =>
+              import('./features/private/components/sueldos/mi-sueldo-analisis/mi-sueldo-analisis')
+                .then(m => m.MiSueldoAnalisis)
           }
+         
         ]
       },
       {

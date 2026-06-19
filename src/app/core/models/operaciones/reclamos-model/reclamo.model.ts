@@ -5,6 +5,7 @@ export interface ReclamoAdjuntoResponse {
     nombreOriginal: string;
     urlArchivo: string;
     tipoAdjunto: string | null;
+    mimeType?: string;
     fechaSubida: string;
 }
 
@@ -21,13 +22,13 @@ export interface ReclamoResponse {
     solucionReclamo: SolucionReclamo;
     descripcion: string;
     notasInternas: string;
-    montoReclamado: number;
+    montoReclamado: number; 
     montoCompensado: number;
     fechaOcurrencia: string;
     fechaReclamo: string;
     fechaResolucion: string;
     esPublico: boolean;
-    adjuntos: ReclamoAdjuntoResponse[];
+    adjuntos: ReclamoAdjuntoResponse[] | null;
 }
 
 export interface ReclamoRequest {
@@ -70,6 +71,7 @@ export interface ReclamoSolucionRequest {
     solucionReclamo?: SolucionReclamo;
     notasInternas?: string;
     montoCompensado?: number;
+    descripcionSolucion?: string;
 }
 
 export interface ReclamoResumen {

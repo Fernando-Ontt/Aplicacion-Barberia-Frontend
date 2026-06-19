@@ -14,7 +14,7 @@ import { SolesPipe } from '@/app/shared/pipes/moneda.pipe';
 @Component({
   selector: 'app-reclamo-table',
   imports: [CommonModule, TableModule, ButtonModule, StatusBadgeComponent, ConfirmPopoverComponent, GalleriaModule, ConfirmPopoverComponent,
-    DialogModule,SolesPipe
+    DialogModule, SolesPipe
   ],
   templateUrl: './reclamo-table.html',
   styleUrl: './reclamo-table.css',
@@ -81,24 +81,24 @@ export class ReclamoTableComponent {
   }
 
 
-  abrirGaleria(reclamo: ReclamoResponse, index = 0): void {
-    const imagenes = reclamo.adjuntos?.filter(a => a.tipoAdjunto?.startsWith('image')) ?? [];
-    if (!imagenes.length) return;
-    this.imagenesGaleria = imagenes.map((a, i) => ({
-      itemImageSrc: `${this.environment}/uploads/${a.urlArchivo}`,
-      thumbnailImageSrc: `${this.environment}/uploads/${a.urlArchivo}`,
-      alt: `${reclamo.numeroReclamo} adjunto ${i + 1}`,
-    }));
-    this.activeIndex = Math.min(index, this.imagenesGaleria.length - 1);
-    this.numVisible = Math.min(this.imagenesGaleria.length, 5);
-    this.mostrarGaleria = true;
-  }
+  // abrirGaleria(reclamo: ReclamoResponse, index = 0): void {
+  //   const imagenes = reclamo.adjuntos?.filter(a => a.tipoAdjunto?.startsWith('image')) ?? [];
+  //   if (!imagenes.length) return;
+  //   this.imagenesGaleria = imagenes.map((a, i) => ({
+  //     itemImageSrc: `${this.environment}/uploads/${a.urlArchivo}`,
+  //     thumbnailImageSrc: `${this.environment}/uploads/${a.urlArchivo}`,
+  //     alt: `${reclamo.numeroReclamo} adjunto ${i + 1}`,
+  //   }));
+  //   this.activeIndex = Math.min(index, this.imagenesGaleria.length - 1);
+  //   this.numVisible = Math.min(this.imagenesGaleria.length, 5);
+  //   this.mostrarGaleria = true;
+  // }
 
-  tieneImagenes(reclamo: ReclamoResponse): boolean {
-    return (reclamo.adjuntos ?? []).some(a => a.tipoAdjunto?.startsWith('image'));
-  }
+  // tieneImagenes(reclamo: ReclamoResponse): boolean {
+  //   return (reclamo.adjuntos ?? []).some(a => a.tipoAdjunto?.startsWith('image'));
+  // }
 
-  totalAdjuntos(reclamo: ReclamoResponse): number {
-    return reclamo.adjuntos?.length ?? 0;
-  }
+  // totalAdjuntos(reclamo: ReclamoResponse): number {
+  //   return reclamo.adjuntos?.length ?? 0;
+  // }
 }

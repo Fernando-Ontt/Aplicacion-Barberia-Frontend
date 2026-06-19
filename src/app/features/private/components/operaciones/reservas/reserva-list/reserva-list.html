@@ -1,6 +1,5 @@
 <div class="space-y-5">
 
-   
     <section class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-white tracking-tight">Reservas</h1>
@@ -13,11 +12,9 @@
         </button>
     </section>
 
-   
     <section class="bg-[#121212] border border-[#222222] rounded-xl p-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 
-          
             <div class="flex flex-col gap-1.5">
                 <label class="text-[#666666] text-[10px] font-semibold uppercase tracking-wider">Cliente</label>
                 <div class="relative">
@@ -28,7 +25,6 @@
                 </div>
             </div>
 
-           
             <div class="flex flex-col gap-1.5">
                 <label class="text-[#666666] text-[10px] font-semibold uppercase tracking-wider">Barbero</label>
                 <div class="relative">
@@ -41,7 +37,6 @@
                     </select>
                 </div>
             </div>
-
             
             <div class="flex flex-col gap-1.5">
                 <label class="text-[#666666] text-[10px] font-semibold uppercase tracking-wider">Estado</label>
@@ -64,7 +59,6 @@
                         class="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg text-white text-sm pl-9 pr-3 py-6 focus:outline-none focus:border-[#C9A84C] transition-colors [color-scheme:dark]" />
                 </div>
             </div>
-
         </div>
 
         
@@ -112,8 +106,6 @@
 
     
     <section class="bg-[#121212] border border-[#222222] rounded-xl overflow-hidden">
-
-       
         <div class="flex items-center justify-between px-5 py-3.5 border-b border-[#1e1e1e]">
             <span class="text-[#666666] text-xs">
                 <span class="text-white font-semibold">{{ reservasFiltradas.length }}</span>
@@ -170,13 +162,9 @@
                                 <span class="text-white text-sm font-medium">{{ reserva.clienteNombre || 'N/A' }}</span>
                             </div>
                         </td>
-
                         
                         <td class="px-5 py-3.5 text-[#aaaaaa] text-sm">{{ reserva.barberoNombre || 'N/A' }}</td>
-
-                       
                         <td class="px-5 py-3.5 text-[#aaaaaa] text-sm">{{ reserva.servicio || 'N/A' }}</td>
-
                         
                         <td class="px-5 py-3.5">
                             <div class="flex flex-col">
@@ -185,14 +173,12 @@
                             </div>
                         </td>
 
-                      
                         <td class="px-5 py-3.5">
                             <span
                                 class="px-2 py-0.5 rounded-md text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                                 {{ reserva.tipoReserva === 'RESERVA_VIRTUAL' ? 'Virtual' : 'Presencial' }}
                             </span>
                         </td>
-
                         
                         <td class="px-5 py-3.5">
                             <span class="px-2 py-0.5 rounded-md text-xs font-semibold border"
@@ -200,7 +186,6 @@
                                 {{ reserva.estadoReserva || 'Sin estado' }}
                             </span>
                         </td>
-
                         
                         <td class="px-5 py-3.5">
                             <div class="flex items-center justify-center gap-1">

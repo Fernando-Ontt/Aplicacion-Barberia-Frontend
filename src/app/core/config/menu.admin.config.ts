@@ -31,8 +31,6 @@ export const ADMIN_MENU = [
             permission: "RESERVA_READ_ALL"
           },
 
-          
-
           {
             label: "Nueva Reserva",
             icon: "pi pi-plus",

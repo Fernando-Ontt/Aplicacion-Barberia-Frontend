@@ -18,8 +18,8 @@ import { NotificationService } from '@/app/core/services/common/notification.ser
 
 @Component({
   selector: 'app-reclamos',
-  imports: [ReactiveFormsModule,  SelectModule,  InputTextModule,  InputNumberModule,  CheckboxModule,  
-    TextareaModule,  ButtonModule,  DatePickerModule,  MessageModule,  CommonModule
+  imports: [ReactiveFormsModule, SelectModule, InputTextModule, InputNumberModule, CheckboxModule,
+    TextareaModule, ButtonModule, DatePickerModule, MessageModule, CommonModule
   ],
   templateUrl: './reclamos.html',
   styleUrl: './reclamos.css',
@@ -45,6 +45,7 @@ export class ReclamosComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    this.configurarValidacionDocumento();
   }
 
   private initForm(): void {
@@ -53,26 +54,51 @@ export class ReclamosComponent implements OnInit {
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
       tipoDocumento: ['DNI', Validators.required],
-      numeroDocumento: ['', Validators.required,Validators.minLength(8), Validators.pattern(/^\d{8}$/)],
+      numeroDocumento: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^\d{8}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
+      telefono: ['', [Validators.required, Validators.pattern(/^9\d{8}$/)]],
       tipoProblema: [null, Validators.required],
       descripcion: ['', [Validators.required, Validators.minLength(5)]],
       montoReclamado: [null],
-      fechaOcurrencia: [null],
+      fechaOcurrencia: [null, Validators.required],
       aceptaVeracidad: [false, Validators.requiredTrue],
       aceptaDatos: [false, Validators.requiredTrue],
       aceptaTerminos: [false, Validators.requiredTrue],
     });
   }
 
+  private configurarValidacionDocumento(): void {
+    const tipoDocumentoControl = this.form.get('tipoDocumento');
+    const numeroDocumentoControl = this.form.get('numeroDocumento');
+    tipoDocumentoControl?.valueChanges.subscribe(tipo => {
+      numeroDocumentoControl?.setValue('');
+      switch (tipo) {
+        case 'DNI': numeroDocumentoControl?.setValidators([Validators.required, Validators.pattern(/^\d{8}$/)]);
+          break;
+        case 'CE': numeroDocumentoControl?.setValidators([Validators.required, Validators.pattern(/^\d{9}$/)]);
+          break;
+        case 'PASAPORTE': numeroDocumentoControl?.setValidators([Validators.required, Validators.pattern(/^[A-Za-z0-9]{6,12}$/)]);
+          break;
+      }
+      numeroDocumentoControl?.updateValueAndValidity();
+    });
+  }
+
+  get maxLengthDocumento(): number {
+    const tipo = this.form.get('tipoDocumento')?.value;
+    switch (tipo) {
+      case 'DNI':return 8;
+      case 'CE':return 9;
+      case 'PASAPORTE':return 12;
+      default:return 12;
+    }
+  }
+
   onSeleccionarArchivos(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
     const nuevos = Array.from(input.files);
-    const validos = nuevos.filter(f =>
-      ['image/jpeg', 'image/png', 'application/pdf'].includes(f.type) && f.size <= 10 * 1024 * 1024
-    );
+    const validos = nuevos.filter(f => ['image/jpeg', 'image/png', 'application/pdf'].includes(f.type) && f.size <= 10 * 1024 * 1024);
     this.archivos = [...this.archivos, ...validos].slice(0, 5);
     input.value = '';
   }
@@ -119,6 +145,7 @@ export class ReclamosComponent implements OnInit {
           this.enviando = false;
           this.enviado = true;
           this.numeroReclamo = res.data.numeroReclamo;
+          this.notify.showSuccess(res.message);
           this.onLimpiar();
         },
         error: (error) => {
@@ -129,7 +156,7 @@ export class ReclamosComponent implements OnInit {
   }
 
   formatearTamano(bytes: number): string {
-    return bytes < 1024 * 1024? ` ${(bytes / 1024).toFixed(0)} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    return bytes < 1024 * 1024 ? ` ${(bytes / 1024).toFixed(0)} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
   seleccionarTipo(tipo: string): void {

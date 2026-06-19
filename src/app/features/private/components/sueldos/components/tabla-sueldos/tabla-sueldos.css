@@ -139,3 +139,112 @@ td {
     background: rgba(212, 175, 55, 0.3) !important;
 }
 
+.header-tabla {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabla-filter {
+  background: #1a1a1a;
+  border: 1px solid #2f2f2f;
+  color: #e8e0d0;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  height: 36px;
+}
+
+.tabla-filter:hover { border-color: #C8A455; }
+.tabla-filter:focus {
+  outline: none;
+  border-color: #C8A455;
+  box-shadow: 0 0 0 2px rgba(200, 164, 85, 0.2);
+}
+
+.btn-aplicar {
+  background: #C8A455;
+  color: #111111;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 36px;
+}
+
+.btn-aplicar:hover { background: #d4b468; }
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 4px 4px 4px;
+  margin-top: 8px;
+  border-top: 0.5px solid #2e2e2e;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.table-footer span {
+  font-size: 12px;
+  color: #6a6055;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pag-btn {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 0.5px solid #2f2f2f;
+  background: #1a1a1a;
+  color: #e8e0d0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.pag-btn:hover:not(:disabled) {
+  border-color: #C8A455;
+  color: #C8A455;
+}
+
+.pag-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pag-current {
+  font-size: 13px;
+  color: #6a6055;
+  padding: 0 4px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.pag-info {
+  font-size: 12px;
+  color: #6a6055;
+}

@@ -57,9 +57,9 @@ export class ReclamoFormComponent implements OnInit {
     this.reclamoForm = this.fb.group({
       nombreCliente: ['', Validators.required],
       correoCliente: ['', Validators.email],
-      telefonoCliente: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
-      tipoDocumentoCliente: [null],
-      numeroDocumentoCliente: [''],
+      telefonoCliente: ['', [Validators.required, Validators.pattern(/^9\d{8}$/)]],
+      tipoDocumentoCliente: ['DNI', Validators.required],
+      numeroDocumentoCliente: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^\d{8}$/)]],
       tipoReclamacion: [null, Validators.required],
       tipoProblema: [null, Validators.required],
       causaReclamo: [null],
@@ -118,6 +118,8 @@ export class ReclamoFormComponent implements OnInit {
 
     const archivos = this.imagenes.map(i => i.file as File);
     this.guardar.emit({ request, archivos: archivos.length ? archivos : undefined });
+    this.formSubmitted = false;
+    this.limpiarFormulario();
   }
 
   private limpiarFormulario(): void {
@@ -134,4 +136,32 @@ export class ReclamoFormComponent implements OnInit {
 
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T00:00:00`;
   }
+
+  private configurarValidacionDocumento(): void {
+    const tipoDocumentoControl = this.reclamoForm.get('tipoDocumento');
+    const numeroDocumentoControl = this.reclamoForm.get('numeroDocumento');
+    tipoDocumentoControl?.valueChanges.subscribe(tipo => {
+      numeroDocumentoControl?.setValue('');
+      switch (tipo) {
+        case 'DNI': numeroDocumentoControl?.setValidators([Validators.required, Validators.pattern(/^\d{8}$/)]);
+          break;
+        case 'CE': numeroDocumentoControl?.setValidators([Validators.required, Validators.pattern(/^\d{9}$/)]);
+          break;
+        case 'PASAPORTE': numeroDocumentoControl?.setValidators([Validators.required, Validators.pattern(/^[A-Za-z0-9]{6,12}$/)]);
+          break;
+      }
+      numeroDocumentoControl?.updateValueAndValidity();
+    });
+  }
+
+    get maxLengthDocumento(): number {
+    const tipo = this.reclamoForm.get('tipoDocumento')?.value;
+    switch (tipo) {
+      case 'DNI':return 8;
+      case 'CE':return 9;
+      case 'PASAPORTE':return 12;
+      default:return 12;
+    }
+  }
+  
 }

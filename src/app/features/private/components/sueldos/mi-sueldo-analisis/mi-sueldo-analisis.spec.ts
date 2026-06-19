@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MisueldoModal } from './misueldo-modal';
+import { MiSueldoAnalisis } from './mi-sueldo-analisis';
 
-describe('MisueldoModal', () => {
-  let component: MisueldoModal;
-  let fixture: ComponentFixture<MisueldoModal>;
+describe('MiSueldoAnalisis', () => {
+  let component: MiSueldoAnalisis;
+  let fixture: ComponentFixture<MiSueldoAnalisis>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MisueldoModal]
+      imports: [MiSueldoAnalisis]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MisueldoModal);
+    fixture = TestBed.createComponent(MiSueldoAnalisis);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
