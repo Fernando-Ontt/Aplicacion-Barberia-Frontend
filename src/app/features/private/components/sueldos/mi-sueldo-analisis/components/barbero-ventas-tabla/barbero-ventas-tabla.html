@@ -1,0 +1,88 @@
+<div class="tabla-wrap">
+
+  <div class="tabla-header">
+    <p class="tabla-titulo">Ventas del período</p>
+    <span class="tabla-badge">{{ totalElements }} registros</span>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th class="text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (venta of ventas; track venta.ventaId) {
+          <tr>
+            <td class="venta-id">#{{ venta.ventaId }}</td>
+            <td>{{ venta.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <div class="cliente-cell">
+                <span class="avatar-sm">
+                  {{ venta.nombreCliente | slice:0:2 | uppercase }}
+                </span>
+                {{ venta.nombreCliente }}
+              </div>
+            </td>
+            <td class="text-right monto">S/ {{ venta.total | number:'1.2-2' }}</td>
+          </tr>
+        }
+
+        @if (ventas.length === 0) {
+          <tr>
+            <td colspan="4" class="empty-state">
+              <i class="ti ti-inbox-off"></i>
+              <span>Sin ventas en este período</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer acumulados -->
+  <div class="tabla-footer">
+    <div class="acumulados">
+      <div class="acum-item">
+        <span class="acum-label">Total vendido</span>
+        <span class="acum-value">S/ {{ resumen.totalVentas | number:'1.2-2' }}</span>
+      </div>
+      <div class="acum-sep"></div>
+      <div class="acum-item">
+        <span class="acum-label">Comisión ganada</span>
+        <span class="acum-value">S/ {{ resumen.montoComision | number:'1.2-2' }}</span>
+      </div>
+      <div class="acum-sep"></div>
+      <div class="acum-item">
+        <span class="acum-label">Sueldo base</span>
+        <span class="acum-value">S/ {{ resumen.sueldoBase | number:'1.2-2' }}</span>
+      </div>
+      <div class="acum-sep"></div>
+      <div class="acum-item acum-final">
+        <span class="acum-label">Sueldo final</span>
+        <span class="acum-value gold">S/ {{ resumen.sueldoFinal | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="paginacion">
+      <span class="pag-info">
+        {{ desde }} – {{ hasta }} de {{ totalElements }}
+      </span>
+      <div class="pag-btns">
+        <button class="pag-btn" [disabled]="page === 0">
+          <i class="ti ti-chevron-left"></i>
+        </button>
+        <span class="pag-current">{{ paginaActual }} / {{ totalPages }}</span>
+        <button class="pag-btn" [disabled]="page + 1 >= totalPages">
+          <i class="ti ti-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

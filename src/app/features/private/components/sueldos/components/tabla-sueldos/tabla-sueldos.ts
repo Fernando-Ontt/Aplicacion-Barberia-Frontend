@@ -4,17 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { PlanillaService } from '@core/services/planilla/planilla.service';
 import { PlanillaBarbero } from '@/app/core/models/planilla/planilla.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tabla-sueldos',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule],  // ✅ FormsModule agregado
+  imports: [CommonModule, FormsModule, ButtonModule],  
   templateUrl: './tabla-sueldos.html',
   styleUrl: './tabla-sueldos.css',
 })
 export class TablaSueldos implements OnInit {
 
   private readonly planillaService = inject(PlanillaService);
+ private readonly router = inject(Router);
 
   barberos: PlanillaBarbero[] = [];
   page = 0;
@@ -41,6 +43,7 @@ export class TablaSueldos implements OnInit {
     { id: 11, nombre: 'Noviembre' },
     { id: 12, nombre: 'Diciembre' },
   ];
+ 
 
   ngOnInit(): void {
     this.cargarAnios();
@@ -76,4 +79,8 @@ export class TablaSueldos implements OnInit {
     this.page = nuevaPagina;
     this.cargarDatos();
   }
+
+ verDetalle(barbero: PlanillaBarbero): void {
+  this.router.navigate(['/dashboard/admin/sueldos', barbero.barberoId]);
+}
 }

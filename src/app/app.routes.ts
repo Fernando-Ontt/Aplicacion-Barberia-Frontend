@@ -57,7 +57,14 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/private/components/sueldos/sueldos')
                 .then(m => m.Sueldos)
+          },
+           {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/private/components/sueldos/mi-sueldo-analisis/mi-sueldo-analisis')
+                .then(m => m.MiSueldoAnalisis)
           }
+         
         ]
       },
       {
