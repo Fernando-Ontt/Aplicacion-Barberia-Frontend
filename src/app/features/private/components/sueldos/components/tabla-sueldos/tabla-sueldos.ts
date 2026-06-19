@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Dialog } from "primeng/dialog";
-import { MisueldoModal } from "../../misueldo-modal/misueldo-modal";
+import { MisueldoModal } from '../../misueldo-modal/misueldo-modal';
 import { Router } from '@angular/router';
 
 interface BarberoFila {

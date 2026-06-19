@@ -1,152 +1,259 @@
-<div class="min-h-screen bg-brand-black px-6 py-6">
+<div class="dashboard">
 
   <!-- HEADER -->
-  <header class="mb-10 border-b border-ui-borderSoft pb-6">
-    <h1 class="text-3xl font-bold text-white">Hola, {{ username }} 👋</h1>
-    <p class="mt-2 text-sm text-text-muted">Bienvenido nuevamente a Fadex Barber</p>
-  </header>
+  <div class="dashboard__header">
 
-  <!-- LOADING STATE -->
-  <div *ngIf="loading" class="flex items-center justify-center py-24">
-    <div class="flex flex-col items-center gap-4">
-      <div class="w-12 h-12 rounded-full border-4 border-ui-elevated border-t-brand-gold animate-spin"></div>
-      <p class="text-text-muted">Cargando datos...</p>
+    <div>
+      <h1 class="dashboard__title">
+        Hola, {{ username }} 👋
+      </h1>
+
+      <p class="dashboard__subtitle">
+        Bienvenido nuevamente a Fadex Barber
+      </p>
     </div>
+
   </div>
 
-  <!-- ERROR STATE -->
-  <div *ngIf="error && !loading" class="mb-8 p-4 rounded-lg border border-red-500/30 bg-red-500/10">
-    <p class="text-red-400 text-sm flex items-center gap-2">
-      <span class="text-lg">⚠️</span>
-      {{ error }}
-    </p>
+  <!-- LOADING -->
+  <div *ngIf="loading" class="prediccion-loading">
+    <i class="pi pi-spin pi-spinner mr-2"></i>
+    Cargando datos...
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="error && !loading" class="dashboard__error">
+    <i class="pi pi-exclamation-triangle mr-2"></i>
+    {{ error }}
   </div>
 
   <ng-container *ngIf="!loading && !error">
 
-    <!-- STATS ROW -->
+    <!-- KPI GRID -->
     <section class="mb-10">
-      <div *ngIf="kpis; else kpiSkeleton" class="grid grid-cols-1 gap-4 xl:grid-cols-4">
 
-        <div class="stats-card">
-          <div class="stats-card__top">
-            <span class="stats-card__icon">✂️</span>
-            <span class="stats-card__trend">⬆️</span>
+      <div *ngIf="kpis; else kpiSkeleton" class="kpi-grid">
+
+        <!-- CORTES -->
+        <div class="kpi-card">
+
+          <div class="kpi-card__icon">
+            <i class="pi pi-scissors"></i>
           </div>
-          <p class="stats-card__label">CORTES</p>
-          <p class="stats-card__value">{{ kpis.totalCortes }}</p>
-          <p class="stats-card__subtitle">Últimos 12 meses</p>
+
+          <div class="kpi-card__label">
+            CORTES
+          </div>
+
+          <div class="kpi-card__value">
+            {{ kpis.totalCortes }}
+          </div>
+
+          <div class="kpi-card__delta kpi-card__delta--positive">
+            Últimos 12 meses
+          </div>
+
+        </div>
+        
+
+        <!-- TOTAL GASTADO -->
+        <div class="kpi-card">
+
+          <div class="kpi-card__icon">
+            <i class="pi pi-wallet"></i>
+          </div>
+
+          <div class="kpi-card__label">
+            TOTAL GASTADO
+          </div>
+
+          <div class="kpi-card__value">
+            S/ {{ kpis.totalGastado | number:'1.0-0' }}
+          </div>
+
+          <div class="kpi-card__delta kpi-card__delta--positive">
+            Acumulado
+          </div>
+
         </div>
 
-        <div class="stats-card">
-          <div class="stats-card__top">
-            <span class="stats-card__icon">💰</span>
-            <span class="stats-card__trend">⬆️</span>
+        <!-- ÚLTIMA VISITA -->
+        <div class="kpi-card">
+
+          <div class="kpi-card__icon">
+            <i class="pi pi-calendar"></i>
           </div>
-          <p class="stats-card__label">TOTAL GASTADO</p>
-          <p class="stats-card__value">S/ {{ kpis.totalGastado | number:'1.0-0' }}</p>
-          <p class="stats-card__subtitle">Acumulado</p>
+
+          <div class="kpi-card__label">
+            ÚLTIMA VISITA
+          </div>
+
+          <div class="kpi-card__value">
+            {{ formatFechaCorta(kpis.ultimaVisita) }}
+          </div>
+
+          <div class="kpi-card__delta kpi-card__delta--positive">
+            {{ formatUltimaVisita(kpis.ultimaVisita) }}
+          </div>
+
         </div>
 
-        <div class="stats-card">
-          <div class="stats-card__top">
-            <span class="stats-card__icon">📅</span>
-            <span class="stats-card__trend">⬆️</span>
-          </div>
-          <p class="stats-card__label">ÚLTIMA VISITA</p>
-          <p class="stats-card__value">{{ formatFechaCorta(kpis.ultimaVisita) }}</p>
-          <p class="stats-card__subtitle">{{ formatUltimaVisita(kpis.ultimaVisita) }}</p>
-        </div>
+        <!-- RESERVAS ACTIVAS -->
+        <div class="kpi-card">
 
-        <div class="stats-card">
-          <div class="stats-card__top">
-            <span class="stats-card__icon">📋</span>
-            <span class="stats-card__trend">⬆️</span>
+          <div class="kpi-card__icon">
+            <i class="pi pi-book"></i>
           </div>
-          <p class="stats-card__label">RESERVAS ACTIVAS</p>
-          <p class="stats-card__value">{{ kpis.totalReservas }}</p>
-          <p class="stats-card__subtitle">Próximas citas</p>
+
+          <div class="kpi-card__label">
+            RESERVAS ACTIVAS
+          </div>
+
+          <div class="kpi-card__value">
+            {{ kpis.totalReservas }}
+          </div>
+
+          <div class="kpi-card__delta kpi-card__delta--positive">
+            Próximas citas
+          </div>
+
         </div>
 
       </div>
 
       <ng-template #kpiSkeleton>
-        <div class="grid grid-cols-1 gap-4 xl:grid-cols-4">
-          <div class="stats-card animate-pulse" *ngFor="let i of [1,2,3,4]"></div>
-        </div>
-      </ng-template>
-    </section>
-
-    <!-- PRÓXIMAS CITAS -->
-    <section class="mb-10">
-      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
-        <h2 class="text-xl font-bold text-white">Próximas Citas</h2>
-      </div>
-
-      <div *ngIf="proximasCitas?.length; else sinCitas" class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div *ngFor="let cita of proximasCitas" class="appointment-card">
-          <div class="appointment-card__header">
-            <span class="appointment-card__datetime">{{ formatFechaCita(cita.fecha) }} · {{ cita.hora }}</span>
-            <span class="status-pill status-pill-confirmada">✓ Confirmada</span>
+        <div class="kpi-grid">
+          <div
+            class="kpi-card kpi-card--skeleton"
+            *ngFor="let i of [1,2,3,4]">
           </div>
-
-          <p class="appointment-card__service">{{ cita.servicio }}</p>
-          <p class="appointment-card__barber"><span class="mr-2">👤</span>{{ cita.barbero }}</p>
-
-          <button class="appointment-card__button" (click)="onVerDetalle(cita.reservaId)">
-            Ver detalles
-          </button>
-        </div>
-      </div>
-
-      <ng-template #sinCitas>
-        <div class="empty-card">
-          <p class="text-text-muted mb-2">No tienes citas próximas.</p>
-          <p class="text-sm text-text-muted">Agenda una nueva cita para mantener tu estilo impecable.</p>
         </div>
       </ng-template>
+
     </section>
+    
+
+<!-- PRÓXIMAS CITAS -->
+<section class="mb-10">
+
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-xl font-bold text-white">Próximas citas</h2>
+  </div>
+
+  <div *ngIf="proximasCitas.length; else sinCita" class="next-appointments-grid">
+    <div class="next-appointment-card" *ngFor="let cita of proximasCitas">
+      <span class="next-appointment-label">PRÓXIMA CITA</span>
+      <h3 class="next-appointment-service">{{ cita.servicio }}</h3>
+      <div class="next-appointment-bottom">
+        <div>
+          <div class="next-appointment-barber">
+            <i class="pi pi-user"></i> {{ cita.barbero }}
+          </div>
+          <div class="next-appointment-date">
+            {{ formatFechaCita(cita.fecha) }} · {{ cita.hora }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #sinCita>
+    <div class="empty-card">
+      <p class="text-text-muted">No tienes citas programadas</p>
+    </div>
+  </ng-template>
+
+</section>
+
 
     <!-- ACTIVIDAD RECIENTE -->
-    <section>
-      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
-        <h2 class="text-xl font-bold text-white">Actividad reciente</h2>
-        <button class="text-sm font-medium text-brand-gold hover:text-brand-gold/80 transition-colors" (click)="onVerHistorial()">
-          Ver historial completo →
+    <section class="citas-section">
+
+      <div class="citas-section__header">
+
+        <h2 class="citas-section__title">
+          Actividad reciente
+        </h2>
+
+        <button
+          class="period-btn"
+          (click)="onVerHistorial()">
+
+          Ver historial completo
+
         </button>
+
       </div>
 
-      <div class="overflow-hidden rounded-2xl border border-ui-borderSoft bg-ui-surface">
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
-            <thead>
-              <tr class="bg-ui-elevated text-left text-text-muted uppercase text-[0.68rem] tracking-[0.2em]">
-                <th class="table-header-cell">FECHA</th>
-                <th class="table-header-cell">SERVICIO</th>
-                <th class="table-header-cell">BARBERO</th>
-                <th class="table-header-cell">MONTO</th>
-                <th class="table-header-cell">ESTADO</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of historialReciente" class="table-row">
-                <td class="table-cell text-text-muted">{{ formatFechaTabla(item.fecha) }}</td>
-                <td class="table-cell font-semibold text-white">{{ item.servicio }}</td>
-                <td class="table-cell text-text-muted">{{ item.barbero }}</td>
-                <td class="table-cell text-brand-gold font-semibold">S/ {{ item.monto }}</td>
-                <td class="table-cell">
-                  <span [ngClass]="{
+      <div class="citas-table-wrapper">
+
+        <table class="citas-table">
+
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Servicio</th>
+              <th>Barbero</th>
+              <th>Monto</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let item of historialReciente">
+
+              <td>
+                {{ formatFechaTabla(item.fecha) }}
+              </td>
+
+              <td>
+
+                <div class="cliente-nombre">
+                  {{ item.servicio }}
+                </div>
+
+              </td>
+
+              <td>
+
+                <span class="hora">
+                  {{ item.barbero }}
+                </span>
+
+              </td>
+
+<td>
+  <span class="servicio-badge badge-base">
+    {{ item.monto === 'Gratis' || item.monto === '—' ? item.monto : 'S/ ' + item.monto }}
+  </span>
+</td>
+
+              <td>
+
+                <span
+                  [ngClass]="{
                     'status-pill status-pill-completada': item.estado === 'COMPLETADA',
                     'status-pill status-pill-cancelada': item.estado === 'CANCELADA',
                     'status-pill status-pill-confirmada': item.estado === 'CONFIRMADA'
-                  }">{{ item.estado }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                  }">
+
+                  {{ item.estado }}
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
       </div>
+
     </section>
 
   </ng-container>
+
 </div>
