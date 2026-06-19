@@ -1460,3 +1460,30 @@ p-paginator.p-paginator {
 	color: var(--color-text-subtle) !important;
 	opacity: 0.3 !important;
 }
+.p-tabs, .p-tabpanels, .p-tabpanel {
+  background: transparent !important;
+}
+
+
+.p-tablist {
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+.p-tab {
+  color: var(--color-text-secondary) !important;
+  background: transparent !important;
+}
+
+.p-tab:hover {
+  color: var(--color-brand-gold) !important;
+}
+
+.p-tab[aria-selected="true"] {
+  color: var(--color-brand-gold) !important;
+  border-bottom-color: var(--color-brand-gold) !important;
+}
+:root {
+  --p-tabs-active-bar-background: var(--color-brand-gold) !important;
+  --p-tab-active-color: var(--color-brand-gold) !important;
+}
