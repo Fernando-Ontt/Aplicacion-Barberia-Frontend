@@ -58,7 +58,7 @@
 
                         <!-- Monto reclamado -->
                         <td class="whitespace-nowrap text-center">
-                            {{ reclamo.montoReclamado != null ? ('S/ ' + (reclamo.montoReclamado | soles)) : '—' }}
+                            {{ reclamo.montoReclamado != null ? ((reclamo.montoReclamado | soles)) : '—' }}
                         </td>
                         
                         <td class="whitespace-nowrap text-center">

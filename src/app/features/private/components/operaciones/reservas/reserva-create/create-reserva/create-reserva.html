@@ -29,13 +29,8 @@
           <label class="text-[#888888] text-xs font-semibold uppercase tracking-wider">
             Cliente <span class="text-[#C9A84C]">*</span>
           </label>
-          <p-select
-            formControlName="clienteId"
-            [options]="(clientes$ | async) || []"
-            optionLabel="nombreCompleto"
-            optionValue="clienteId"
-            placeholder="Selecciona un cliente"
-            styleClass="w-full"
+          <p-select formControlName="clienteId" [options]="(clientes$ | async) || []" optionLabel="nombreCompleto"
+            optionValue="clienteId" placeholder="Selecciona un cliente" styleClass="w-full"
             [class.border-red-500]="clienteInvalido">
           </p-select>
         </div>
@@ -45,13 +40,8 @@
           <label class="text-[#888888] text-xs font-semibold uppercase tracking-wider">
             Barbero <span class="text-[#C9A84C]">*</span>
           </label>
-          <p-select
-            formControlName="barberoId"
-            [options]="(barberos$ | async) || []"
-            optionLabel="nombreCompleto"
-            optionValue="barberoId"
-            placeholder="Selecciona un barbero"
-            styleClass="w-full"
+          <p-select formControlName="barberoId" [options]="(barberos$ | async) || []" optionLabel="nombreCompleto"
+            optionValue="barberoId" placeholder="Selecciona un barbero" styleClass="w-full"
             [class.border-red-500]="barberoInvalido">
           </p-select>
         </div>
@@ -61,13 +51,8 @@
           <label class="text-[#888888] text-xs font-semibold uppercase tracking-wider">
             Servicio <span class="text-[#C9A84C]">*</span>
           </label>
-          <p-select
-            formControlName="servicioId"
-            [options]="(servicios$ | async) || []"
-            optionLabel="nombre"
-            optionValue="servicioId"
-            placeholder="Selecciona un servicio"
-            styleClass="w-full">
+          <p-select formControlName="servicioId" [options]="(servicios$ | async) || []" optionLabel="nombre"
+            optionValue="servicioId" placeholder="Selecciona un servicio" styleClass="w-full">
           </p-select>
         </div>
 
@@ -76,12 +61,8 @@
           <label class="text-[#888888] text-xs font-semibold uppercase tracking-wider">
             Fecha <span class="text-[#C9A84C]">*</span>
           </label>
-          <p-datepicker
-            formControlName="fecha"
-            [showIcon]="true"
-            [minDate]="today"
-            dateFormat="dd/mm/yy"
-            styleClass="w-full">
+          <p-datepicker formControlName="fecha" [showIcon]="true" [minDate]="today" dateFormat="dd/mm/yy"
+            styleClass="w-full" (onSelect)="onFechaChange()">
           </p-datepicker>
         </div>
 
@@ -90,13 +71,8 @@
           <label class="text-[#888888] text-xs font-semibold uppercase tracking-wider">
             Hora <span class="text-[#C9A84C]">*</span>
           </label>
-          <p-select
-            formControlName="hora"
-            [options]="horarios"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Selecciona una hora"
-            styleClass="w-full">
+          <p-select formControlName="hora" [options]="horarios" optionLabel="label" optionValue="value"
+            placeholder="Selecciona una hora" styleClass="w-full">
           </p-select>
         </div>
 
@@ -105,10 +81,7 @@
           <label class="text-[#888888] text-xs font-semibold uppercase tracking-wider">
             Observaciones
           </label>
-          <textarea
-            pTextarea
-            rows="3"
-            formControlName="observacion"
+          <textarea pTextarea rows="3" formControlName="observacion"
             placeholder="Escribe alguna observación adicional..."
             class="w-full bg-[#2a2a2a] border border-[#333333] rounded-md text-white text-sm px-3 py-2.5 resize-none placeholder-[#888888] focus:outline-none focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C]/30 transition-colors">
           </textarea>
@@ -119,17 +92,13 @@
       <!-- Footer Buttons -->
       <div class="flex justify-end gap-3 px-6 py-4 border-t border-[#333333] bg-black/20">
 
-        <button
-          type="button"
-          (click)="cancelar()"
+        <button type="button" (click)="cancelar()"
           class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold text-[#888888] border border-[#333333] bg-transparent hover:border-[#C9A84C] hover:text-[#C9A84C] transition-colors cursor-pointer">
           <i class="pi pi-times text-xs"></i>
           Cancelar
         </button>
 
-        <button
-          type="submit"
-          [disabled]="isLoading"
+        <button type="submit" [disabled]="isLoading"
           class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold text-black bg-[#C9A84C] hover:bg-[#E2B95A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer">
           <i class="pi pi-calendar-plus text-xs"></i>
           <span *ngIf="!isLoading">Guardar Reserva</span>
@@ -139,59 +108,50 @@
       </div>
 
     </form>
-    <p-dialog
-  [(visible)]="showConfirmDialog"
-  [modal]="true"
-  [closable]="true"
-  [draggable]="false"
-  header="Confirmar Reserva"
-  styleClass="w-full max-w-md">
+    <p-dialog [(visible)]="showConfirmDialog" [modal]="true" [closable]="true" [draggable]="false"
+      header="Confirmar Reserva" styleClass="!bg-[#121212] !border !border-[#333333] w-full max-w-md"
+      [contentStyle]="{'background-color': '#121212', 'color': '#ffffff'}" [style]="{'border-radius': '12px'}">
 
-  <div class="flex flex-col gap-3 py-2 text-sm text-white">
-    <div class="flex justify-between border-b border-[#333333] pb-2">
-      <span class="text-[#888888]">Cliente</span>
-      <span>{{ getClienteNombre() }}</span>
-    </div>
-    <div class="flex justify-between border-b border-[#333333] pb-2">
-      <span class="text-[#888888]">Barbero</span>
-      <span>{{ getBarberoNombre() }}</span>
-    </div>
-    <div class="flex justify-between border-b border-[#333333] pb-2">
-      <span class="text-[#888888]">Servicio</span>
-      <span>{{ getServicioNombre() }}</span>
-    </div>
-    <div class="flex justify-between border-b border-[#333333] pb-2">
-      <span class="text-[#888888]">Fecha</span>
-      <span>{{ reservaPreview?.fechaFormateada }}</span>
-    </div>
-    <div class="flex justify-between">
-      <span class="text-[#888888]">Hora</span>
-      <span>{{ reservaPreview?.hora }}</span>
-    </div>
-  </div>
+      <div class="flex flex-col gap-3 py-2 text-sm text-white">
+        <div class="flex justify-between border-b border-[#333333] pb-2">
+          <span class="text-[#888888]">Cliente</span>
+          <span class="font-semibold">{{ getClienteNombre() }}</span>
+        </div>
+        <div class="flex justify-between border-b border-[#333333] pb-2">
+          <span class="text-[#888888]">Barbero</span>
+          <span class="font-semibold">{{ getBarberoNombre() }}</span>
+        </div>
+        <div class="flex justify-between border-b border-[#333333] pb-2">
+          <span class="text-[#888888]">Servicio</span>
+          <span class="font-semibold">{{ getServicioNombre() }}</span>
+        </div>
+        <div class="flex justify-between border-b border-[#333333] pb-2">
+          <span class="text-[#888888]">Fecha</span>
+          <span class="font-semibold">{{ reservaPreview?.fechaFormateada }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-[#888888]">Hora</span>
+          <span class="font-semibold text-[#C9A84C]">{{ reservaPreview?.hora }}</span>
+        </div>
+      </div>
 
-  <ng-template pTemplate="footer">
-    <div class="flex justify-end gap-3 pt-2">
-      <button
-        type="button"
-        (click)="showConfirmDialog = false"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold text-[#888888] border border-[#333333] bg-transparent hover:border-[#C9A84C] hover:text-[#C9A84C] transition-colors cursor-pointer">
-        <i class="pi pi-times text-xs"></i>
-        Cancelar
-      </button>
-      <button
-        type="button"
-        (click)="confirmarGuardar()"
-        [disabled]="isLoading"
-        class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold text-black bg-[#C9A84C] hover:bg-[#E2B95A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer">
-        <i class="pi pi-check text-xs"></i>
-        <span *ngIf="!isLoading">Confirmar</span>
-        <span *ngIf="isLoading">Guardando...</span>
-      </button>
-    </div>
-  </ng-template>
+      <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-3 pt-2 border-t border-[#333333]">
+          <button type="button" (click)="showConfirmDialog = false"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold text-[#888888] border border-[#333333] bg-transparent hover:border-[#C9A84C] hover:text-[#C9A84C] transition-colors cursor-pointer">
+            <i class="pi pi-times text-xs"></i>
+            Cancelar
+          </button>
+          <button type="button" (click)="confirmarGuardar()" [disabled]="isLoading"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold text-black bg-[#C9A84C] hover:bg-[#E2B95A] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer">
+            <i class="pi pi-check text-xs"></i>
+            <span *ngIf="!isLoading">Confirmar</span>
+            <span *ngIf="isLoading">Guardando...</span>
+          </button>
+        </div>
+      </ng-template>
 
-</p-dialog>
+    </p-dialog>
   </div>
 
 </div>

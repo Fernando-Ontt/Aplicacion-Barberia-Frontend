@@ -72,24 +72,53 @@ export class CreateReserva implements OnInit, OnDestroy {
   serviciosCache: Servicio[] = [];
   servicioFiltro: ServicioFiltro = { page: 0, size: 1000 };
 
-  horarios = [
-    { label: '09:00 AM', value: '09:00', disabled: false },
-    { label: '09:30 AM', value: '09:30', disabled: false },
-    { label: '10:00 AM', value: '10:00', disabled: false },
-    { label: '10:30 AM', value: '10:30', disabled: false },
-    { label: '11:00 AM', value: '11:00', disabled: false },
-    { label: '11:30 AM', value: '11:30', disabled: false },
-    { label: '12:00 PM', value: '12:00', disabled: false },
-    { label: '12:30 PM', value: '12:30', disabled: false },
-    { label: '02:00 PM', value: '14:00', disabled: false },
-    { label: '02:30 PM', value: '14:30', disabled: false },
-    { label: '03:00 PM', value: '15:00', disabled: false },
-    { label: '03:30 PM', value: '15:30', disabled: false },
-    { label: '04:00 PM', value: '16:00', disabled: false },
-    { label: '04:30 PM', value: '16:30', disabled: false },
-    { label: '05:00 PM', value: '17:00', disabled: false }
-  ];
+  get horarios() {
+    const todosLosHorarios = [
+      { label: '09:00 AM', value: '09:00' },
+      { label: '09:30 AM', value: '09:30' },
+      { label: '10:00 AM', value: '10:00' },
+      { label: '10:30 AM', value: '10:30' },
+      { label: '11:00 AM', value: '11:00' },
+      { label: '11:30 AM', value: '11:30' },
+      { label: '12:00 PM', value: '12:00' },
+      { label: '12:30 PM', value: '12:30' },
+      { label: '02:00 PM', value: '14:00' },
+      { label: '02:30 PM', value: '14:30' },
+      { label: '03:00 PM', value: '15:00' },
+      { label: '03:30 PM', value: '15:30' },
+      { label: '04:00 PM', value: '16:00' },
+      { label: '04:30 PM', value: '16:30' },
+      { label: '05:00 PM', value: '17:00' },
+      { label: '05:30 PM', value: '17:30' },
+      { label: '06:00 PM', value: '18:00' },
+      { label: '06:30 PM', value: '18:30' },
+    ];
 
+    const fechaSeleccionada = this.reservaForm?.get('fecha')?.value;
+    if (!fechaSeleccionada) return todosLosHorarios;
+
+    const hoy = new Date();
+    const fechaForm = new Date(fechaSeleccionada as Date);
+
+    const esHoy =
+      fechaForm.getFullYear() === hoy.getFullYear() &&
+      fechaForm.getMonth() === hoy.getMonth() &&
+      fechaForm.getDate() === hoy.getDate();
+
+    if (!esHoy) return todosLosHorarios;
+
+    const horaActual = hoy.getHours();
+    const minActual = hoy.getMinutes();
+
+    return todosLosHorarios.filter(h => {
+      const [hh, mm] = h.value.split(':').map(Number);
+      if (hh < horaActual) return false;
+      if (hh === horaActual && mm <= minActual) return false;
+      return true;
+    });
+  } onFechaChange(): void {
+    this.reservaForm.get('hora')?.reset();
+  }
   reservaForm = this.fb.group({
     clienteId: [null, [Validators.required]],
     barberoId: [null, [Validators.required]],
@@ -311,7 +340,3 @@ export class CreateReserva implements OnInit, OnDestroy {
     return !!control?.invalid && control.touched;
   }
 }
-
-
-
-
