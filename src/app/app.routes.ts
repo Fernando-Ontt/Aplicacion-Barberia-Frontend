@@ -22,6 +22,7 @@ import { PerfilBarbero } from './features/private/components/gestion/barberos/pe
 import { Usuario } from './features/private/components/gestion/usuario/usuario';
 import { PerfilUsuario } from './features/private/components/gestion/usuario/perfil-usuario/perfil-usuario';
 import { CheckoutComponent } from './features/auth/checkout/checkout.component';
+import { PerfilDashboardBarbero } from './features/private/components/perfil-dashboard-barbero/perfil-dashboard-barbero';
 
 export const routes: Routes = [
   {
@@ -119,6 +120,7 @@ export const routes: Routes = [
           { path: 'pagos', loadComponent: () => import('./features/private/components/operaciones/pagos/pagos.component').then(m => m.PagosComponent) },
         ]
       },
+
       {
         path: 'gestion', children: [
           { path: 'clientes', loadComponent: () => import('./features/private/components/gestion/clientes/clientes').then(m => m.Clientes) },
@@ -127,6 +129,7 @@ export const routes: Routes = [
           { path: 'barberos', loadComponent: () => import('./features/private/components/gestion/barberos/barberos').then(m => m.Barberos) },
         ]
       },
+      { path: 'perfil', component: PerfilDashboardBarbero },
       { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
     ]
   },
