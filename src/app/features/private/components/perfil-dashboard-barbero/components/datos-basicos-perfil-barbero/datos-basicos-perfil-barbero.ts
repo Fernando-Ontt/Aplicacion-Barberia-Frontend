@@ -3,10 +3,11 @@ import { PersonaService } from '@/app/core/services/gestion/persona.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Divider } from "primeng/divider";
 
 @Component({
   selector: 'app-datos-basicos-perfil-barbero',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Divider],
   templateUrl: './datos-basicos-perfil-barbero.html',
   styleUrl: './datos-basicos-perfil-barbero.css',
 })

@@ -5,11 +5,12 @@ import { UsuarioService } from '@/app/core/services/auth/usuario.service';
 import { NotificationService } from '@/app/core/services/common/notification.service';
 import { UpdateUsernameRequest } from '@/app/core/models/auth/usuario/update-username-request.model';
 import { ChangePasswordRequest } from '@/app/core/models/auth/usuario/change-password-request.model';
+import { Divider } from "primeng/divider";
 
 @Component({
   selector: 'app-credenciales-perfil-barbero',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Divider],
   templateUrl: './credenciales-perfil-barbero.html',
   styleUrl: './credenciales-perfil-barbero.css',
 })
