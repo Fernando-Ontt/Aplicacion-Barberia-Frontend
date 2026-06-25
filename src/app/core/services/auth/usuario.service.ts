@@ -10,6 +10,7 @@ import { BarberoRegister } from '../../models/auth/usuario/barbero-register.mode
 import { ApiResponse, Page } from '../../models/common/index.model';
 import { AssignRolesRequest, Permiso, Rol, UsuarioTablaResponse } from '../../models/gestion/usuario.model';
 import { AdminRegister } from '../../models/auth/usuario/admin-register.model';
+import { ChangePasswordRequest } from '../../models/auth/usuario/change-password-request.model';
 
 @Injectable({
     providedIn: 'root'
@@ -198,6 +199,13 @@ export class UsuarioService {
             { params }
         );
     }
+changeMyPassword(data: ChangePasswordRequest): Observable<any> {
+    return this.http.patch<any>(
+        `${this.apiUrl}/me/change-password`,
+        data
+    );
+}
+    
 
 
 

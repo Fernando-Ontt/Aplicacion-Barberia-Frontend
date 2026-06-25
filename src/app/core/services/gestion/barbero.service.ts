@@ -191,4 +191,9 @@ logout(): Observable<ApiResponse<string>> {
     );
 }
 
+obtenerMiBarberoId(): Observable<ApiResponse<number>> {
+    return this.http.get<ApiResponse<number>>(
+        `${this.apiUrl}/mi-barbero`
+    );
+}
 }
