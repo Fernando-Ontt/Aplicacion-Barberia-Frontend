@@ -8,6 +8,7 @@ import { BOOLEAN_FILTERS, CATEGORIA_OPTIONS, CAUSA_RECLAMO_OPTIONS, ESTADO_RECLA
 import { ReclamoFiltro } from "../models/operaciones/reclamos-model/reclamo.filtro.model";
 import { VentaFiltro } from "../models/ventas/venta.model";
 import { HistorialClienteFiltro } from "../models/operaciones/historial-cliente.model";
+import { HistorialBarberFiltro } from "../models/operaciones/historial-barbero.model";
 
 
 
@@ -102,6 +103,27 @@ export const FILTROS_HISTORIAL: FilterField<HistorialClienteFiltro>[] = [
             label: e,
             value: e
         }))
+    },
+    {
+        key: 'desde',
+        label: 'Desde',
+        type: 'date',
+        placeholder: 'Fecha inicio'
+    },
+    {
+        key: 'hasta',
+        label: 'Hasta',
+        type: 'date',
+        placeholder: 'Fecha fin',
+        endOfDay: true
+    }
+];
+export const FILTROS_HISTORIAL_BARBERO: FilterField<HistorialBarberFiltro>[] = [
+    {
+        key: 'clienteNombre',
+        label: 'Cliente',
+        type: 'text',
+        placeholder: 'Buscar por nombre del cliente'
     },
     {
         key: 'desde',
