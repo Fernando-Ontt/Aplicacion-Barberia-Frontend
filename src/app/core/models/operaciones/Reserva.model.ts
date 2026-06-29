@@ -3,6 +3,7 @@ import { EstadoReserva } from './EstadoReserva';
 
 export interface Reserva{
     id: number;
+    reservaId: number;
     clienteNombre: string;
     barberoNombre: string;
     servicio: string;

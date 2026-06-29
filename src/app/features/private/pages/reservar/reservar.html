@@ -99,12 +99,15 @@
                                 <label class="block text-sm font-medium text-gray-300 mb-2">
                                     Fecha <span class="text-red-500">*</span>
                                 </label>
-                                <input type="date" [formControlName]="'fecha'" [min]="getFechaMinimaInput()"
-                                    (change)="onFechaChange()"
-                                    class="w-full px-4 py-2 bg-black border border-neutral-800 rounded-xl text-white focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 transition-all"
-                                    [class.border-red-500]="fechaInvalida">
+
+                                <p-datepicker formControlName="fecha" [minDate]="getFechaMinima()" [showIcon]="true"
+                                    dateFormat="dd/mm/yy" (onSelect)="onFechaChange()" styleClass="w-full">
+                                </p-datepicker>
+
                                 @if (fechaInvalida) {
-                                <p class="text-red-500 text-xs mt-1">{{ fechaErrorMensaje }}</p>
+                                <p class="text-red-500 text-xs mt-1">
+                                    {{ fechaErrorMensaje }}
+                                </p>
                                 }
                             </div>
 

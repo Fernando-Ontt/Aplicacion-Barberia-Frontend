@@ -55,5 +55,9 @@ export class ReservaService {
     return this.http.get<ApiResponse<Reserva>>(`${this.API2}/${id}`);
   }
 
+  pagarReserva(id: number): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(`${this.API2}/${id}/pagar`, {});
+  }
+
 
 }
