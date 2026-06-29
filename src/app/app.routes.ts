@@ -119,6 +119,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
       { path: 'resumen', loadComponent: () => import('./features/private/components/resumen/resumen-barbero').then(m => m.ResumenBarbero) },
       { path: 'reservas', loadComponent: () => import('./features/private/components/reserva/reserva').then(m => m.ReservaComponent) },
+      { path: 'cortes', loadComponent: () => import('./features/private/components/cortes/cortes').then(m => m.CortesComponent) },
       {
         path: 'operaciones', children: [
           { path: 'ventas', loadComponent: () => import('./features/private/components/operaciones/ventas/ventas.component').then(m => m.VentasComponent) },
@@ -168,6 +169,7 @@ export const routes: Routes = [
           { path: 'historial', loadComponent: () => import('./features/private/pages/historial/historial.component').then(m => m.ClienteHistorialComponent) },
           { path: 'rewards', loadComponent: () => import('./features/private/pages/rewards/rewards.component').then(m => m.RewardsComponent) },
           { path: 'perfil', loadComponent: () => import('./features/private/pages/perfil/perfil.component').then(m => m.PerfilComponent) },
+          {path: 'checkout/:reservaId', loadComponent: () => import('./features/private/pages/checkout/checkout').then(m => m.CheckoutComponent)},
           { path: '**', loadComponent: () => import('./shared/components/error404/error404.component').then(m => m.Error404Component) }
         ]
       },

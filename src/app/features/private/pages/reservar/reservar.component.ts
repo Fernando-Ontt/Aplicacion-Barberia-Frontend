@@ -158,37 +158,36 @@ export class ReservarComponent implements OnInit, OnDestroy {
   onFechaChange(): void {
     this.citaForm.get('hora')?.reset();
   }
-
   getFechaFormateada(): string {
     const fecha = this.citaForm.get('fecha')?.value;
+
     if (!fecha) return '';
 
-    const fechaObj = new Date(fecha);
-    const options: Intl.DateTimeFormatOptions = {
+    return (fecha as Date).toLocaleDateString('es-ES', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    };
-
-    return fechaObj.toLocaleDateString('es-ES', options);
+    });
   }
 
 
   fechaValida(control: AbstractControl): ValidationErrors | null {
-    const fecha = control.value;
+    const fecha = control.value as Date;
+
     if (!fecha) return null;
 
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
-    if (fecha < hoy) {
+    const fechaComparar = new Date(fecha);
+    fechaComparar.setHours(0, 0, 0, 0);
+
+    if (fechaComparar < hoy) {
       return { fechaInvalida: true };
     }
 
-
-    const fechaObj = new Date(fecha);
-    if (fechaObj.getDay() === 0) {
+    if (fechaComparar.getDay() === 0) {
       return { domingo: true };
     }
 

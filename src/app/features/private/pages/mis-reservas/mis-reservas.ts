@@ -34,7 +34,7 @@ import { Reserva } from '@/app/core/models/operaciones/Reserva.model';
   styleUrls: ['./mis-reservas.css']
 })
 export class MisReservasComponent implements OnInit {
-  
+
   private reservaService = inject(ReservaService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
@@ -69,14 +69,14 @@ export class MisReservasComponent implements OnInit {
 
   cargarMisReservas(event?: TableLazyLoadEvent): void {
     this.loading = true;
-    
+
     // Obtener página y tamaño del evento de PrimeNG
     const page = event ? Math.floor((event.first || 0) / (event.rows || this.rows)) : this.currentPage;
     const size = event?.rows || this.rows;
-    
+
     this.currentPage = page;
     this.rows = size;
-    
+
     console.log(`Cargando reservas - Página: ${page}, Tamaño: ${size}`);
 
     this.reservaService.getMisReservas(page, size)
@@ -87,7 +87,7 @@ export class MisReservasComponent implements OnInit {
       .subscribe({
         next: (response: ApiResponse<Page<Reserva>>) => {
           console.log('Respuesta del API:', response);
-          
+
           if (response.success && response.data) {
             // Mapear los campos correctamente
             this.reservas = response.data.content.map(item => ({
@@ -95,10 +95,10 @@ export class MisReservasComponent implements OnInit {
               id: item.id, // Asegurar que id esté disponible
               estado: item.estadoReserva // Normalizar el nombre del campo
             }));
-            
+
             this.totalRecords = response.data.totalElements;
             this.rows = response.data.pageSize || size;
-            
+
             console.log(`Reservas cargadas: ${this.reservas.length} de ${this.totalRecords}`);
             console.log('Primera reserva:', this.reservas[0]);
           } else {
@@ -136,8 +136,10 @@ export class MisReservasComponent implements OnInit {
   }
 
   cancelarReserva(reserva: Reserva): void {
-    const id = reserva.id || reserva.id;
-    
+    const id = reserva.reservaId || reserva.id;
+    console.log(reserva);
+    console.log('ID:', id);
+
     this.confirmationService.confirm({
       message: `¿Cancelar la reserva del servicio "${reserva.servicio}"?`,
       header: 'Confirmar cancelación',
@@ -146,7 +148,7 @@ export class MisReservasComponent implements OnInit {
       rejectLabel: 'No',
       accept: () => {
         this.loading = true;
-        this.reservaService.cancelarReserva(id!)
+        this.reservaService.cancelarReserva(id)
           .pipe(finalize(() => this.loading = false))
           .subscribe({
             next: (response) => {
@@ -177,7 +179,7 @@ export class MisReservasComponent implements OnInit {
   }
 
   puedeCancelar(reserva: Reserva): boolean {
-    const estadosPermitidos = ['PENDIENTE', 'CONFIRMADA'];
+    const estadosPermitidos = ['PENDIENTE_PAGO'];
     const estadoActual = reserva.estadoReserva || reserva.estadoReserva;
     return estadosPermitidos.includes(estadoActual || '');
   }
@@ -198,10 +200,17 @@ export class MisReservasComponent implements OnInit {
   }
 
   irNuevaReserva(): void {
-    this.router.navigate(['/dashboard/cliente/reservas/nueva']);
+    this.router.navigate(['/mi-cuenta/reservar/agendar']);
   }
 
   recargar(): void {
     this.cargarMisReservas();
+  }
+
+  irAPagar(reserva: Reserva): void {
+    this.router.navigate(['/mi-cuenta/checkout', reserva.reservaId]);
+  }
+  puedePagar(reserva: Reserva): boolean {
+    return reserva.estadoReserva === 'PENDIENTE_PAGO';
   }
 }

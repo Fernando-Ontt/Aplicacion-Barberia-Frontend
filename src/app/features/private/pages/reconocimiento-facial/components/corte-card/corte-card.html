@@ -18,10 +18,7 @@
 
             @for(star of [1,2,3,4,5]; track star){
 
-            <span
-                class="star"
-                [class.activa]="rating >= star"
-                (click)="calificar(star)">
+            <span class="star" [class.activa]="rating >= star" (click)="calificar(star)">
 
                 ★
 
@@ -39,30 +36,56 @@
 
     <div class="acciones">
 
-        <button
-            class="btn-ver"
-            (click)="abrirModal()">
+        <button class="btn-ver" (click)="abrirModal()">
 
             Ver imagen
 
         </button>
 
-        <button
-            class="btn-like"
-            [class.activo]="liked"
-            (click)="like()">
+        <button class="btn-preview" (click)="probarConIA()">
+
+            Usar IA
+
+        </button>
+
+        <button class="btn-like" [class.activo]="liked" (click)="like()">
 
             👍
         </button>
 
-        <button
-            class="btn-dislike"
-            [class.activo]="dislike"
-            (click)="dislike()">
+        <button class="btn-dislike" [class.activo]="dislike" (click)="dislike()">
 
             👎
         </button>
 
+        
+
     </div>
 
 </div>
+
+@if(modalIaAbierto){
+<div class="modal-backdrop" (click)="modalIaAbierto = false">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <button class="btn-cerrar" (click)="modalIaAbierto = false">✕</button>
+
+    <h2>¿Cómo me quedaría?</h2>
+    <p class="subtitulo">{{ corte.nombre }}</p>
+
+    <div class="foto-container">
+      <img [src]="fotoPreview" alt="Tu foto" />
+    </div>
+
+   @if(cargandoIA){
+  <div class="ia-loading">✨ Generando tu nuevo look...</div>
+}
+
+@if(imagenIA){
+  <div class="foto-container">
+    <img [attr.src]="imagenIA" alt="Tu nuevo look" />
+  </div>
+}
+  </div>
+</div>
+}

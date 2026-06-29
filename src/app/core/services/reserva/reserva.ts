@@ -4,6 +4,19 @@ import { Observable } from 'rxjs';
 import { CitaBarberoResponseDTO, EstadoCita } from '../../models/reserva/reserva.model';
 import { environment } from '@/environments/environment.development';
 
+export interface ServicioHistorialDTO {
+  idReserva: number;
+  nombreCliente: string;
+  apellidoCliente: string;
+  telefonoCliente: string;
+  nombreCorte: string;
+  fecha: string;
+  horaInicio: string;
+  duracion: number;
+  precio: number;
+  estado: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,5 +35,8 @@ export class Reservas {
     });
   }
 
-}
+  getHistorialServicios(): Observable<ServicioHistorialDTO[]> {
+    return this.http.get<ServicioHistorialDTO[]>(`${this.baseUrl}/historial`);
+  }
 
+}
