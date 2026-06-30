@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, tap } from 'rxjs';
 import { TokenService } from './token.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { RefreshRequest } from '../../models/auth/refreshRequest.model';
 import { LoginRequest, LoginResponse } from '../../models/auth/loginResponse.model';
 import { ApiResponse } from '../../models/common/index.model';

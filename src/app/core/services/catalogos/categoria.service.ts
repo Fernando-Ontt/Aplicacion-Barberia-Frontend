@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, Page } from '../../models/common/index.model';
 import { of, tap } from 'rxjs';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { Categoria, CategoriaFiltro, CategoriaRequest, CategoriaTipo, } from '../../models/catalogos/categorias.model';
 import { buildHttpParamsComponent } from '@/app/shared/utils/build-http-params.component';
 

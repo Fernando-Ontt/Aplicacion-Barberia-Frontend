@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse, Page } from '../../models/common/index.model';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { buildHttpParamsComponent } from '@/app/shared/utils/build-http-params.component';
 import { Producto, ProductoFiltro, ProductoRequest } from '../../models/catalogos/productos.model';
 

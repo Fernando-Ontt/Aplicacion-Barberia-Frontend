@@ -22,7 +22,7 @@ import { TokenService } from '../../../core/services/auth/token.service';
 import { NotificationService } from '../../../core/services/common/notification.service';
 import { LogoComponent } from '@/app/shared/components/logo/logo.component';
 import { campoInvalido } from '@/app/shared/utils/form-utils.component';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 export interface GoogleCredentialResponse {
   credential: string;

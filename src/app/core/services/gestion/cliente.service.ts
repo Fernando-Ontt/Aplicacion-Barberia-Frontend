@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cliente } from '../../models/gestion/cliente/cliente.model';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { ClienteResumen } from '../../models/gestion/cliente/ClienteResumen.model';
 import { ClienteDetalleResumen } from '../../models/gestion/cliente/cliente-detalle-resumen.model';
 import { ActividadReciente } from '../../models/gestion/cliente/ActividadReciente.model';

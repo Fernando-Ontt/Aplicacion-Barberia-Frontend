@@ -11,7 +11,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { Servicio } from '@/app/core/models/catalogos/servicios.model';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { ConfirmPopoverComponent } from '@/app/shared/components/confirm-popover/confirm-popover.component';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge.component';
 import { SafeImageUrlPipe } from '@/app/shared/pipes/safe-image-url.pipe';

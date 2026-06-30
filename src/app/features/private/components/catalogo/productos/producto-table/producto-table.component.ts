@@ -13,7 +13,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ConfirmPopoverComponent } from '@/app/shared/components/confirm-popover/confirm-popover.component';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge.component';
 import { Producto } from '@/app/core/models/catalogos/productos.model';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { SafeImageUrlPipe } from '@/app/shared/pipes/safe-image-url.pipe';
 import { INVENTARIO_CONFIG } from '@/app/core/config/valores.config';
 import { SolesPipe } from '@/app/shared/pipes/moneda.pipe';
