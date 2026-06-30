@@ -166,6 +166,26 @@
                                     }
                                 </div>
 
+                                <!-- detalle solucion -->
+                                <div class="rounded-xl border border-default p-5">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <i class="pi pi-lock"></i>
+                                        <h4 class="font-semibold">
+                                            Detalle Solucion 
+                                        </h4>
+                                    </div>
+
+                                    @if (reclamo.detalleSolucion) {
+                                        <p class="leading-relaxed">
+                                            {{ reclamo.detalleSolucion }}
+                                        </p>
+                                    } @else {
+                                        <p class="italic text-gray-500">
+                                            Sin detalle de solución.
+                                        </p>
+                                    }
+                                </div>
+
                             </div>
                         </td>
                     </tr>

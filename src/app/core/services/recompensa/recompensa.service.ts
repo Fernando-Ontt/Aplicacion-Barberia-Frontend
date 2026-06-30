@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@/environments/environment.development';
 import { ApiResponse } from '../../models/common/index.model';
-import { Recompensa } from '../../models/recompensas/Recompensa.model';
+import { Recompensa } from '../../models/recompensa/Recompensa.model';
 
 @Injectable({
   providedIn: 'root'

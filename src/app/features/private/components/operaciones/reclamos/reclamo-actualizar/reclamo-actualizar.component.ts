@@ -55,6 +55,7 @@ export class ReclamoActualizarComponent implements OnInit, OnChanges {
       solucionReclamo: [null],
       notasInternas:   [''],
       montoCompensado: [null, Validators.min(0)],
+      detalleSolucion: [''],
     });
   }
 
@@ -65,6 +66,7 @@ export class ReclamoActualizarComponent implements OnInit, OnChanges {
       solucionReclamo: this.reclamo.solucionReclamo ?? null,
       notasInternas:   this.reclamo.notasInternas   ?? '',
       montoCompensado: this.reclamo.montoCompensado ?? null,
+      detalleSolucion: this.reclamo.detalleSolucion ?? '',
     });
     this.actualizarForm.markAsPristine();
     this.actualizarForm.markAsUntouched();
@@ -81,6 +83,7 @@ export class ReclamoActualizarComponent implements OnInit, OnChanges {
       solucionReclamo: v.solucionReclamo ?? undefined,
       notasInternas:   v.notasInternas   || undefined,
       montoCompensado: v.montoCompensado ?? undefined,
+      detalleSolucion: v.detalleSolucion || undefined,
     };
     this.guardar.emit(request);
   }

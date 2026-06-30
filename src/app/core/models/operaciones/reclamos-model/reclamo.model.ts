@@ -21,6 +21,7 @@ export interface ReclamoResponse {
     estadoReclamo: EstadoReclamo;
     solucionReclamo: SolucionReclamo;
     descripcion: string;
+    detalleSolucion: string;
     notasInternas: string;
     montoReclamado: number; 
     montoCompensado: number;
@@ -43,6 +44,7 @@ export interface ReclamoRequest {
     tipoReclamacion: TipoReclamacion;
     tipoProblema: TipoProblema;
     causaReclamo?: CausaReclamo;
+    detalleSolucion?: string;
     descripcion: string;
     montoReclamado?: number;
     fechaOcurrencia?: string;
@@ -71,6 +73,7 @@ export interface ReclamoSolucionRequest {
     solucionReclamo?: SolucionReclamo;
     notasInternas?: string;
     montoCompensado?: number;
+    detalleSolucion?: string;
     descripcionSolucion?: string;
 }
 
