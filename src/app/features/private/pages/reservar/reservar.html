@@ -100,9 +100,9 @@
                                     Fecha <span class="text-red-500">*</span>
                                 </label>
 
-                                <p-datepicker formControlName="fecha" [minDate]="getFechaMinima()" [showIcon]="true"
-                                    dateFormat="dd/mm/yy" (onSelect)="onFechaChange()" styleClass="w-full">
-                                </p-datepicker>
+                                <p-datepicker formControlName="fecha" [minDate]="minDateCita" [maxDate]="maxDateCita" [showIcon]="true"
+    dateFormat="dd/mm/yy" (onSelect)="onFechaChange()" styleClass="w-full">
+</p-datepicker>
 
                                 @if (fechaInvalida) {
                                 <p class="text-red-500 text-xs mt-1">
@@ -116,10 +116,10 @@
                                     Hora <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
-                                    <p-select formControlName="hora" [options]="horarios" optionLabel="label"
-                                        optionValue="value" placeholder="Selecciona una hora" class="w-full"
-                                        [disabled]="checkingDisponibility">
-                                    </p-select>
+                                   <p-select formControlName="hora" [options]="horariosDisponibles" optionLabel="label"
+    optionValue="value" placeholder="Selecciona una hora" class="w-full"
+    [disabled]="checkingDisponibility">
+</p-select>
                                     @if (checkingDisponibility) {
                                     <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
                                         <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-yellow-500">
