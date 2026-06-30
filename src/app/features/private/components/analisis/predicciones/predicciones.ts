@@ -26,10 +26,11 @@ export class Predicciones implements OnInit {
     this.analisis = null;
 
     this.analisisService.getPredicciones().subscribe({
-      next: (data: AnalisisIA) => {
-        this.analisis = data;
-        this.cargando = false;
-      },
+next: (data: AnalisisIA) => {
+  console.log('Respuesta raw:', data);
+  this.analisis = data;
+  this.cargando = false;
+},
       error: () => {
         this.error = 'No se pudo conectar con el servidor.';
         this.cargando = false;
@@ -50,8 +51,8 @@ export class Predicciones implements OnInit {
     return `badge ${this.getBadge(nivel)}`;
   }
 
-  contarPorNivel(nivel: string): number {
-    return this.analisis?.clientesEnRiesgo
-      .filter(c => c.nivelRiesgo === nivel).length ?? 0;
-  }
+contarPorNivel(nivel: string): number {
+  return (this.analisis?.clientesEnRiesgo ?? [])
+    .filter(c => c.nivelRiesgo === nivel).length;
+}
 }

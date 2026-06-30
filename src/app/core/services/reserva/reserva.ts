@@ -39,4 +39,11 @@ export class Reservas {
     return this.http.get<ServicioHistorialDTO[]>(`${this.baseUrl}/historial`);
   }
 
+getHistorialCortesBarbero(desde?: string, hasta?: string, clienteNombre?: string): Observable<any> {
+  const params: any = {};
+  if (desde) params['desde'] = desde;
+  if (hasta) params['hasta'] = hasta;
+  if (clienteNombre) params['clienteNombre'] = clienteNombre;
+  return this.http.get<any>(`${environment.apiUrl}/barbero/historial`, { params });
+}
 }

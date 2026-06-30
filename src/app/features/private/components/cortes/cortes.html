@@ -5,7 +5,7 @@
         class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between px-6 py-4 border-b border-brand-gold-soft bg-brand-black rounded-xl">
 
         <h1 class="text-lg font-semibold text-brand-gold text-center md:text-start">
-            <i class="pi pi-history"></i> Historial de Servicios
+            <i class="pi pi-history"></i> Historial de Cortes
         </h1>
 
         <div class="flex items-center gap-3">
@@ -13,8 +13,12 @@
                 {{ serviciosFiltrados.length }} servicio{{ serviciosFiltrados.length !== 1 ? 's' : '' }}
             </span>
 
-            <button type="button" (click)="cargarHistorial()" [disabled]="cargando"
+            <button
+                type="button"
+                (click)="cargarHistorial()"
+                [disabled]="cargando"
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-zinc-300 border border-ui-border bg-ui-card hover:border-brand-gold hover:text-brand-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer whitespace-nowrap">
+
                 <i class="pi pi-refresh" [class.pi-spin]="cargando"></i>
                 Actualizar
             </button>
@@ -22,63 +26,34 @@
     </aside>
 
     <!-- FILTROS -->
-    <div class="table-base p-4 md:p-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+     <app-filtros
+  [fields]="filtrosFields"
+  [titulo]="'Historial'"
+  [text]="'Buscar cortes'"
+  [acordeon]="true"
+  (buscar)="onBuscar($event)"
+  (limpiar)="onLimpiar()">
+</app-filtros>
 
-            <!-- Cliente -->
-            <div class="flex flex-col gap-1.5">
-                <label class="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
-                    Cliente
-                </label>
-                <div class="relative">
-                    <i
-                        class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm pointer-events-none z-10"></i>
-                    <input type="text" [(ngModel)]="filtros.cliente" (ngModelChange)="aplicarFiltros()"
-                        placeholder="Buscar por nombre del cliente"
-                        class="w-full !pl-10 pr-3 py-2.5 bg-ui-card border border-ui-border rounded-lg text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-brand-gold transition-colors">
-                </div>
-            </div>
-
-            <!-- Fecha desde -->
-            <div class="flex flex-col gap-1.5">
-                <label class="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
-                    Desde
-                </label>
-                <input type="date" [(ngModel)]="filtros.fechaDesde" (ngModelChange)="onFechaDesdeChange()"
-                    class="w-full px-3 py-2.5 bg-ui-card border border-ui-border rounded-lg text-white text-sm focus:outline-none focus:border-brand-gold transition-colors [color-scheme:dark]">
-            </div>
-
-            <!-- Fecha hasta -->
-            <div class="flex flex-col gap-1.5">
-                <label class="text-zinc-500 text-xs font-semibold uppercase tracking-wider">
-                    Hasta
-                </label>
-                <input type="date" [(ngModel)]="filtros.fechaHasta" [min]="filtros.fechaDesde"
-                    (ngModelChange)="aplicarFiltros()"
-                    class="w-full px-3 py-2.5 bg-ui-card border border-ui-border rounded-lg text-white text-sm focus:outline-none focus:border-brand-gold transition-colors [color-scheme:dark]">
-            </div>
-
-        </div>
-
-        <div *ngIf="hayFiltrosActivos" class="mt-3 flex justify-end">
-            <button (click)="limpiarFiltros()"
-                class="text-xs text-zinc-500 hover:text-brand-gold transition-colors flex items-center gap-1.5 cursor-pointer">
-                <i class="pi pi-times text-xs"></i>
-                Limpiar filtros
-            </button>
-        </div>
-    </div>
 
     <!-- TABLA -->
     <div class="table-base p-4 md:p-6">
+
         <div class="relative w-full overflow-x-auto">
 
-            <p-table [value]="serviciosFiltrados" [loading]="cargando" [paginator]="true" [rows]="10"
+            <p-table
+                [value]="serviciosFiltrados"
+                [loading]="cargando"
+                [paginator]="true"
+                [rows]="10"
                 [showCurrentPageReport]="true"
-                currentPageReportTemplate="Viendo {first} a {last} de {totalRecords} entradas" [tableStyle]="{
-          'min-width': '950px',
-          'table-layout': 'fixed'
-        }" dataKey="idReserva" class="rounded-xl">
+                currentPageReportTemplate="Viendo {first} a {last} de {totalRecords} entradas"
+                [tableStyle]="{
+                    'min-width': '950px',
+                    'table-layout': 'fixed'
+                }"
+                dataKey="reservaId"
+                class="rounded-xl">
 
                 <!-- HEADER -->
                 <ng-template pTemplate="header">
@@ -126,7 +101,7 @@
 
                         <!-- ID -->
                         <td class="texto whitespace-nowrap text-center" style="width: 55px">
-                            #{{ servicio.idReserva }}
+                            #{{ servicio.reservaId }}
                         </td>
 
                         <!-- CLIENTE -->
@@ -135,11 +110,7 @@
                             <div class="flex flex-col items-center">
 
                                 <span class="font-medium text-white">
-                                    {{ servicio.nombreCliente }} {{ servicio.apellidoCliente }}
-                                </span>
-
-                                <span class="text-xs text-zinc-500 mt-1">
-                                    {{ servicio.telefonoCliente }}
+                                    {{ servicio.clienteNombre }} {{ servicio.clienteApellido }}
                                 </span>
 
                             </div>
@@ -148,7 +119,7 @@
 
                         <!-- SERVICIO -->
                         <td class="texto whitespace-nowrap text-center" style="width: 130px">
-                            {{ servicio.nombreCorte || '—' }}
+                            {{ servicio.servicioNombre || '—' }}
                         </td>
 
                         <!-- FECHA -->
@@ -168,33 +139,32 @@
 
                         <!-- PRECIO -->
                         <td class="whitespace-nowrap text-center" style="width: 100px">
+
                             <span class="font-semibold text-brand-gold">
                                 S/ {{ servicio.precio | number:'1.2-2' }}
                             </span>
+
                         </td>
 
                         <!-- ESTADO -->
                         <td class="whitespace-nowrap text-center" style="width: 110px">
 
                             @if (servicio.estado === 'FINALIZADA') {
-                            <span
-                                class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/30">
-                                Finalizada
-                            </span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/30">
+                                    Finalizada
+                                </span>
                             }
 
                             @if (servicio.estado === 'CANCELADA' || servicio.estado === 'CANCELADA_AUTOMATICA') {
-                            <span
-                                class="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/30">
-                                Cancelada
-                            </span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/30">
+                                    Cancelada
+                                </span>
                             }
 
                             @if (servicio.estado === 'NO_ASISTIO') {
-                            <span
-                                class="px-3 py-1 rounded-full text-xs font-semibold bg-zinc-500/10 text-zinc-400 border border-zinc-500/30">
-                                No asistió
-                            </span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-zinc-500/10 text-zinc-400 border border-zinc-500/30">
+                                    No asistió
+                                </span>
                             }
 
                         </td>
@@ -205,22 +175,33 @@
 
                 <!-- EMPTY -->
                 <ng-template pTemplate="emptymessage">
+
                     <tr>
+
                         <td colspan="8" class="py-12 text-center">
+
                             <div class="flex flex-col items-center gap-2 text-zinc-500">
+
                                 <i class="pi pi-inbox text-4xl opacity-30"></i>
+
                                 <p class="text-sm">
-                                    {{ hayFiltrosActivos ? 'No se encontraron servicios con esos filtros' : 'Aún no
-                                    tienes servicios registrados' }}
+                                    {{ hayFiltrosActivos
+                                        ? 'No se encontraron servicios con esos filtros'
+                                        : 'Aún no tienes servicios registrados' }}
                                 </p>
+
                             </div>
+
                         </td>
+
                     </tr>
+
                 </ng-template>
 
             </p-table>
 
         </div>
+
     </div>
 
 </div>

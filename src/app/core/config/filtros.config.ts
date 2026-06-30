@@ -7,6 +7,9 @@ import { FilterField } from "../models/common/filtro.model";
 import { BOOLEAN_FILTERS, CATEGORIA_OPTIONS, CAUSA_RECLAMO_OPTIONS, ESTADO_RECLAMO_OPTIONS, TIPO_PROBLEMA_OPTIONS, TIPO_RECLAMACION_OPTIONS } from "../models/common/select.option.model";
 import { ReclamoFiltro } from "../models/operaciones/reclamos-model/reclamo.filtro.model";
 import { VentaFiltro } from "../models/ventas/venta.model";
+import { HistorialClienteFiltro } from "../models/operaciones/historial-cliente.model";
+import { HistorialBarberFiltro } from "../models/operaciones/historial-barbero.model";
+
 
 
 export const FILTROS_CATEGORIA: FilterField<CategoriaFiltro>[] = [
@@ -89,4 +92,50 @@ export const FILTROS_VENTA: FilterField<VentaFiltro>[] = [
     ], placeholder: 'Todos' },
     { key: 'fechaInicio', label: 'Fecha de inicio', type: 'date', placeholder: 'Desde' },
     { key: 'fechaFin', label: 'Fecha de fin', type: 'date', placeholder: 'Hasta', endOfDay: true }
+];
+export const FILTROS_HISTORIAL: FilterField<HistorialClienteFiltro>[] = [
+    {
+        key: 'estado',
+        label: 'Estado',
+        type: 'select',
+        placeholder: 'Seleccione estado',
+        options: Object.values(EstadoReserva).map(e => ({
+            label: e,
+            value: e
+        }))
+    },
+    {
+        key: 'desde',
+        label: 'Desde',
+        type: 'date',
+        placeholder: 'Fecha inicio'
+    },
+    {
+        key: 'hasta',
+        label: 'Hasta',
+        type: 'date',
+        placeholder: 'Fecha fin',
+        endOfDay: true
+    }
+];
+export const FILTROS_HISTORIAL_BARBERO: FilterField<HistorialBarberFiltro>[] = [
+    {
+        key: 'clienteNombre',
+        label: 'Cliente',
+        type: 'text',
+        placeholder: 'Buscar por nombre del cliente'
+    },
+    {
+        key: 'desde',
+        label: 'Desde',
+        type: 'date',
+        placeholder: 'Fecha inicio'
+    },
+    {
+        key: 'hasta',
+        label: 'Hasta',
+        type: 'date',
+        placeholder: 'Fecha fin',
+        endOfDay: true
+    }
 ];

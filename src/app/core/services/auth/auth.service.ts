@@ -78,4 +78,7 @@ cambiarPassword(passwordActual: string, passwordNueva: string): Observable<ApiRe
     passwordNueva,
   });
 }
+verificarTokenReset(token: string): Observable<void> {
+  return this.http.get<void>(`${this.API}/verificar-token?token=${token}`);
+}
 }

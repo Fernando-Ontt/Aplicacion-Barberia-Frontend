@@ -35,6 +35,8 @@ export class ResetPassword implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
+  mostrarNueva = false;
+mostrarConfirmar = false;
   formulario!: FormGroup;
   loading = false;
   submitted = false;
@@ -44,10 +46,11 @@ export class ResetPassword implements OnInit {
 
   campoInvalido = (campo: string) => campoInvalido(this.formulario, campo, this.submitted);
 
-  ngOnInit() {
-    this.readToken();
-    this.initForm();
-  }
+ngOnInit() {
+  this.readToken();
+  this.initForm();
+  this.verificarToken(); 
+}
 
   readToken() {
     this.route.queryParams.subscribe((params) => {
@@ -123,6 +126,17 @@ export class ResetPassword implements OnInit {
         },
       });
   }
+  tokenInvalido = false;
+
+verificarToken() {
+  if (!this.token) return;
+  this.authService.verificarTokenReset(this.token).subscribe({
+    error: () => {
+      this.tokenInvalido = true;
+      this.errorMessage = 'Este enlace ya fue utilizado o ha expirado.';
+    }
+  });
+}
 }
 
 
