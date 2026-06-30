@@ -210,7 +210,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
   }
 
   private calcularHorarios(): { label: string; value: string }[] {
-    const fechaSeleccionada as any= this.citaForm.get('fecha')?.value;
+    const fechaSeleccionada:any = this.citaForm.get('fecha')?.value;
     if (!fechaSeleccionada) return this.TODOS_LOS_HORARIOS;
 
     const hoy = new Date();
