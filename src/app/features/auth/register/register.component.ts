@@ -11,7 +11,7 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { campoInvalido, marcarFormulario } from '@/app/shared/utils/form-utils.component';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { finalize } from 'rxjs';
 
 export interface GoogleCredentialResponse {

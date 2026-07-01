@@ -8,7 +8,7 @@ import { ReclamoService } from '@/app/core/services/operaciones/reclamo.service'
 import { ReclamoResponse } from '@/app/core/models/operaciones/reclamos-model/reclamo.model';
 import { NotificationService } from '@/app/core/services/common/notification.service';
 import { ImageModule } from 'primeng/image';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { formatearTexto } from '@/app/shared/utils/formatear-text.utils.component';
 import { SafeImageUrlPipe } from '@/app/shared/pipes/safe-image-url.pipe';
 

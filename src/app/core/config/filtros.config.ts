@@ -11,7 +11,6 @@ import { HistorialClienteFiltro } from "../models/operaciones/historial-cliente.
 import { HistorialBarberFiltro } from "../models/operaciones/historial-barbero.model";
 
 
-
 export const FILTROS_CATEGORIA: FilterField<CategoriaFiltro>[] = [
     { key: 'nombre', label: 'Nombre', type: 'text', placeholder: 'Buscar categoría' },
     { key: 'tipo', label: 'Tipo', type: 'select', options: CATEGORIA_OPTIONS, placeholder: 'Seleccione tipo' },
@@ -65,31 +64,24 @@ export const FILTROS_RECLAMO: FilterField<ReclamoFiltro>[] = [
     { key: 'fechaInicio', label: 'Fecha de inicio', type: 'date', placeholder: 'Desde' },
     { key: 'fechaFin', label: 'Fecha de fin', type: 'date', placeholder: 'Hasta', endOfDay: true },
 ]
+
 export const FILTROS_REPORTE: FilterField<ReporteFiltro>[] = [
     { key: 'desde', label: 'Desde', type: 'date', placeholder: 'Fecha inicio' },
     { key: 'hasta', label: 'Hasta', type: 'date', placeholder: 'Fecha fin' },
     { key: 'barberoId', label: 'Barbero', type: 'select', placeholder: 'Seleccione barbero', options: [] },
     { key: 'servicioId', label: 'Servicio', type: 'select', placeholder: 'Seleccione servicio', options: [] },
-    { key: 'estado', label: 'Estado', type: 'select', placeholder: 'Seleccione estado', options:
-    Object.values(EstadoReserva).map(e => ({ label: e, value: e }))
-    },
-    { key: 'metodoPago', label: 'Método de pago', type: 'select', placeholder: 'Seleccione método', options:
-    Object.values(MetodoPago).map(e => ({ label: e, value: e }))
-    },
+    { key: 'estado', label: 'Estado', type: 'select', placeholder: 'Seleccione estado', options: Object.values(EstadoReserva).map(e => ({ label: e, value: e })) },
+    { key: 'metodoPago', label: 'Método de pago', type: 'select', placeholder: 'Seleccione método', options: Object.values(MetodoPago).map(e => ({ label: e, value: e })) },
 ];
 export const FILTROS_METRICAS: FilterField<MetricasFiltro>[] = [
-  { key: 'fechaInicio', label: 'Desde', type: 'date', placeholder: 'Fecha inicio' },
-  { key: 'fechaFin', label: 'Hasta', type: 'date', placeholder: 'Fecha fin', endOfDay: true }
+    { key: 'fechaInicio', label: 'Desde', type: 'date', placeholder: 'Fecha inicio' },
+    { key: 'fechaFin', label: 'Hasta', type: 'date', placeholder: 'Fecha fin', endOfDay: true }
 ];
-
 
 export const FILTROS_VENTA: FilterField<VentaFiltro>[] = [
     { key: 'numeroCorrelativo', label: 'N° de Venta', type: 'text', placeholder: 'Ej. VEN-062026-0001' },
     { key: 'cliente', label: 'Nombre del Cliente', type: 'text', placeholder: 'Buscar por nombre' },
-    { key: 'tipoComprobante', label: 'Tipo de Comprobante', type: 'select', options: [
-        { label: 'Boleta', value: 'BOLETA' },
-        { label: 'Factura', value: 'FACTURA' }
-    ], placeholder: 'Todos' },
+    { key: 'tipoComprobante', label: 'Tipo de Comprobante', type: 'select', options: [{ label: 'Boleta', value: 'BOLETA' }, { label: 'Factura', value: 'FACTURA' }], placeholder: 'Todos' },
     { key: 'fechaInicio', label: 'Fecha de inicio', type: 'date', placeholder: 'Desde' },
     { key: 'fechaFin', label: 'Fecha de fin', type: 'date', placeholder: 'Hasta', endOfDay: true }
 ];

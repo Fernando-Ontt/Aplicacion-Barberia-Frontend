@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, Observable, catchError, of } from 'rxjs';
 import { TokenService } from '../auth/token.service';
 import { ApiResponse, ReservaDTO, ClienteDetalleResumenDTO, ServicioResponseDTO, } from '../../models/gestion/cliente/ClienteResumen.model'; 
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 
 const BASE = environment.apiUrl;  
 

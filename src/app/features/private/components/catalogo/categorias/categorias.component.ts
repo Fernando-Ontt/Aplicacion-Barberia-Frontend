@@ -69,9 +69,7 @@ export class CategoriasComponent implements OnInit {
   cargarCategoriasPadre(): void {
     this.categoriaService.obtenerCategoriasPadre().subscribe({
       next: (resp) => {
-        console.log(resp.data);
         this.categoriaPadre = resp.data.map(categoria => ({label: categoria.nombre,value: categoria.id}));
-        console.log(this.categoriaPadre);
         this.actualizarFiltroPadre();
       },
       error: (err) => this.notify.showHttpError(err.message)

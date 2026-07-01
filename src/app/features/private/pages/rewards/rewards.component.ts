@@ -10,7 +10,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 import { RecompensaService } from '@core/services/recompensa/recompensa.service';
-import { Recompensa } from '@core/models/recompensas/Recompensa.model';
+import { Recompensa } from '@/app/core/models/recompensa/Recompensa.model';
 import { BarberoService } from '@/app/core/services/gestion/barbero.service';
 import { ServicioService } from '@/app/core/services/catalogos/servicio.service';
 import { ReservaService } from '@/app/core/services/operaciones/reserva.service';

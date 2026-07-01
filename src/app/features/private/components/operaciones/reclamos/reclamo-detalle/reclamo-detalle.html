@@ -125,6 +125,18 @@
                     <p class="leading-relaxed text-sm">{{ detalleReclamo.notasInternas }}</p>
                 }
             </section>
+            
+            <section class="bg-ui-card rounded-xl border border-ui-border p-5 flex flex-col gap-3">
+                <h2 class="text-brand-gold font-semibold text-sm uppercase tracking-widest border-b border-ui-border pb-2">
+                    <i class="pi pi-lock mr-2"></i>Detalle de Solucion
+                </h2>
+                @if (!detalleReclamo.detalleSolucion) {
+                    <p class="italic text-text-subtle text-sm">No se agrego detalle de solucion .</p>
+                } @else {
+                    <p class="leading-relaxed text-sm">{{ detalleReclamo.detalleSolucion }}</p>
+                }
+            </section>
+
         </div>
         
         <section class="bg-ui-card rounded-xl border border-ui-border p-5 flex flex-col gap-4">

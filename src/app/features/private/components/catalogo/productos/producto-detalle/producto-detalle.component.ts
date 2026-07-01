@@ -5,7 +5,7 @@ import { ImageModule } from 'primeng/image';
 import { ButtonModule } from 'primeng/button';
 import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge.component';
 import { ProductoService } from '@/app/core/services/catalogos/producto.service';
-import { environment } from '@/environments/environment.development';
+import { environment } from '@/environments/environment';
 import { Producto } from '@/app/core/models/catalogos/productos.model';
 import { SafeImageUrlPipe } from '@/app/shared/pipes/safe-image-url.pipe';
 import { INVENTARIO_CONFIG } from '@/app/core/config/valores.config';

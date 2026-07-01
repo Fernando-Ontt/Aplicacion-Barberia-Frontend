@@ -1,4 +1,3 @@
-
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, AsyncPipe, DatePipe } from '@angular/common';
 import {
@@ -85,6 +84,33 @@ export class ReservarComponent implements OnInit, OnDestroy {
   serviciosCache: Servicio[] = [];
   servicioFiltro: ServicioFiltro = { page: 0, size: 1000 };
 
+  minDateCita: Date = this.calcularFechaMinima();
+  maxDateCita: Date = this.calcularFechaMaxima();
+
+  horariosDisponibles: { label: string; value: string }[] = [];
+
+  private readonly TODOS_LOS_HORARIOS: { label: string; value: string }[] = [
+    { label: '09:00 AM', value: '09:00' },
+    { label: '09:30 AM', value: '09:30' },
+    { label: '10:00 AM', value: '10:00' },
+    { label: '10:30 AM', value: '10:30' },
+    { label: '11:00 AM', value: '11:00' },
+    { label: '11:30 AM', value: '11:30' },
+    { label: '12:00 PM', value: '12:00' },
+    { label: '12:30 PM', value: '12:30' },
+    { label: '01:00 PM', value: '13:00' },
+    { label: '01:30 PM', value: '13:30' },
+    { label: '02:00 PM', value: '14:00' },
+    { label: '02:30 PM', value: '14:30' },
+    { label: '03:00 PM', value: '15:00' },
+    { label: '03:30 PM', value: '15:30' },
+    { label: '04:00 PM', value: '16:00' },
+    { label: '04:30 PM', value: '16:30' },
+    { label: '05:00 PM', value: '17:00' },
+    { label: '05:30 PM', value: '17:30' },
+    { label: '06:00 PM', value: '18:00' },
+    { label: '06:30 PM', value: '18:30' },
+  ];
 
   clienteActual: any = {
     id: null,
@@ -94,75 +120,58 @@ export class ReservarComponent implements OnInit, OnDestroy {
     telefono: ''
   };
 
-  get horarios() {
-    const todosLosHorarios = [
-      { label: '09:00 AM', value: '09:00' },
-      { label: '09:30 AM', value: '09:30' },
-      { label: '10:00 AM', value: '10:00' },
-      { label: '10:30 AM', value: '10:30' },
-      { label: '11:00 AM', value: '11:00' },
-      { label: '11:30 AM', value: '11:30' },
-      { label: '12:00 PM', value: '12:00' },
-      { label: '12:30 PM', value: '12:30' },
-      { label: '01:00 PM', value: '13:00' },
-      { label: '01:30 PM', value: '13:30' },
-      { label: '02:00 PM', value: '14:00' },
-      { label: '02:30 PM', value: '14:30' },
-      { label: '03:00 PM', value: '15:00' },
-      { label: '03:30 PM', value: '15:30' },
-      { label: '04:00 PM', value: '16:00' },
-      { label: '04:30 PM', value: '16:30' },
-      { label: '05:00 PM', value: '17:00' },
-      { label: '05:30 PM', value: '17:30' },
-      { label: '06:00 PM', value: '18:00' },
-      { label: '06:30 PM', value: '18:30' },
-    ];
+  citaForm = this.fb.group({
+    barberoId: [null, [Validators.required]],
+    servicioId: [null, [Validators.required]],
+    fecha: [null, [Validators.required, this.fechaValida.bind(this)]],
+    hora: [null, [Validators.required]],
+    notas: ['', [Validators.maxLength(300)]],
+    aceptaTerminos: [false, [Validators.requiredTrue]]
+  });
 
-    const fechaSeleccionada = this.citaForm?.get('fecha')?.value;
-    if (!fechaSeleccionada) return todosLosHorarios;
 
-    const hoy = new Date();
-    const fechaForm = new Date((fechaSeleccionada as string) + 'T00:00:00'); // ← único cambio
 
-    const esHoy =
-      fechaForm.getFullYear() === hoy.getFullYear() &&
-      fechaForm.getMonth() === hoy.getMonth() &&
-      fechaForm.getDate() === hoy.getDate();
+  ngOnInit(): void {
+    this.cargarClienteDesdeToken();
+    this.cargarDatos();
+    this.horariosDisponibles = this.calcularHorarios();
+  }
 
-    if (!esHoy) return todosLosHorarios;
-
-    const horaActual = hoy.getHours();
-    const minActual = hoy.getMinutes();
-
-    return todosLosHorarios.filter(h => {
-      const [hh, mm] = h.value.split(':').map(Number);
-      if (hh < horaActual) return false;
-      if (hh === horaActual && mm <= minActual) return false;
-      return true;
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
-  getFechaMinimaInput(): string {
+
+  private calcularFechaMinima(): Date {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
-    return hoy.toISOString().split('T')[0];
+    return hoy;
+  }
+
+  private calcularFechaMaxima(): Date {
+    const max = new Date();
+    max.setMonth(max.getMonth() + 3);
+    max.setHours(0, 0, 0, 0);
+    return max;
+  }
+
+  getFechaMinimaInput(): string {
+    return this.minDateCita.toISOString().split('T')[0];
   }
 
   getFechaMaximaInput(): string {
-    const max = new Date();
-    max.setMonth(max.getMonth() + 3);
-    return max.toISOString().split('T')[0];
+    return this.maxDateCita.toISOString().split('T')[0];
   }
 
-  onFechaChange(): void {
-    this.citaForm.get('hora')?.reset();
+  getFechaMinima(): Date {
+    return this.minDateCita;
   }
+
   getFechaFormateada(): string {
     const fecha = this.citaForm.get('fecha')?.value;
-
     if (!fecha) return '';
-
     return (fecha as Date).toLocaleDateString('es-ES', {
       weekday: 'long',
       year: 'numeric',
@@ -170,7 +179,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
       day: 'numeric'
     });
   }
-
 
   fechaValida(control: AbstractControl): ValidationErrors | null {
     const fecha = control.value as Date;
@@ -194,25 +202,43 @@ export class ReservarComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  citaForm = this.fb.group({
-    barberoId: [null, [Validators.required]],
-    servicioId: [null, [Validators.required]],
-    fecha: [null, [Validators.required, this.fechaValida.bind(this)]],
-    hora: [null, [Validators.required]],
-    notas: ['', [Validators.maxLength(300)]],
-    aceptaTerminos: [false, [Validators.requiredTrue]]
-  });
+  
 
-  ngOnInit(): void {
-    this.cargarClienteDesdeToken();
-    this.cargarDatos();
-
+  onFechaChange(): void {
+    this.citaForm.get('hora')?.reset();
+    this.horariosDisponibles = this.calcularHorarios();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private calcularHorarios(): { label: string; value: string }[] {
+    const fechaSeleccionada:any = this.citaForm.get('fecha')?.value;
+    if (!fechaSeleccionada) return this.TODOS_LOS_HORARIOS;
+
+    const hoy = new Date();
+
+ 
+    const fechaForm = fechaSeleccionada instanceof Date
+      ? new Date(fechaSeleccionada)
+      : new Date((fechaSeleccionada as string) + 'T00:00:00');
+
+    const esHoy =
+      fechaForm.getFullYear() === hoy.getFullYear() &&
+      fechaForm.getMonth() === hoy.getMonth() &&
+      fechaForm.getDate() === hoy.getDate();
+
+    if (!esHoy) return this.TODOS_LOS_HORARIOS;
+
+    const horaActual = hoy.getHours();
+    const minActual = hoy.getMinutes();
+
+    return this.TODOS_LOS_HORARIOS.filter(h => {
+      const [hh, mm] = h.value.split(':').map(Number);
+      if (hh < horaActual) return false;
+      if (hh === horaActual && mm <= minActual) return false;
+      return true;
+    });
   }
+
+
 
   private cargarClienteDesdeToken(): void {
     const decodedToken = this.tokenService.getDecodedToken();
@@ -278,14 +304,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
     );
   }
 
-
-
-
-  getFechaMinima(): Date {
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    return hoy;
-  }
 
   guardarCita(): void {
     if (this.citaForm.invalid) {
@@ -406,7 +424,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
   cancelar(): void {
     this.router.navigate(['/dashboard/cliente/inicio']);
   }
-
 
   get barberoInvalido(): boolean {
     const control = this.citaForm.get('barberoId');
