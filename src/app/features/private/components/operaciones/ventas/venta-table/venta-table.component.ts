@@ -5,7 +5,7 @@ import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { Venta } from '@/app/core/models/ventas/venta.model';
-//import { StatusBadgeComponent } from '@/app/shared/components/status-badge/status-badge.component'; 
+import { ConfirmPopoverComponent } from '@/app/shared/components/confirm-popover/confirm-popover.component'; 
 
 @Component({
   selector: 'app-venta-table',
@@ -16,7 +16,7 @@ import { Venta } from '@/app/core/models/ventas/venta.model';
     TableModule,
     ButtonModule,
     TooltipModule,
-    //StatusBadgeComponent 
+    ConfirmPopoverComponent 
   ],
   templateUrl: './venta-table.html',
   styleUrls: ['./venta-table.css'],
@@ -30,12 +30,34 @@ export class VentaTableComponent {
   @Input() rows = 25;
 
   @Output() lazyLoad = new EventEmitter<TableLazyLoadEvent>();
-  @Output() editar   = new EventEmitter<Venta>();
   @Output() eliminar = new EventEmitter<Venta>();
+
+  mostrarConfirmacion = false;
+  mensajeConfirmacion = '';
+  ventaAEliminar: Venta | null = null;
 
   calcularTotal(venta: Venta): number {
     return (venta.detalles ?? []).reduce((acc, det) => {
       return acc + (Number(det.precioUnitario) * Number(det.cantidad));
     }, 0);
+  }
+
+  pedirConfirmacion(venta: Venta) {
+    this.ventaAEliminar = venta;
+    const identificador = venta.numeroCorrelativo || ('#' + venta.ventaId);
+    this.mensajeConfirmacion = `¿Estás seguro de que deseas eliminar la venta ${identificador}? Esta acción es irreversible.`;
+    this.mostrarConfirmacion = true;
+  }
+
+  confirmarEliminar() {
+    if (this.ventaAEliminar) {
+      this.eliminar.emit(this.ventaAEliminar);
+    }
+    this.cancelarEliminar();
+  }
+
+  cancelarEliminar() {
+    this.mostrarConfirmacion = false; 
+    this.ventaAEliminar = null; 
   }
 }

@@ -23,7 +23,7 @@ export const BARBERO_MENU = [
     {
         label: "Ventas",
         icon: "pi pi-receipt",
-        routerLink: ["ventas"],
+        routerLink: ["operaciones", "ventas"],
         permission: "VENTA_READ_ASSIGNED"
     },
 

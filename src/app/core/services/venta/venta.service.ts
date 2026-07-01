@@ -21,6 +21,10 @@ export class VentaService {
     );
   }
 
+  obtenerMisVentas(barberoId: number) {
+    return this.http.get<ApiResponse<Venta[]>>(`${this.apiUrl}/barbero/${barberoId}`);
+  }
+
   buscarVentaPorId(id: number) {
     return this.http.get<ApiResponse<Venta>>(`${this.apiUrl}/${id}`);
   }

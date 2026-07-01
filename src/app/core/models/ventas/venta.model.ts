@@ -8,6 +8,7 @@ export interface Venta {
   clienteNombre?: string;
   fecha?: string;
   tipoComprobante?: 'BOLETA' | 'FACTURA';
+  metodoPago?: string;
   detalles?: VentaDetalle[];
   total?: number;
 
