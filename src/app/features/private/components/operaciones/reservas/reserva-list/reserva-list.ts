@@ -1,7 +1,6 @@
 import { ApiResponse, Page } from '@/app/core/models/common/index.model';
 import { Reserva } from '@/app/core/models/operaciones/Reserva.model';
 import { ReservaService } from '@/app/core/services/operaciones/reserva.service';
-import { ConfirmPopoverComponent } from '@/app/shared/components/confirm-popover/confirm-popover.component';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -43,8 +42,6 @@ verDetalle(reserva: Reserva): void {
   this.showDetalle = true;
 }
 
- 
-
   get totalFiltrados(): number {
   return this.reservasFiltradas.length;
 }
@@ -56,7 +53,6 @@ ngOnInit(): void {
 loadReservas(event?: TableLazyLoadEvent): void {
   this.loading = true;
 
-  
   if (event) {
     this.rows = event.rows ?? this.rows;
     this.currentPage = event.first != null ? Math.floor((event.first ?? 0) / this.rows) : 0;
@@ -77,7 +73,6 @@ loadReservas(event?: TableLazyLoadEvent): void {
       });
     return;
   }
-
   
   this.reservaService.getReservas(0, 1000)
     .pipe(finalize(() => this.loading = false))
@@ -109,12 +104,9 @@ aplicarFiltros(): void {
   });
 }
 
- 
   get barberosList(): string[] {
   return [...new Set(this.reservas.map(r => r.barberoNombre).filter(Boolean))].sort();
 }
-
-  
 
   get hayFiltrosActivos(): boolean {
     return !!(this.filtros.cliente || this.filtros.barbero || this.filtros.estado || this.filtros.fecha);
@@ -134,11 +126,15 @@ aplicarFiltros(): void {
     this.loadReservas(event);
   }
 
+  cobrarReserva(reserva: Reserva): void {
+    this.router.navigate(['/dashboard/admin/operaciones/pos'], {
+      state: { reservaCobrar: reserva }
+    });
+  }
+
   irNuevaReserva(): void {
     this.router.navigate(['/dashboard/admin/operaciones/reservas/nueva']);
   }
-
-  
 
   editarReserva(reserva: Reserva): void {
     this.router.navigate([`/dashboard/admin/operaciones/reservas/editar/${reserva.id}`]);
